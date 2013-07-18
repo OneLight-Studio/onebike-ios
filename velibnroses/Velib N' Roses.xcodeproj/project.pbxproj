@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
 		1993DCEF178F09860089A6D5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1993DCEE178F09860089A6D5 /* MapKit.framework */; };
 		19B5ADD417902AA5000E6B40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19B5ADD317902AA5000E6B40 /* CoreLocation.framework */; };
 		19B5ADD817902B73000E6B40 /* CoreLocationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 19B5ADD717902B73000E6B40 /* CoreLocationHelper.m */; };
+		19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D1F7421793FDEC0051D13B /* WSRequest.m */; };
+		19FD1B571795891200309FD0 /* toulouse.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 19FD1B561795891200309FD0 /* toulouse.gpx */; };
+		19FD1B5F179591BE00309FD0 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FD1B5E179591BE00309FD0 /* Station.m */; };
 		E931956617858121009AFCC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956517858121009AFCC1 /* UIKit.framework */; };
 		E931956817858121009AFCC1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956717858121009AFCC1 /* Foundation.framework */; };
 		E931956A17858121009AFCC1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956917858121009AFCC1 /* CoreGraphics.framework */; };
@@ -25,10 +29,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		190776FF1796F3BE00180530 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
+		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
 		1993DCEE178F09860089A6D5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		19B5ADD317902AA5000E6B40 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		19B5ADD617902B73000E6B40 /* CoreLocationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreLocationHelper.h; sourceTree = "<group>"; };
 		19B5ADD717902B73000E6B40 /* CoreLocationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreLocationHelper.m; sourceTree = "<group>"; };
+		19FD1B561795891200309FD0 /* toulouse.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = toulouse.gpx; path = velibnroses/toulouse.gpx; sourceTree = "<group>"; };
+		19FD1B5817958E4B00309FD0 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		19FD1B5D179591BE00309FD0 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Station.h; sourceTree = "<group>"; };
+		19FD1B5E179591BE00309FD0 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Station.m; sourceTree = "<group>"; };
 		E931956217858121009AFCC1 /* Velib N' Roses.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Velib N' Roses.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E931956517858121009AFCC1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E931956717858121009AFCC1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -67,18 +77,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		190777021796F3C700180530 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				19B5ADD717902B73000E6B40 /* CoreLocationHelper.m */,
+				19B5ADD617902B73000E6B40 /* CoreLocationHelper.h */,
+			);
+			name = Helper;
+			sourceTree = "<group>";
+		};
 		19B5ADD517902ACF000E6B40 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				19B5ADD617902B73000E6B40 /* CoreLocationHelper.h */,
-				19B5ADD717902B73000E6B40 /* CoreLocationHelper.m */,
+				19FD1B5817958E4B00309FD0 /* Constants.h */,
+				190776FF1796F3BE00180530 /* GeoUtils.h */,
+				190777001796F3BE00180530 /* GeoUtils.m */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		19FD1B5C1795916600309FD0 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				19FD1B5D179591BE00309FD0 /* Station.h */,
+				19FD1B5E179591BE00309FD0 /* Station.m */,
+			);
+			name = Domain;
 			sourceTree = "<group>";
 		};
 		E931955917858121009AFCC1 = {
 			isa = PBXGroup;
 			children = (
+				19FD1B561795891200309FD0 /* toulouse.gpx */,
 				E931956B17858121009AFCC1 /* velibnroses */,
 				E931956417858121009AFCC1 /* Frameworks */,
 				E931956317858121009AFCC1 /* Products */,
@@ -114,6 +144,8 @@
 				E931957D17858121009AFCC1 /* MainStoryboard.storyboard */,
 				E931958017858121009AFCC1 /* MapController.h */,
 				E931958117858121009AFCC1 /* MapController.m */,
+				19FD1B5C1795916600309FD0 /* Domain */,
+				190777021796F3C700180530 /* Helper */,
 				19B5ADD517902ACF000E6B40 /* Utils */,
 				E9D1F7401793FDC40051D13B /* Web Services */,
 				E931956C17858121009AFCC1 /* Supporting Files */,
@@ -203,6 +235,7 @@
 				E931957C17858121009AFCC1 /* Default-568h@2x.png in Resources */,
 				E931957F17858121009AFCC1 /* MainStoryboard.storyboard in Resources */,
 				E9D1F73F1793FA690051D13B /* Localizable.strings in Resources */,
+				19FD1B571795891200309FD0 /* toulouse.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +250,9 @@
 				E931957617858121009AFCC1 /* AppDelegate.m in Sources */,
 				E931958217858121009AFCC1 /* MapController.m in Sources */,
 				19B5ADD817902B73000E6B40 /* CoreLocationHelper.m in Sources */,
+				19FD1B5F179591BE00309FD0 /* Station.m in Sources */,
+				190777011796F3BE00180530 /* GeoUtils.m in Sources */,
+				19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

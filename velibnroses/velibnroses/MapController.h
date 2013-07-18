@@ -10,11 +10,10 @@
 #import <CoreLocation/CoreLocation.h>
 #import "CoreLocationHelper.h"
 
-@interface MapController : UIViewController <CoreLocationHelperDelegate> {
-    @private CLLocationCoordinate2D currentLocation;
-}
+@interface MapController : UIViewController <CoreLocationHelperDelegate>
 
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (nonatomic, weak) IBOutlet MKMapView *mapView;
 @property (nonatomic, retain) CoreLocationHelper *locationHelper;
+
 
 @end
