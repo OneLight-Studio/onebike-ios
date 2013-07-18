@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="SBZ-qn-Jb4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -12,7 +12,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="R2K-lh-zEE" kind="relationship" relationship="rootViewController" id="a1G-27-Nki"/>
+                        <segue destination="R2K-lh-zEE" kind="relationship" relationship="rootViewController" id="bam-mF-8h0"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PLT-Kz-m19" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -27,19 +27,122 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="QIt-AM-94y"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="QIt-AM-94y">
+                                <rect key="frame" x="0.0" y="177" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
+                            </mapView>
+                            <view contentMode="scaleToFill" id="5b7-xd-UEt">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="177"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="99S-N3-YFi">
+                                        <rect key="frame" x="10" y="48" width="300" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Arrival" minimumFontSize="17" clearButtonMode="whileEditing" id="Wdw-ii-7F2">
+                                        <rect key="frame" x="20" y="48" width="260" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="next"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="R2K-lh-zEE" id="y66-k7-vvc"/>
+                                        </connections>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="GVn-s9-Vip">
+                                        <rect key="frame" x="10" y="9" width="300" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Departure" minimumFontSize="17" clearButtonMode="whileEditing" id="iYR-bn-zkd">
+                                        <rect key="frame" x="20" y="9" width="260" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="next"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="R2K-lh-zEE" id="hdx-X0-x9z"/>
+                                        </connections>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Number of bikes" minimumFontSize="17" id="gs9-Dj-mAK">
+                                        <rect key="frame" x="10" y="86" width="198" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="search"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="R2K-lh-zEE" id="QtG-uR-1DJ"/>
+                                        </connections>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7ZO-mt-kun">
+                                        <rect key="frame" x="237" y="123" width="73" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Search">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="search:" destination="R2K-lh-zEE" eventType="touchUpInside" id="FmO-dR-hzO"/>
+                                        </connections>
+                                    </button>
+                                    <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" id="NFz-WJ-rUr">
+                                        <rect key="frame" x="216" y="88" width="94" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <connections>
+                                            <action selector="bikesChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="h0o-Wo-3DN"/>
+                                        </connections>
+                                    </stepper>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vrN-9E-YNC">
+                                        <rect key="frame" x="271" y="2" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="MyLocation.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="useMyLocationAsDeparture:" destination="R2K-lh-zEE" eventType="touchUpInside" id="2iX-lJ-8Zl"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FUH-DR-DvO">
+                                        <rect key="frame" x="271" y="41" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="MyLocation.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="useMyLocationAsArrival:" destination="R2K-lh-zEE" eventType="touchUpInside" id="fAT-Iv-ZXa"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="QIt-AM-94y" firstAttribute="top" secondItem="Xpv-kR-8Ki" secondAttribute="top" type="default" id="6bn-Cd-KKS"/>
-                            <constraint firstItem="QIt-AM-94y" firstAttribute="trailing" secondItem="Xpv-kR-8Ki" secondAttribute="trailing" type="default" id="8XV-dV-IS6"/>
-                            <constraint firstItem="QIt-AM-94y" firstAttribute="leading" secondItem="Xpv-kR-8Ki" secondAttribute="leading" type="default" id="Gni-0O-D8A"/>
-                            <constraint firstItem="QIt-AM-94y" firstAttribute="bottom" secondItem="Xpv-kR-8Ki" secondAttribute="bottom" type="default" id="unQ-s9-8Lm"/>
-                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="hmS-dC-JVN"/>
+                    <navigationItem key="navigationItem" id="hmS-dC-JVN">
+                        <barButtonItem key="rightBarButtonItem" image="Search.png" id="Dwx-k2-M2a">
+                            <connections>
+                                <action selector="toggleSearchView:" destination="R2K-lh-zEE" id="njY-lO-BeL"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="arrivalField" destination="Wdw-ii-7F2" id="Edo-YR-Rhn"/>
+                        <outlet property="bikeField" destination="gs9-Dj-mAK" id="amk-f0-sKK"/>
+                        <outlet property="bikeStepper" destination="NFz-WJ-rUr" id="UCT-es-hcf"/>
+                        <outlet property="departureField" destination="iYR-bn-zkd" id="AZx-VX-AIw"/>
                         <outlet property="mapView" destination="QIt-AM-94y" id="ayC-Gs-Ple"/>
+                        <outlet property="searchView" destination="5b7-xd-UEt" id="G5h-3n-uDV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mlL-JI-PpG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -47,15 +150,26 @@
             <point key="canvasLocation" x="791" y="35"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="MyLocation.png" width="40" height="40"/>
+        <image name="Search.png" width="20" height="20"/>
+    </resources>
     <classes>
         <class className="MapController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MapController.h"/>
             <relationships>
+                <relationship kind="action" name="bikesChanged:" candidateClass="UIStepper"/>
+                <relationship kind="action" name="search:"/>
+                <relationship kind="action" name="toggleSearchView:"/>
+                <relationship kind="action" name="useMyLocationAsArrival:"/>
+                <relationship kind="action" name="useMyLocationAsDeparture:"/>
+                <relationship kind="outlet" name="arrivalField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="bikeField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="bikeStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="searchView" candidateClass="UIView"/>
             </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

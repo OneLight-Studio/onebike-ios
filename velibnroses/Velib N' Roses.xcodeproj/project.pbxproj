@@ -22,6 +22,10 @@
 		E931957F17858121009AFCC1 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E931957D17858121009AFCC1 /* MainStoryboard.storyboard */; };
 		E931958217858121009AFCC1 /* MapController.m in Sources */ = {isa = PBXBuildFile; fileRef = E931958117858121009AFCC1 /* MapController.m */; };
 		E9D1F73F1793FA690051D13B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F73D1793FA690051D13B /* Localizable.strings */; };
+		E9D1F74617969EC00051D13B /* MyLocation.png in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F74417969EC00051D13B /* MyLocation.png */; };
+		E9D1F74717969EC00051D13B /* MyLocation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F74517969EC00051D13B /* MyLocation@2x.png */; };
+		E9D1F74A1796CC130051D13B /* Search.png in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F7481796CC130051D13B /* Search.png */; };
+		E9D1F74B1796CC130051D13B /* Search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F7491796CC130051D13B /* Search@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +53,10 @@
 		E9D1F73E1793FA690051D13B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = velibnroses/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E9D1F7411793FDEC0051D13B /* WSRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WSRequest.h; sourceTree = "<group>"; };
 		E9D1F7421793FDEC0051D13B /* WSRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WSRequest.m; sourceTree = "<group>"; };
+		E9D1F74417969EC00051D13B /* MyLocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MyLocation.png; path = img/MyLocation.png; sourceTree = "<group>"; };
+		E9D1F74517969EC00051D13B /* MyLocation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MyLocation@2x.png"; path = "img/MyLocation@2x.png"; sourceTree = "<group>"; };
+		E9D1F7481796CC130051D13B /* Search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Search.png; path = img/Search.png; sourceTree = "<group>"; };
+		E9D1F7491796CC130051D13B /* Search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Search@2x.png"; path = "img/Search@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +124,7 @@
 				E931958117858121009AFCC1 /* MapController.m */,
 				19B5ADD517902ACF000E6B40 /* Utils */,
 				E9D1F7401793FDC40051D13B /* Web Services */,
+				E9D1F74317969EAB0051D13B /* Images */,
 				E931956C17858121009AFCC1 /* Supporting Files */,
 			);
 			path = velibnroses;
@@ -143,6 +152,17 @@
 				E9D1F7421793FDEC0051D13B /* WSRequest.m */,
 			);
 			name = "Web Services";
+			sourceTree = "<group>";
+		};
+		E9D1F74317969EAB0051D13B /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				E9D1F74417969EC00051D13B /* MyLocation.png */,
+				E9D1F74517969EC00051D13B /* MyLocation@2x.png */,
+				E9D1F7481796CC130051D13B /* Search.png */,
+				E9D1F7491796CC130051D13B /* Search@2x.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,6 +223,10 @@
 				E931957C17858121009AFCC1 /* Default-568h@2x.png in Resources */,
 				E931957F17858121009AFCC1 /* MainStoryboard.storyboard in Resources */,
 				E9D1F73F1793FA690051D13B /* Localizable.strings in Resources */,
+				E9D1F74617969EC00051D13B /* MyLocation.png in Resources */,
+				E9D1F74717969EC00051D13B /* MyLocation@2x.png in Resources */,
+				E9D1F74A1796CC130051D13B /* Search.png in Resources */,
+				E9D1F74B1796CC130051D13B /* Search@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
