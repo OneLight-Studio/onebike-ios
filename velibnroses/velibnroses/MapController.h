@@ -7,14 +7,9 @@
 //
 
 #import <MapKit/MapKit.h>
-#import <CoreLocation/CoreLocation.h>
-#import "CoreLocationHelper.h"
 
-@interface MapController : UIViewController <CoreLocationHelperDelegate> {
-    @private CLLocationCoordinate2D currentLocation;
-}
+@interface MapController : UIViewController <MKMapViewDelegate>
 
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (nonatomic, retain) CoreLocationHelper *locationHelper;
+@property (nonatomic, weak) IBOutlet MKMapView *mapView;
 
 @end
