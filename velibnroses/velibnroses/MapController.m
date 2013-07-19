@@ -14,7 +14,7 @@
 #import "GeoUtils.h"
 
 @implementation MapController {
-    CLLocationCoordinate2D _currentLocation;
+    MKUserLocation *startUserLocation;
     WSRequest *_wsRequest;
     NSMutableArray *_stations;
     NSMutableArray *_stationAroundUser;
@@ -25,13 +25,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.mapView.showsUserLocation = YES;
-    
-    NSLog(@"init location manager");
-    self.locationHelper = [[CoreLocationHelper alloc] init];
-	self.locationHelper.delegate = self;
-    self.locationHelper.locationManager.distanceFilter = MIN_DIST_INTERVAL_IN_METER;
-    self.locationHelper.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+    self.mapView.delegate = self;
     
     NSLog(@"init ws");
     _wsRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:TRUE];
@@ -48,36 +42,35 @@
     [_wsRequest call];
     _stationAroundUser = [NSMutableArray array];
     
-    // centered by default on Toulouse
-    _currentLocation.latitude = TLS_LAT;
-    _currentLocation.longitude = TLS_LONG;
+    self.mapView.showsUserLocation = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(_currentLocation,
+    // centered by default on Toulouse
+    CLLocationCoordinate2D tls;
+    tls.latitude = TLS_LAT;
+    tls.longitude = TLS_LONG;
+    
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(tls,
         ZOOM_SQUARE_SIDE_IN_KM, ZOOM_SQUARE_SIDE_IN_KM);
     [mapView setRegion:viewRegion animated:YES];
-    [self.locationHelper.locationManager startUpdatingLocation];
-}
-
-- (void)updateLocation:(CLLocation *)location {
-    _currentLocation.latitude = location.coordinate.latitude;
-    _currentLocation.longitude = location.coordinate.longitude;
-    NSLog(@"current location (%f,%f)", location.coordinate.latitude, location.coordinate.longitude);
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(_currentLocation,
-        ZOOM_SQUARE_SIDE_IN_KM, ZOOM_SQUARE_SIDE_IN_KM);
-    [mapView setRegion:viewRegion animated:YES];
-}
-
-- (void)locationError:(NSError *)error {
-    NSLog(@"update location problem %@", [error description]);
+    NSLog(@"centered on Toulouse (%f,%f)", tls.latitude, tls.longitude);
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
+    if (startUserLocation == nil) {
+        startUserLocation = aUserLocation;
+        MKCoordinateRegion currentRegion = MKCoordinateRegionMakeWithDistance(aUserLocation.coordinate,
+            ZOOM_SQUARE_SIDE_IN_KM, ZOOM_SQUARE_SIDE_IN_KM);
+        [mapView setRegion:currentRegion animated:YES];
+        NSLog(@"centered on user location (%f,%f)", aUserLocation.coordinate.latitude, aUserLocation.coordinate.longitude);
+    }
 }
 
 - (void)displayStations {
