@@ -17,7 +17,7 @@
 
 @interface CoreLocationHelper : NSObject <CLLocationManagerDelegate>
 
-@property (nonatomic, retain) CLLocationManager *locationManager;
-@property (nonatomic, retain) id<CoreLocationHelperDelegate> delegate;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) id<CoreLocationHelperDelegate> delegate;
 
 @end

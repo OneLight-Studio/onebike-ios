@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 OneLight. All rights reserved.
 //
 
-#import "SBJson.h"
 #import "WSRequest.h"
 
 @implementation WSRequest {
@@ -39,7 +38,7 @@
 }
 
 - (WSRequest *)appendParameterWithKey:(NSString *)key andValue:(id)value {
-    [NSException raise:@"Forbidden call to abstract method" format:@"appendParameterWithKey must be invoked from a subclass of WSRequest."];
+    [_params setValue:[value description] forKey:key];
     return self;
 }
 
@@ -84,7 +83,7 @@
     }
     NSURL *url = [NSURL URLWithString:uri];
     // build the request
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:timeout];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10];
     [request setHTTPMethod:@"GET"];
     
     NSLog(@"Request %@ %@", request.HTTPMethod, request.URL.absoluteString);
@@ -188,13 +187,12 @@
         [self onError:_httpCode];
     } else {
         if ([_mimeType isEqualToString:@"application/json"] || [_mimeType isEqualToString:@"text/plain"]) {
-            NSString *jsonString = [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding];
-            if (jsonString.length > 0) {
-                NSLog(@"JSON result %@", jsonString);
-                [self onResult:[jsonString JSONValue]];
+            NSError *exception = nil;
+            id result = [NSJSONSerialization JSONObjectWithData:_data options:0 error:&exception];
+            if (result == nil) {
+                [self onException:exception];
             } else {
-                NSLog(@"No JSON result");
-                [self onResult:nil];
+                [self onResult:result];
             }
         }
     }
