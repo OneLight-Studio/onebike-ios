@@ -8,8 +8,21 @@
 
 #import <MapKit/MapKit.h>
 
-@interface MapController : UIViewController <MKMapViewDelegate>
+@interface MapController : UIViewController <MKMapViewDelegate, UITextFieldDelegate> {
+    @private CLLocationCoordinate2D currentLocation;
+}
 
-@property (nonatomic, weak) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet UIView *searchView;
+@property (weak, nonatomic) IBOutlet UITextField *departureField;
+@property (weak, nonatomic) IBOutlet UITextField *arrivalField;
+@property (weak, nonatomic) IBOutlet UITextField *bikeField;
+@property (weak, nonatomic) IBOutlet UIStepper *bikeStepper;
+
+- (IBAction)bikesChanged:(UIStepper *)stepper;
+- (IBAction)toggleSearchView:(id)sender;
+- (IBAction)useMyLocationAsDeparture:(id)sender;
+- (IBAction)useMyLocationAsArrival:(id)sender;
+- (IBAction)search:(id)sender;
 
 @end

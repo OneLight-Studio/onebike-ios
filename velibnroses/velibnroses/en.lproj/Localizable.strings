@@ -6,4 +6,9 @@
   Copyright (c) 2013 OneLight Studio. All rights reserved.
 */
 
+"arrival_not_found" = "Could not locate arrival address";
+"departure_not_found" = "Could not locate departure address";
 "error" = "Oops, an error occurred";
+"missing_arrival" = "Please enter an arrival address";
+"missing_bikes" = "Please enter the number of bikes you need";
+"missing_departure" = "Please enter a departure address";

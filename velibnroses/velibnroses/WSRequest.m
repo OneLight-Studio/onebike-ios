@@ -111,7 +111,7 @@
 - (void) defaultErrorHandler:(int)errorCode {
     NSLog(@"HTTP error %d", errorCode);
     if (!_background) {
-        [[[UIAlertView alloc] initWithTitle:nil message:@"error" delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"error", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
     }
 }
 
