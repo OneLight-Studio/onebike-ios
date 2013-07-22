@@ -17,7 +17,8 @@
     MKUserLocation *startUserLocation;
     WSRequest *_wsRequest;
     NSMutableArray *_stations;
-    CLLocationCoordinate2D northWestCorner, southEastCorner;
+    CLLocationCoordinate2D northWestSpanCorner, southEastCorner;
+    BOOL isMapLoaded;
 }
 
 @synthesize mapView;
@@ -35,12 +36,15 @@
         NSLog(@"ws result");
         _stations = (NSMutableArray *)[Station fromJSONArray:json];
         NSLog(@"stations count %i", _stations.count);
+        [self determineSpanCoordinates];
+        [self displayStations];
     }];
     
     NSLog(@"call ws");
     [_wsRequest call];
     
     self.mapView.showsUserLocation = YES;
+    isMapLoaded = false;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -51,7 +55,7 @@
     tls.longitude = TLS_LONG;
     
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(tls,
-        ZOOM_SQUARE_SIDE_IN_KM, ZOOM_SQUARE_SIDE_IN_KM);
+        SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
     [mapView setRegion:viewRegion animated:YES];
     NSLog(@"centered on Toulouse (%f,%f)", tls.latitude, tls.longitude);
 }
@@ -65,20 +69,23 @@
     if (startUserLocation == nil) {
         startUserLocation = aUserLocation;
         MKCoordinateRegion currentRegion = MKCoordinateRegionMakeWithDistance(aUserLocation.coordinate,
-            ZOOM_SQUARE_SIDE_IN_KM, ZOOM_SQUARE_SIDE_IN_KM);
+            SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
         [mapView setRegion:currentRegion animated:YES];
         NSLog(@"centered on user location (%f,%f)", aUserLocation.coordinate.latitude, aUserLocation.coordinate.longitude);
     }
 }
 
-- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    [self determineSpanCoordinates];
-    [self displayStations];
+- (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated {
+    if (isMapLoaded) {
+        NSLog(@"region has changed");
+        [self determineSpanCoordinates];
+        [self displayStations];
+    }
 }
 
-- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView {
-    [self determineSpanCoordinates];
-    [self displayStations];
+- (void)mapViewDidFinishLoadingMap:(MKMapView *)aMapView {
+    NSLog(@"map is loaded");
+    isMapLoaded = true;
 }
 
 - (void)displayStations {
@@ -94,7 +101,7 @@
                 coordinate.latitude = [station.latitude doubleValue];
                 coordinate.longitude = [station.longitude doubleValue];
                 
-                if ([self isRenderableLocation:coordinate]) {
+                if ([self isVisibleLocation:coordinate]) {
                     NSMutableString *title = [NSMutableString stringWithFormat:@"nb vélos disponibles / nb places libres : %d", [station.availableBikes integerValue]];
                     [title appendFormat:@"/%d", [station.availableBikeStands integerValue]];
                     
@@ -119,25 +126,35 @@
     }
 }
 
-- (BOOL)isRenderableLocation:(CLLocationCoordinate2D) location {
+- (BOOL)isVisibleLocation:(CLLocationCoordinate2D)location {
     
-    BOOL renderable = false;
+    BOOL visible = false;
     
-    if (location.latitude  >= northWestCorner.latitude && location.latitude  <= southEastCorner.latitude
-        && location.longitude >= northWestCorner.longitude && location.longitude <= southEastCorner.longitude) {
-        //NSLog(@"(%f,%f) is in visible span", location.latitude, location.longitude);
-        renderable = true;
+    CLLocationCoordinate2D userLocation = self.mapView.userLocation.coordinate;
+    CLLocationCoordinate2D spanCenter = self.mapView.region.center;
+    
+    if (location.latitude >= northWestSpanCorner.latitude && location.latitude <= southEastCorner.latitude
+        && location.longitude >= northWestSpanCorner.longitude && location.longitude <= southEastCorner.longitude
+        && ([self unlessInMeters:SPAN_SIDE_MAX_LENGTH_IN_METERS from:userLocation for:location]
+        || [self unlessInMeters:SPAN_SIDE_MAX_LENGTH_IN_METERS from:spanCenter for:location])) {
+        visible = true;
     }
     
-    return renderable;
+    return visible;
+}
+            
+- (BOOL)unlessInMeters:(double)radius from:(CLLocationCoordinate2D)origin for:(CLLocationCoordinate2D)location {
+    double dist = [GeoUtils getDistanceFromLat:origin.latitude toLat:location.latitude fromLong:origin.longitude toLong:location.longitude];
+    //NSLog(@"distance from (%f,%f) for (%f,%f) : %f m", origin.latitude, origin.longitude, location.latitude, location.longitude, dist);
+    return dist <= radius;
 }
 
 - (void)determineSpanCoordinates {
     MKCoordinateRegion region = self.mapView.region;
-    CLLocationCoordinate2D center   = region.center;
+    CLLocationCoordinate2D center = region.center;
     NSLog(@"determine span coordinates");
-    northWestCorner.latitude  = center.latitude  - (region.span.latitudeDelta  / 2.0);
-    northWestCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
+    northWestSpanCorner.latitude  = center.latitude  - (region.span.latitudeDelta  / 2.0);
+    northWestSpanCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
     southEastCorner.latitude  = center.latitude  + (region.span.latitudeDelta  / 2.0);
     southEastCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
 }
