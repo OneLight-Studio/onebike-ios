@@ -81,6 +81,7 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    [self stopTimer];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
