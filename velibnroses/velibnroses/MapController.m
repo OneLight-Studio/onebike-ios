@@ -13,11 +13,6 @@
 #import "Station.h"
 #import "GeoUtils.h"
 
-#define METERS_PER_MILE 1609.344
-#define TLS_LAT 43.610477
-#define TLS_LONG 1.443615
-#define MIN_DIST_INTERVAL_IN_METER 50
-
 @interface MapController ()
 
 @end
@@ -26,12 +21,13 @@
     MKUserLocation *startUserLocation;
     WSRequest *_wsRequest;
     NSMutableArray *_stations;
-    CLLocationCoordinate2D northWestSpanCorner, southEastCorner;
-    BOOL isMapLoaded;
+    CLLocationCoordinate2D _northWestSpanCorner, _southEastSpanCorner;
+    BOOL _isMapLoaded;
     BOOL _searchViewVisible;
     BOOL _searching;
     CLLocation *_departureLocation;
     CLLocation *_arrivalLocation;
+    NSTimer *_timer;
 }
 
 @synthesize mapView;
@@ -41,9 +37,17 @@
 @synthesize bikeField;
 @synthesize bikeStepper;
 
+# pragma events
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackgroundNotificationReceived:) name:NOTIFICATION_DID_ENTER_BACKGROUND object:nil];
+    NSLog(@"register on %@", NOTIFICATION_DID_ENTER_BACKGROUND);
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForegroundNotificationReceived:) name:NOTIFICATION_WILL_ENTER_FOREGROUND object:nil];
+    NSLog(@"register on %@", NOTIFICATION_WILL_ENTER_FOREGROUND);
 
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;
@@ -64,13 +68,21 @@
         NSLog(@"stations count %i", _stations.count);
         [self determineSpanCoordinates];
         [self displayStations];
+        [self startTimer];
     }];
     
     NSLog(@"call ws");
     [_wsRequest call];
     
     self.mapView.showsUserLocation = YES;
-    isMapLoaded = false;
+    _isMapLoaded = false;
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    [self stopTimer];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -102,7 +114,7 @@
 }
 
 - (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated {
-    if (isMapLoaded) {
+    if (_isMapLoaded) {
         NSLog(@"region has changed");
         [self determineSpanCoordinates];
         [self displayStations];
@@ -111,8 +123,54 @@
 
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)aMapView {
     NSLog(@"map is loaded");
-    isMapLoaded = true;
+    _isMapLoaded = true;
 }
+
+-(void)timerFired:(NSTimer *)theTimer
+{
+    NSLog(@"timer fired %@", [theTimer fireDate]);
+    NSLog(@"call ws");
+    [_wsRequest call];
+}
+
+- (void) didEnterBackgroundNotificationReceived:(NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:NOTIFICATION_DID_ENTER_BACKGROUND]) {
+        [self stopTimer];
+    }
+}
+
+- (void) willEnterForegroundNotificationReceived:(NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:NOTIFICATION_WILL_ENTER_FOREGROUND]) {
+        double sleepingTime = [notification.object doubleValue];
+        NSLog(@"sleeping time : %f s", sleepingTime);
+        if (sleepingTime > TIME_BEFORE_REFRESH_DATA_IN_SECONDS) {
+            NSLog(@"have to refresh stations data");
+            NSLog(@"call ws");
+            [_wsRequest call];
+        }
+    }
+}
+
+- (void) startTimer {
+    if (_timer == nil)
+    {
+        NSLog(@"start timer");
+        _timer = [NSTimer scheduledTimerWithTimeInterval:TIME_BEFORE_REFRESH_DATA_IN_SECONDS target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
+    }
+}
+
+- (void) stopTimer {
+    if (_timer != nil)
+    {
+        NSLog(@"stop timer");
+        [_timer invalidate];
+        _timer = nil;
+    }
+}
+
+# pragma interface
 
 - (void)displayStations {
     if (_stations != nil) {
@@ -159,16 +217,16 @@
     CLLocationCoordinate2D userLocation = self.mapView.userLocation.coordinate;
     CLLocationCoordinate2D spanCenter = self.mapView.region.center;
     
-    if (location.latitude >= northWestSpanCorner.latitude && location.latitude <= southEastCorner.latitude
-        && location.longitude >= northWestSpanCorner.longitude && location.longitude <= southEastCorner.longitude
+    if (location.latitude >= _northWestSpanCorner.latitude && location.latitude <= _southEastSpanCorner.latitude
+        && location.longitude >= _northWestSpanCorner.longitude && location.longitude <= _southEastSpanCorner.longitude
         && ([self unlessInMeters:SPAN_SIDE_MAX_LENGTH_IN_METERS from:userLocation for:location]
-        || [self unlessInMeters:SPAN_SIDE_MAX_LENGTH_IN_METERS from:spanCenter for:location])) {
-        visible = true;
-    }
+            || [self unlessInMeters:SPAN_SIDE_MAX_LENGTH_IN_METERS from:spanCenter for:location])) {
+            visible = true;
+        }
     
     return visible;
 }
-            
+
 - (BOOL)unlessInMeters:(double)radius from:(CLLocationCoordinate2D)origin for:(CLLocationCoordinate2D)location {
     double dist = [GeoUtils getDistanceFromLat:origin.latitude toLat:location.latitude fromLong:origin.longitude toLong:location.longitude];
     //NSLog(@"distance from (%f,%f) for (%f,%f) : %f m", origin.latitude, origin.longitude, location.latitude, location.longitude, dist);
@@ -179,10 +237,10 @@
     MKCoordinateRegion region = self.mapView.region;
     CLLocationCoordinate2D center = region.center;
     NSLog(@"determine span coordinates");
-    northWestSpanCorner.latitude  = center.latitude  - (region.span.latitudeDelta  / 2.0);
-    northWestSpanCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
-    southEastCorner.latitude  = center.latitude  + (region.span.latitudeDelta  / 2.0);
-    southEastCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
+    _northWestSpanCorner.latitude  = center.latitude  - (region.span.latitudeDelta  / 2.0);
+    _northWestSpanCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
+    _southEastSpanCorner.latitude  = center.latitude  + (region.span.latitudeDelta  / 2.0);
+    _southEastSpanCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
 }
 
 - (IBAction)bikesChanged:(UIStepper *)stepper {
