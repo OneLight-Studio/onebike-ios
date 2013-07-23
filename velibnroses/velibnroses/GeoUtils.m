@@ -19,7 +19,7 @@
     double radSrc = srcLatitude * M_PI / 180.0;
     double radDest = destLatitude * M_PI / 180.0;
     
-    double a = sin(distLat/2) * sin(distLat/2) * sin(distLong/2) * sin(distLong/2) * cos(radSrc) * sin(radDest);
+    double a = sin(distLat/2) * sin(distLat/2) + sin(distLong/2) * sin(distLong/2) * cos(radSrc) * sin(radDest);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
     
     return (EARTH_RADIUS_IN_METERS * c);

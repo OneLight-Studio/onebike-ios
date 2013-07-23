@@ -10,7 +10,6 @@
 		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
 		1993DCEF178F09860089A6D5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1993DCEE178F09860089A6D5 /* MapKit.framework */; };
 		19B5ADD417902AA5000E6B40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19B5ADD317902AA5000E6B40 /* CoreLocation.framework */; };
-		19B5ADD817902B73000E6B40 /* CoreLocationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 19B5ADD717902B73000E6B40 /* CoreLocationHelper.m */; };
 		19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D1F7421793FDEC0051D13B /* WSRequest.m */; };
 		19FD1B571795891200309FD0 /* toulouse.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 19FD1B561795891200309FD0 /* toulouse.gpx */; };
 		19FD1B5F179591BE00309FD0 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FD1B5E179591BE00309FD0 /* Station.m */; };
@@ -37,8 +36,6 @@
 		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
 		1993DCEE178F09860089A6D5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		19B5ADD317902AA5000E6B40 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		19B5ADD617902B73000E6B40 /* CoreLocationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreLocationHelper.h; sourceTree = "<group>"; };
-		19B5ADD717902B73000E6B40 /* CoreLocationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreLocationHelper.m; sourceTree = "<group>"; };
 		19FD1B561795891200309FD0 /* toulouse.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = toulouse.gpx; path = velibnroses/toulouse.gpx; sourceTree = "<group>"; };
 		19FD1B5817958E4B00309FD0 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		19FD1B5D179591BE00309FD0 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Station.h; sourceTree = "<group>"; };
@@ -85,15 +82,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		190777021796F3C700180530 /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				19B5ADD717902B73000E6B40 /* CoreLocationHelper.m */,
-				19B5ADD617902B73000E6B40 /* CoreLocationHelper.h */,
-			);
-			name = Helper;
-			sourceTree = "<group>";
-		};
 		19B5ADD517902ACF000E6B40 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,7 +141,6 @@
 				E931958017858121009AFCC1 /* MapController.h */,
 				E931958117858121009AFCC1 /* MapController.m */,
 				19FD1B5C1795916600309FD0 /* Domain */,
-				190777021796F3C700180530 /* Helper */,
 				19B5ADD517902ACF000E6B40 /* Utils */,
 				E9D1F7401793FDC40051D13B /* Web Services */,
 				E9D1F74317969EAB0051D13B /* Images */,
@@ -273,7 +260,6 @@
 				E931957217858121009AFCC1 /* main.m in Sources */,
 				E931957617858121009AFCC1 /* AppDelegate.m in Sources */,
 				E931958217858121009AFCC1 /* MapController.m in Sources */,
-				19B5ADD817902B73000E6B40 /* CoreLocationHelper.m in Sources */,
 				19FD1B5F179591BE00309FD0 /* Station.m in Sources */,
 				190777011796F3BE00180530 /* GeoUtils.m in Sources */,
 				19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */,
