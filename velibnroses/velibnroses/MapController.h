@@ -8,9 +8,7 @@
 
 #import <MapKit/MapKit.h>
 
-@interface MapController : UIViewController <MKMapViewDelegate, UITextFieldDelegate> {
-    @private CLLocationCoordinate2D currentLocation;
-}
+@interface MapController : UIViewController <MKMapViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIView *searchView;
