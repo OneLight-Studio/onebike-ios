@@ -17,7 +17,14 @@
 
 // WS
 
+#define TIME_BEFORE_REFRESH_DATA_IN_SECONDS 300
 #define JCD_WS_ENTRY_POINT_PARAM_VALUE @"https://api.jcdecaux.com/vls/v1/stations"
 #define JCD_API_KEY_PARAM_NAME @"apiKey"
 #define JCD_API_KEY_PARAM_VALUE @"e774968643aee3788d9b83be4651ba671aba7611"
 #define JCD_CONTRACT_KEY_PARAM_NAME @"contract"
+
+// notification
+
+#define NOTIFICATION_DID_ENTER_BACKGROUND @"applicationDidEnterBackground"
+#define NOTIFICATION_WILL_ENTER_FOREGROUND @"applicationWillEnterForeground"
+
