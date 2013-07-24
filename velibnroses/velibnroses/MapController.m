@@ -23,7 +23,7 @@
     NSMutableArray *_stations;
     CLLocationCoordinate2D _northWestSpanCorner, _southEastSpanCorner;
     BOOL _isMapLoaded;
-    BOOL _searchViewVisible;
+    //BOOL _searchViewVisible;
     BOOL _searching;
     CLLocation *_departureLocation;
     CLLocation *_arrivalLocation;
@@ -36,8 +36,9 @@
 @synthesize arrivalField;
 @synthesize bikeField;
 @synthesize bikeStepper;
+@synthesize searchButton;
 
-# pragma events
+# pragma mark Event
 
 - (void)viewDidLoad
 {
@@ -51,8 +52,6 @@
 
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;
-
-    _searchViewVisible = NO;
     
     CGRect searchFrame = self.searchView.frame;
     searchFrame.origin.y = -searchFrame.size.height;
@@ -76,6 +75,9 @@
     
     self.mapView.showsUserLocation = YES;
     _isMapLoaded = false;
+    
+    // button bar init
+    self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"X" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelSearchView:)];
 }
 
 - (void)viewDidUnload
@@ -170,7 +172,7 @@
     }
 }
 
-# pragma interface
+# pragma mark Map
 
 - (void)displayStations {
     if (_stations != nil) {
@@ -243,14 +245,48 @@
     _southEastSpanCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
 }
 
+# pragma mark Navigation Bar
+
+- (IBAction)displaySearchView:(id)sender {
+    [self refreshNavigationBar:true];
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect searchFrame = self.searchView.frame;
+        CGRect mapFrame = self.mapView.frame;
+        searchFrame.origin.y = 0;
+        mapFrame.origin.y = searchFrame.size.height;
+        self.searchView.frame = searchFrame;
+        self.mapView.frame = mapFrame;
+    }];
+}
+
+- (void)cancelSearchView:(id)sender {
+    [self refreshNavigationBar:false];
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect searchFrame = self.searchView.frame;
+        CGRect mapFrame = self.mapView.frame;
+        searchFrame.origin.y = -searchFrame.size.height;
+        mapFrame.origin.y = 0;
+        [self.view endEditing:YES];
+        self.searchView.frame = searchFrame;
+        self.mapView.frame = mapFrame;
+    }];
+}
+
+- (void)refreshNavigationBar:(BOOL)isVisibleSearchView {
+    
+    if (isVisibleSearchView == false) {
+        self.navigationItem.rightBarButtonItem = self.searchButton;
+    } else {
+        self.navigationItem.rightBarButtonItem = self.cancelButton;
+    }
+}
+
+# pragma mark Search
+
 - (IBAction)bikesChanged:(UIStepper *)stepper {
     // default min is 0 because we start with 0, now set the min to 1
     stepper.minimumValue = 1;
     self.bikeField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
-}
-
-- (IBAction)toggleSearchView:(id)sender {
-    [self toggleSearchView];
 }
 
 - (IBAction)useMyLocationAsDeparture:(id)sender {
@@ -290,7 +326,7 @@
         [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"missing_bikes", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
     } else {
         [self.view endEditing:YES];
-        [self toggleSearchView];
+        [self cancelSearchView:nil];
         _departureLocation = nil;
         _arrivalLocation = nil;
         _searching = YES;
@@ -328,24 +364,6 @@
             }
         }];
     }
-}
-
-- (void)toggleSearchView {
-    _searchViewVisible = !_searchViewVisible;
-    [UIView animateWithDuration:0.3 animations:^{
-        CGRect searchFrame = self.searchView.frame;
-        CGRect mapFrame = self.mapView.frame;
-        if (_searchViewVisible) {
-            searchFrame.origin.y = 0;
-            mapFrame.origin.y = searchFrame.size.height;
-        } else {
-            searchFrame.origin.y = -searchFrame.size.height;
-            mapFrame.origin.y = 0;
-            [self.view endEditing:YES];
-        }
-        self.searchView.frame = searchFrame;
-        self.mapView.frame = mapFrame;
-    }];
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {

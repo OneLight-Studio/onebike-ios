@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="11G63b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -135,7 +135,7 @@
                     <navigationItem key="navigationItem" id="hmS-dC-JVN">
                         <barButtonItem key="rightBarButtonItem" image="Search.png" id="Dwx-k2-M2a">
                             <connections>
-                                <action selector="toggleSearchView:" destination="R2K-lh-zEE" id="njY-lO-BeL"/>
+                                <action selector="displaySearchView:" destination="R2K-lh-zEE" id="omS-Lc-4UY"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -145,12 +145,13 @@
                         <outlet property="bikeStepper" destination="NFz-WJ-rUr" id="UCT-es-hcf"/>
                         <outlet property="departureField" destination="iYR-bn-zkd" id="AZx-VX-AIw"/>
                         <outlet property="mapView" destination="QIt-AM-94y" id="ayC-Gs-Ple"/>
+                        <outlet property="searchButton" destination="Dwx-k2-M2a" id="vf1-gY-RPE"/>
                         <outlet property="searchView" destination="5b7-xd-UEt" id="G5h-3n-uDV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mlL-JI-PpG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="791" y="35"/>
+            <point key="canvasLocation" x="803" y="32"/>
         </scene>
     </scenes>
     <resources>

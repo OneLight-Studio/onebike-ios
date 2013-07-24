@@ -16,9 +16,12 @@
 @property (weak, nonatomic) IBOutlet UITextField *arrivalField;
 @property (weak, nonatomic) IBOutlet UITextField *bikeField;
 @property (weak, nonatomic) IBOutlet UIStepper *bikeStepper;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *searchButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *backToMapButton;
 
 - (IBAction)bikesChanged:(UIStepper *)stepper;
-- (IBAction)toggleSearchView:(id)sender;
+- (IBAction)displaySearchView:(id)sender;
 - (IBAction)useMyLocationAsDeparture:(id)sender;
 - (IBAction)useMyLocationAsArrival:(id)sender;
 - (IBAction)search:(id)sender;
