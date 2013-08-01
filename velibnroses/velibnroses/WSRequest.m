@@ -7,6 +7,7 @@
 //
 
 #import "WSRequest.h"
+#import "Constants.h"
 
 @implementation WSRequest {
     NSString *_resource;
@@ -83,7 +84,7 @@
     }
     NSURL *url = [NSURL URLWithString:uri];
     // build the request
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:WS_REQUEST_TIMEOUT];
     [request setHTTPMethod:@"GET"];
     
     NSLog(@"Request %@ %@", request.HTTPMethod, request.URL.absoluteString);

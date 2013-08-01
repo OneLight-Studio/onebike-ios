@@ -12,9 +12,10 @@
 #import "WSRequest.h"
 #import "Station.h"
 #import "GeoUtils.h"
+#import "RoutePolyline.h"
 
 @interface MapController ()
-
+    
 @end
 
 @implementation MapController {
@@ -23,11 +24,12 @@
     NSMutableArray *_stations;
     CLLocationCoordinate2D _northWestSpanCorner, _southEastSpanCorner;
     BOOL _isMapLoaded;
-    //BOOL _searchViewVisible;
     BOOL _searching;
     CLLocation *_departureLocation;
     CLLocation *_arrivalLocation;
     NSTimer *_timer;
+    RoutePolyline *_route;
+    int _mapViewState;
 }
 
 @synthesize mapView;
@@ -65,8 +67,10 @@
         NSLog(@"ws result");
         _stations = (NSMutableArray *)[Station fromJSONArray:json];
         NSLog(@"stations count %i", _stations.count);
-        [self determineSpanCoordinates];
-        [self displayStations];
+        if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
+            [self determineSpanCoordinates];
+            [self displayStations];
+        }
         [self startTimer];
     }];
     
@@ -75,6 +79,7 @@
     
     self.mapView.showsUserLocation = YES;
     _isMapLoaded = false;
+    _mapViewState = MAP_VIEW_DEFAULT_STATE;
     
     // button bar init
     self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"X" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelSearchView:)];
@@ -116,7 +121,7 @@
 }
 
 - (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated {
-    if (_isMapLoaded) {
+    if (_isMapLoaded && _mapViewState == MAP_VIEW_DEFAULT_STATE) {
         NSLog(@"region has changed");
         [self determineSpanCoordinates];
         [self displayStations];
@@ -172,7 +177,45 @@
     }
 }
 
-# pragma mark Map
+# pragma mark -
+
+# pragma mark Navigation Bar
+
+- (IBAction)displaySearchView:(id)sender {
+    [self refreshNavigationBar:true];
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect searchFrame = self.searchView.frame;
+        CGRect mapFrame = self.mapView.frame;
+        searchFrame.origin.y = 0;
+        mapFrame.origin.y = searchFrame.size.height;
+        self.searchView.frame = searchFrame;
+        self.mapView.frame = mapFrame;
+    }];
+}
+
+- (void)cancelSearchView:(id)sender {
+    [self refreshNavigationBar:false];
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect searchFrame = self.searchView.frame;
+        CGRect mapFrame = self.mapView.frame;
+        searchFrame.origin.y = -searchFrame.size.height;
+        mapFrame.origin.y = 0;
+        [self.view endEditing:YES];
+        self.searchView.frame = searchFrame;
+        self.mapView.frame = mapFrame;
+    }];
+}
+
+- (void)refreshNavigationBar:(BOOL)isVisibleSearchView {
+    
+    if (isVisibleSearchView == false) {
+        self.navigationItem.rightBarButtonItem = self.searchButton;
+    } else {
+        self.navigationItem.rightBarButtonItem = self.cancelButton;
+    }
+}
+
+# pragma mark Map View
 
 - (void)displayStations {
     if (_stations != nil) {
@@ -245,43 +288,43 @@
     _southEastSpanCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
 }
 
-# pragma mark Navigation Bar
-
-- (IBAction)displaySearchView:(id)sender {
-    [self refreshNavigationBar:true];
-    [UIView animateWithDuration:0.3 animations:^{
-        CGRect searchFrame = self.searchView.frame;
-        CGRect mapFrame = self.mapView.frame;
-        searchFrame.origin.y = 0;
-        mapFrame.origin.y = searchFrame.size.height;
-        self.searchView.frame = searchFrame;
-        self.mapView.frame = mapFrame;
-    }];
+-(MKOverlayView *)mapView:(MKMapView *)aMapView viewForOverlay:(id<MKOverlay>)overlay
+{
+    NSLog(@"render route");
+    RoutePolyline *polyline = overlay;
+    MKPolylineView *polylineView = [[MKPolylineView alloc] initWithPolyline:polyline.polyline];
+    polylineView.lineWidth = 5;
+    polylineView.strokeColor = [UIColor blackColor];
+    return polylineView;
 }
 
-- (void)cancelSearchView:(id)sender {
-    [self refreshNavigationBar:false];
-    [UIView animateWithDuration:0.3 animations:^{
-        CGRect searchFrame = self.searchView.frame;
-        CGRect mapFrame = self.mapView.frame;
-        searchFrame.origin.y = -searchFrame.size.height;
-        mapFrame.origin.y = 0;
-        [self.view endEditing:YES];
-        self.searchView.frame = searchFrame;
-        self.mapView.frame = mapFrame;
-    }];
-}
-
-- (void)refreshNavigationBar:(BOOL)isVisibleSearchView {
-    
-    if (isVisibleSearchView == false) {
-        self.navigationItem.rightBarButtonItem = self.searchButton;
-    } else {
-        self.navigationItem.rightBarButtonItem = self.cancelButton;
+- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation
+{
+    MKPinAnnotationView *annotationView;
+    if (annotation != mapView.userLocation) {
+        static NSString *annotationID = @"pinView";
+        annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+        if (annotationView == nil) {
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
+        }
+        if ([annotation isKindOfClass:[MKPointAnnotation class]]) {
+            MKPointAnnotation *marker = annotation;
+            if ([marker.title isEqualToString:@"departure"]) {
+                NSLog(@"render departure pin");
+                annotationView.pinColor = MKPinAnnotationColorGreen;
+            } else if ([marker.title isEqualToString:@"arrival"]) {
+                NSLog(@"render arrival pin");
+                annotationView.pinColor = MKPinAnnotationColorPurple;
+            } else {
+                annotationView.pinColor = MKPinAnnotationColorRed;
+            }
+        }
+        annotationView.canShowCallout = YES;
     }
+    return annotationView;
 }
 
-# pragma mark Search
+# pragma mark Search View
 
 - (IBAction)bikesChanged:(UIStepper *)stepper {
     // default min is 0 because we start with 0, now set the min to 1
@@ -389,7 +432,68 @@
 
 - (void)searchWithDeparture:(CLLocation *)departure andArrival:(CLLocation *)arrival withNumberOfBikes:(int)bikes {
     NSLog(@"%f,%f -> %f,%f (%d)", departure.coordinate.latitude, departure.coordinate.longitude, arrival.coordinate.latitude, arrival.coordinate.longitude, bikes);
-    // TODO Search stations
+    _mapViewState = MAP_VIEW_SEARCH_STATE;
+    [self findAndDrawRoute];
+}
+
+# pragma mark -
+# pragma mark Utils
+
+- (void)findAndDrawRoute {
+    
+    NSLog(@"searching for a route");
+    WSRequest *googleRequest = [[WSRequest alloc] initWithResource:@"https://maps.googleapis.com/maps/api/directions/json" inBackground:NO];
+    [googleRequest appendParameterWithKey:@"origin" andValue:[NSString stringWithFormat:@"%f,%f", _departureLocation.coordinate.latitude, _departureLocation.coordinate.longitude]];
+    [googleRequest appendParameterWithKey:@"destination" andValue:[NSString stringWithFormat:@"%f,%f", _arrivalLocation.coordinate.latitude, _arrivalLocation.coordinate.longitude]];
+    [googleRequest appendParameterWithKey:@"language" andValue:[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]];
+    [googleRequest appendParameterWithKey:@"mode" andValue:@"walking"];
+    [googleRequest appendParameterWithKey:@"sensor" andValue:@"true"];
+    [googleRequest handleResultWith:^(id json) {
+        NSString *status = [json valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"OK"]) {
+            NSLog(@"find a route");
+            if (_route != nil) {
+                [mapView removeOverlay:_route];
+                _route = nil;
+            }
+            [mapView removeAnnotations:mapView.annotations];
+            
+            NSString *encodedPolyline = [[[[json objectForKey:@"routes"] firstObject] objectForKey:@"overview_polyline"] valueForKey:@"points"];
+            _route = [RoutePolyline routePolylineFromPolyline:[GeoUtils polylineWithEncodedString:encodedPolyline]];
+            
+            // departure annotation
+            MKPointAnnotation *marker = [[MKPointAnnotation alloc] init];
+            marker.coordinate = _departureLocation.coordinate;
+            marker.title = @"departure";
+            
+            [mapView addAnnotation:marker];
+            
+            // arrival annotation
+            marker = [[MKPointAnnotation alloc] init];
+            marker.coordinate = _arrivalLocation.coordinate;
+            marker.title = @"arrival";
+            
+            [mapView addAnnotation:marker];
+            
+            [mapView addOverlay:_route];
+            
+            [mapView setVisibleMapRect:_route.boundingMapRect animated:YES];
+            
+        } else {
+            NSLog(@"Google Maps API error %@", status);
+            [[[UIAlertView alloc] initWithTitle:@"error" message:@"Google Maps API error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }
+    }];
+    [googleRequest handleErrorWith:^(int errorCode) {
+        NSLog(@"HTTP error %d", errorCode);
+        [[[UIAlertView alloc] initWithTitle:@"error" message:@"HTTP error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }];
+    [googleRequest handleExceptionWith:^(NSError *exception) {
+        NSLog(@"Exception %@", exception.debugDescription);
+        [[[UIAlertView alloc] initWithTitle:@"error" message:@"Exception" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }];
+    [googleRequest call];
 }
 
 @end

@@ -17,6 +17,7 @@
 
 // WS
 
+#define WS_REQUEST_TIMEOUT 15
 #define TIME_BEFORE_REFRESH_DATA_IN_SECONDS 300
 #define JCD_WS_ENTRY_POINT_PARAM_VALUE @"https://api.jcdecaux.com/vls/v1/stations"
 #define JCD_API_KEY_PARAM_NAME @"apiKey"
@@ -28,3 +29,6 @@
 #define NOTIFICATION_DID_ENTER_BACKGROUND @"applicationDidEnterBackground"
 #define NOTIFICATION_WILL_ENTER_FOREGROUND @"applicationWillEnterForeground"
 
+// misc
+#define MAP_VIEW_DEFAULT_STATE 0
+#define MAP_VIEW_SEARCH_STATE 1
