@@ -35,7 +35,7 @@
                                 </connections>
                             </mapView>
                             <view contentMode="scaleToFill" id="5b7-xd-UEt">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="177"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="205"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="99S-N3-YFi">
@@ -66,16 +66,16 @@
                                             <outlet property="delegate" destination="R2K-lh-zEE" id="hdx-X0-x9z"/>
                                         </connections>
                                     </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Number of bikes" minimumFontSize="17" id="gs9-Dj-mAK">
-                                        <rect key="frame" x="10" y="86" width="198" height="30"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="gs9-Dj-mAK">
+                                        <rect key="frame" x="110" y="87" width="69" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="search"/>
+                                        <textInputTraits key="textInputTraits"/>
                                         <connections>
                                             <outlet property="delegate" destination="R2K-lh-zEE" id="QtG-uR-1DJ"/>
                                         </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7ZO-mt-kun">
-                                        <rect key="frame" x="237" y="123" width="73" height="44"/>
+                                        <rect key="frame" x="216" y="163" width="94" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Search">
@@ -89,8 +89,8 @@
                                             <action selector="search:" destination="R2K-lh-zEE" eventType="touchUpInside" id="FmO-dR-hzO"/>
                                         </connections>
                                     </button>
-                                    <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" id="NFz-WJ-rUr">
-                                        <rect key="frame" x="216" y="88" width="94" height="27"/>
+                                    <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="50" id="NFz-WJ-rUr">
+                                        <rect key="frame" x="216" y="89" width="94" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <connections>
                                             <action selector="bikesChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="h0o-Wo-3DN"/>
@@ -126,6 +126,43 @@
                                             <action selector="useMyLocationAsArrival:" destination="R2K-lh-zEE" eventType="touchUpInside" id="fAT-Iv-ZXa"/>
                                         </connections>
                                     </button>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="Uyh-Mx-wNk">
+                                        <rect key="frame" x="110" y="124" width="69" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="R2K-lh-zEE" id="DbV-aP-WVg"/>
+                                        </connections>
+                                    </textField>
+                                    <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1000" minimumValue="100" maximumValue="2000" stepValue="100" id="jEG-Oe-mgC">
+                                        <rect key="frame" x="216" y="125" width="94" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <connections>
+                                            <action selector="radiusChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="Omx-DU-YKG"/>
+                                        </connections>
+                                    </stepper>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="In a radius of" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K3X-ha-Ssg">
+                                        <rect key="frame" x="20" y="124" width="88" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Bike number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9FD-46-R8n">
+                                        <rect key="frame" x="20" y="89" width="88" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="m" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dtD-rH-IN8">
+                                        <rect key="frame" x="179" y="124" width="29" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -145,6 +182,8 @@
                         <outlet property="bikeStepper" destination="NFz-WJ-rUr" id="UCT-es-hcf"/>
                         <outlet property="departureField" destination="iYR-bn-zkd" id="AZx-VX-AIw"/>
                         <outlet property="mapView" destination="QIt-AM-94y" id="ayC-Gs-Ple"/>
+                        <outlet property="radiusField" destination="Uyh-Mx-wNk" id="hgV-Qz-riQ"/>
+                        <outlet property="radiusStepper" destination="jEG-Oe-mgC" id="U4G-mn-Kqo"/>
                         <outlet property="searchButton" destination="Dwx-k2-M2a" id="vf1-gY-RPE"/>
                         <outlet property="searchView" destination="5b7-xd-UEt" id="G5h-3n-uDV"/>
                     </connections>
@@ -158,6 +197,29 @@
         <image name="MyLocation.png" width="40" height="40"/>
         <image name="Search.png" width="20" height="20"/>
     </resources>
+    <classes>
+        <class className="MapController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapController.h"/>
+            <relationships>
+                <relationship kind="action" name="bikesChanged:" candidateClass="UIStepper"/>
+                <relationship kind="action" name="displaySearchView:"/>
+                <relationship kind="action" name="radiusChanged:" candidateClass="UIStepper"/>
+                <relationship kind="action" name="search:"/>
+                <relationship kind="action" name="useMyLocationAsArrival:"/>
+                <relationship kind="action" name="useMyLocationAsDeparture:"/>
+                <relationship kind="outlet" name="arrivalField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="bikeField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="bikeStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="radiusField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="radiusStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="searchButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="searchView" candidateClass="UIView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
