@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
+		1993DCEF178F09860089A6D5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1993DCEE178F09860089A6D5 /* MapKit.framework */; };
+		19B5ADD417902AA5000E6B40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19B5ADD317902AA5000E6B40 /* CoreLocation.framework */; };
+		19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D1F7421793FDEC0051D13B /* WSRequest.m */; };
+		19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CED9FF17AAA4120069ECDC /* RoutePolyline.m */; };
+		19FD1B571795891200309FD0 /* toulouse.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 19FD1B561795891200309FD0 /* toulouse.gpx */; };
+		19FD1B5F179591BE00309FD0 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FD1B5E179591BE00309FD0 /* Station.m */; };
 		E931956617858121009AFCC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956517858121009AFCC1 /* UIKit.framework */; };
 		E931956817858121009AFCC1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956717858121009AFCC1 /* Foundation.framework */; };
 		E931956A17858121009AFCC1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956917858121009AFCC1 /* CoreGraphics.framework */; };
@@ -17,25 +24,28 @@
 		E931957A17858121009AFCC1 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E931957917858121009AFCC1 /* Default@2x.png */; };
 		E931957C17858121009AFCC1 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E931957B17858121009AFCC1 /* Default-568h@2x.png */; };
 		E931957F17858121009AFCC1 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E931957D17858121009AFCC1 /* MainStoryboard.storyboard */; };
-		E931958217858121009AFCC1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E931958117858121009AFCC1 /* ViewController.m */; };
-		E931958A17858122009AFCC1 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931958917858122009AFCC1 /* SenTestingKit.framework */; };
-		E931958B17858122009AFCC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956517858121009AFCC1 /* UIKit.framework */; };
-		E931958C17858122009AFCC1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956717858121009AFCC1 /* Foundation.framework */; };
-		E931959417858122009AFCC1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E931959217858122009AFCC1 /* InfoPlist.strings */; };
-		E931959717858122009AFCC1 /* velibnrosesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E931959617858122009AFCC1 /* velibnrosesTests.m */; };
+		E931958217858121009AFCC1 /* MapController.m in Sources */ = {isa = PBXBuildFile; fileRef = E931958117858121009AFCC1 /* MapController.m */; };
+		E9D1F73F1793FA690051D13B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F73D1793FA690051D13B /* Localizable.strings */; };
+		E9D1F74617969EC00051D13B /* MyLocation.png in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F74417969EC00051D13B /* MyLocation.png */; };
+		E9D1F74717969EC00051D13B /* MyLocation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F74517969EC00051D13B /* MyLocation@2x.png */; };
+		E9D1F74A1796CC130051D13B /* Search.png in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F7481796CC130051D13B /* Search.png */; };
+		E9D1F74B1796CC130051D13B /* Search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F7491796CC130051D13B /* Search@2x.png */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		E931958D17858122009AFCC1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E931955A17858121009AFCC1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E931956117858121009AFCC1;
-			remoteInfo = velibnroses;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
+		190776FF1796F3BE00180530 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
+		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
+		1993DCEE178F09860089A6D5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		19B5ADD317902AA5000E6B40 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		19CED9FE17AAA4120069ECDC /* RoutePolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoutePolyline.h; sourceTree = "<group>"; };
+		19CED9FF17AAA4120069ECDC /* RoutePolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoutePolyline.m; sourceTree = "<group>"; };
+		19F3F49C17B250B900DCCC47 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainStoryboard.strings; sourceTree = "<group>"; };
+		19F3F49D17B250B900DCCC47 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		19F3F49E17B250B900DCCC47 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		19FD1B561795891200309FD0 /* toulouse.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = toulouse.gpx; path = velibnroses/toulouse.gpx; sourceTree = "<group>"; };
+		19FD1B5817958E4B00309FD0 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		19FD1B5D179591BE00309FD0 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Station.h; sourceTree = "<group>"; };
+		19FD1B5E179591BE00309FD0 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Station.m; sourceTree = "<group>"; };
 		E931956217858121009AFCC1 /* Velib N' Roses.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Velib N' Roses.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E931956517858121009AFCC1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E931956717858121009AFCC1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -49,15 +59,17 @@
 		E931957717858121009AFCC1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		E931957917858121009AFCC1 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		E931957B17858121009AFCC1 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		E931957E17858121009AFCC1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		E931958017858121009AFCC1 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		E931958117858121009AFCC1 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		E931958817858122009AFCC1 /* Velib N' RosesTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Velib N' RosesTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E931958017858121009AFCC1 /* MapController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapController.h; sourceTree = "<group>"; };
+		E931958117858121009AFCC1 /* MapController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapController.m; sourceTree = "<group>"; };
 		E931958917858122009AFCC1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		E931959117858122009AFCC1 /* Velib N' RosesTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Velib N' RosesTests-Info.plist"; sourceTree = "<group>"; };
-		E931959317858122009AFCC1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E931959517858122009AFCC1 /* velibnrosesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = velibnrosesTests.h; sourceTree = "<group>"; };
-		E931959617858122009AFCC1 /* velibnrosesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = velibnrosesTests.m; sourceTree = "<group>"; };
+		E9D1F73C1793F9D10051D13B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		E9D1F73E1793FA690051D13B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = velibnroses/en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E9D1F7411793FDEC0051D13B /* WSRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WSRequest.h; sourceTree = "<group>"; };
+		E9D1F7421793FDEC0051D13B /* WSRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WSRequest.m; sourceTree = "<group>"; };
+		E9D1F74417969EC00051D13B /* MyLocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MyLocation.png; path = img/MyLocation.png; sourceTree = "<group>"; };
+		E9D1F74517969EC00051D13B /* MyLocation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MyLocation@2x.png"; path = "img/MyLocation@2x.png"; sourceTree = "<group>"; };
+		E9D1F7481796CC130051D13B /* Search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Search.png; path = img/Search.png; sourceTree = "<group>"; };
+		E9D1F7491796CC130051D13B /* Search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Search@2x.png"; path = "img/Search@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,30 +77,43 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19B5ADD417902AA5000E6B40 /* CoreLocation.framework in Frameworks */,
+				1993DCEF178F09860089A6D5 /* MapKit.framework in Frameworks */,
 				E931956617858121009AFCC1 /* UIKit.framework in Frameworks */,
 				E931956817858121009AFCC1 /* Foundation.framework in Frameworks */,
 				E931956A17858121009AFCC1 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E931958417858122009AFCC1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E931958A17858122009AFCC1 /* SenTestingKit.framework in Frameworks */,
-				E931958B17858122009AFCC1 /* UIKit.framework in Frameworks */,
-				E931958C17858122009AFCC1 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		19B5ADD517902ACF000E6B40 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				19FD1B5817958E4B00309FD0 /* Constants.h */,
+				190776FF1796F3BE00180530 /* GeoUtils.h */,
+				190777001796F3BE00180530 /* GeoUtils.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		19FD1B5C1795916600309FD0 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				19FD1B5D179591BE00309FD0 /* Station.h */,
+				19FD1B5E179591BE00309FD0 /* Station.m */,
+				19CED9FE17AAA4120069ECDC /* RoutePolyline.h */,
+				19CED9FF17AAA4120069ECDC /* RoutePolyline.m */,
+			);
+			name = Domain;
+			sourceTree = "<group>";
+		};
 		E931955917858121009AFCC1 = {
 			isa = PBXGroup;
 			children = (
+				19FD1B561795891200309FD0 /* toulouse.gpx */,
 				E931956B17858121009AFCC1 /* velibnroses */,
-				E931958F17858122009AFCC1 /* velibnrosesTests */,
 				E931956417858121009AFCC1 /* Frameworks */,
 				E931956317858121009AFCC1 /* Products */,
 			);
@@ -98,7 +123,6 @@
 			isa = PBXGroup;
 			children = (
 				E931956217858121009AFCC1 /* Velib N' Roses.app */,
-				E931958817858122009AFCC1 /* Velib N' RosesTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -106,6 +130,8 @@
 		E931956417858121009AFCC1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				19B5ADD317902AA5000E6B40 /* CoreLocation.framework */,
+				1993DCEE178F09860089A6D5 /* MapKit.framework */,
 				E931956517858121009AFCC1 /* UIKit.framework */,
 				E931956717858121009AFCC1 /* Foundation.framework */,
 				E931956917858121009AFCC1 /* CoreGraphics.framework */,
@@ -120,8 +146,12 @@
 				E931957417858121009AFCC1 /* AppDelegate.h */,
 				E931957517858121009AFCC1 /* AppDelegate.m */,
 				E931957D17858121009AFCC1 /* MainStoryboard.storyboard */,
-				E931958017858121009AFCC1 /* ViewController.h */,
-				E931958117858121009AFCC1 /* ViewController.m */,
+				E931958017858121009AFCC1 /* MapController.h */,
+				E931958117858121009AFCC1 /* MapController.m */,
+				19FD1B5C1795916600309FD0 /* Domain */,
+				19B5ADD517902ACF000E6B40 /* Utils */,
+				E9D1F7401793FDC40051D13B /* Web Services */,
+				E9D1F74317969EAB0051D13B /* Images */,
 				E931956C17858121009AFCC1 /* Supporting Files */,
 			);
 			path = velibnroses;
@@ -130,6 +160,7 @@
 		E931956C17858121009AFCC1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E9D1F73D1793FA690051D13B /* Localizable.strings */,
 				E931956D17858121009AFCC1 /* Velib N' Roses-Info.plist */,
 				E931956E17858121009AFCC1 /* InfoPlist.strings */,
 				E931957117858121009AFCC1 /* main.m */,
@@ -141,23 +172,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E931958F17858122009AFCC1 /* velibnrosesTests */ = {
+		E9D1F7401793FDC40051D13B /* Web Services */ = {
 			isa = PBXGroup;
 			children = (
-				E931959517858122009AFCC1 /* velibnrosesTests.h */,
-				E931959617858122009AFCC1 /* velibnrosesTests.m */,
-				E931959017858122009AFCC1 /* Supporting Files */,
+				E9D1F7411793FDEC0051D13B /* WSRequest.h */,
+				E9D1F7421793FDEC0051D13B /* WSRequest.m */,
 			);
-			path = velibnrosesTests;
+			name = "Web Services";
 			sourceTree = "<group>";
 		};
-		E931959017858122009AFCC1 /* Supporting Files */ = {
+		E9D1F74317969EAB0051D13B /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				E931959117858122009AFCC1 /* Velib N' RosesTests-Info.plist */,
-				E931959217858122009AFCC1 /* InfoPlist.strings */,
+				E9D1F74417969EC00051D13B /* MyLocation.png */,
+				E9D1F74517969EC00051D13B /* MyLocation@2x.png */,
+				E9D1F7481796CC130051D13B /* Search.png */,
+				E9D1F7491796CC130051D13B /* Search@2x.png */,
 			);
-			name = "Supporting Files";
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,25 +212,6 @@
 			productReference = E931956217858121009AFCC1 /* Velib N' Roses.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E931958717858122009AFCC1 /* Velib N' RosesTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E931959D17858122009AFCC1 /* Build configuration list for PBXNativeTarget "Velib N' RosesTests" */;
-			buildPhases = (
-				E931958317858122009AFCC1 /* Sources */,
-				E931958417858122009AFCC1 /* Frameworks */,
-				E931958517858122009AFCC1 /* Resources */,
-				E931958617858122009AFCC1 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E931958E17858122009AFCC1 /* PBXTargetDependency */,
-			);
-			name = "Velib N' RosesTests";
-			productName = velibnrosesTests;
-			productReference = E931958817858122009AFCC1 /* Velib N' RosesTests.octest */;
-			productType = "com.apple.product-type.bundle";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -214,6 +227,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
+				fr,
 			);
 			mainGroup = E931955917858121009AFCC1;
 			productRefGroup = E931956317858121009AFCC1 /* Products */;
@@ -221,7 +236,6 @@
 			projectRoot = "";
 			targets = (
 				E931956117858121009AFCC1 /* Velib N' Roses */,
-				E931958717858122009AFCC1 /* Velib N' RosesTests */,
 			);
 		};
 /* End PBXProject section */
@@ -236,34 +250,16 @@
 				E931957A17858121009AFCC1 /* Default@2x.png in Resources */,
 				E931957C17858121009AFCC1 /* Default-568h@2x.png in Resources */,
 				E931957F17858121009AFCC1 /* MainStoryboard.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E931958517858122009AFCC1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E931959417858122009AFCC1 /* InfoPlist.strings in Resources */,
+				E9D1F73F1793FA690051D13B /* Localizable.strings in Resources */,
+				19FD1B571795891200309FD0 /* toulouse.gpx in Resources */,
+				E9D1F74617969EC00051D13B /* MyLocation.png in Resources */,
+				E9D1F74717969EC00051D13B /* MyLocation@2x.png in Resources */,
+				E9D1F74A1796CC130051D13B /* Search.png in Resources */,
+				E9D1F74B1796CC130051D13B /* Search@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		E931958617858122009AFCC1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E931955E17858121009AFCC1 /* Sources */ = {
@@ -272,33 +268,22 @@
 			files = (
 				E931957217858121009AFCC1 /* main.m in Sources */,
 				E931957617858121009AFCC1 /* AppDelegate.m in Sources */,
-				E931958217858121009AFCC1 /* ViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E931958317858122009AFCC1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E931959717858122009AFCC1 /* velibnrosesTests.m in Sources */,
+				E931958217858121009AFCC1 /* MapController.m in Sources */,
+				19FD1B5F179591BE00309FD0 /* Station.m in Sources */,
+				190777011796F3BE00180530 /* GeoUtils.m in Sources */,
+				19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */,
+				19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		E931958E17858122009AFCC1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E931956117858121009AFCC1 /* Velib N' Roses */;
-			targetProxy = E931958D17858122009AFCC1 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		E931956E17858121009AFCC1 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E931956F17858121009AFCC1 /* en */,
+				19F3F49E17B250B900DCCC47 /* fr */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -306,17 +291,20 @@
 		E931957D17858121009AFCC1 /* MainStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E931957E17858121009AFCC1 /* en */,
+				E9D1F73C1793F9D10051D13B /* Base */,
+				19F3F49C17B250B900DCCC47 /* fr */,
 			);
 			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
-		E931959217858122009AFCC1 /* InfoPlist.strings */ = {
+		E9D1F73D1793FA690051D13B /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E931959317858122009AFCC1 /* en */,
+				E9D1F73E1793FA690051D13B /* en */,
+				19F3F49D17B250B900DCCC47 /* fr */,
 			);
-			name = InfoPlist.strings;
+			name = Localizable.strings;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -402,40 +390,6 @@
 			};
 			name = Release;
 		};
-		E931959E17858122009AFCC1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/velibnroses.app/velibnroses";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "velibnroses/velibnroses-Prefix.pch";
-				INFOPLIST_FILE = "velibnrosesTests/Velib N' RosesTests-Info.plist";
-				PRODUCT_NAME = "Velib N' RosesTests";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		E931959F17858122009AFCC1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/velibnroses.app/velibnroses";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "velibnroses/velibnroses-Prefix.pch";
-				INFOPLIST_FILE = "velibnrosesTests/Velib N' RosesTests-Info.plist";
-				PRODUCT_NAME = "Velib N' RosesTests";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -455,14 +409,7 @@
 				E931959C17858122009AFCC1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-		};
-		E931959D17858122009AFCC1 /* Build configuration list for PBXNativeTarget "Velib N' RosesTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E931959E17858122009AFCC1 /* Debug */,
-				E931959F17858122009AFCC1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
