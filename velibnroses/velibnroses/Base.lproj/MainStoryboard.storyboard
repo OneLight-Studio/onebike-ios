@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="11G63b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -35,17 +35,17 @@
                                 </connections>
                             </mapView>
                             <view contentMode="scaleToFill" id="5b7-xd-UEt">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="177"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="211"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="99S-N3-YFi">
-                                        <rect key="frame" x="10" y="48" width="300" height="30"/>
+                                        <rect key="frame" x="10" y="73" width="300" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Arrival" minimumFontSize="17" clearButtonMode="whileEditing" id="Wdw-ii-7F2">
-                                        <rect key="frame" x="20" y="48" width="260" height="30"/>
+                                        <rect key="frame" x="20" y="73" width="260" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="next"/>
                                         <connections>
@@ -53,29 +53,29 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="GVn-s9-Vip">
-                                        <rect key="frame" x="10" y="9" width="300" height="30"/>
+                                        <rect key="frame" x="10" y="6" width="300" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Departure" minimumFontSize="17" clearButtonMode="whileEditing" id="iYR-bn-zkd">
-                                        <rect key="frame" x="20" y="9" width="260" height="30"/>
+                                        <rect key="frame" x="20" y="6" width="260" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="next"/>
                                         <connections>
                                             <outlet property="delegate" destination="R2K-lh-zEE" id="hdx-X0-x9z"/>
                                         </connections>
                                     </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Number of bikes" minimumFontSize="17" id="gs9-Dj-mAK">
-                                        <rect key="frame" x="10" y="86" width="198" height="30"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="gs9-Dj-mAK">
+                                        <rect key="frame" x="130" y="39" width="59" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="search"/>
+                                        <textInputTraits key="textInputTraits"/>
                                         <connections>
                                             <outlet property="delegate" destination="R2K-lh-zEE" id="QtG-uR-1DJ"/>
                                         </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7ZO-mt-kun">
-                                        <rect key="frame" x="237" y="123" width="73" height="44"/>
+                                        <rect key="frame" x="216" y="174" width="94" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Search">
@@ -86,18 +86,18 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="search:" destination="R2K-lh-zEE" eventType="touchUpInside" id="FmO-dR-hzO"/>
+                                            <action selector="searchButtonClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="6Cp-Rb-CaP"/>
                                         </connections>
                                     </button>
-                                    <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" id="NFz-WJ-rUr">
-                                        <rect key="frame" x="216" y="88" width="94" height="27"/>
+                                    <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="50" id="NFz-WJ-rUr">
+                                        <rect key="frame" x="216" y="41" width="94" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <connections>
-                                            <action selector="bikesChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="h0o-Wo-3DN"/>
+                                            <action selector="bikeStepperClicked:" destination="R2K-lh-zEE" eventType="valueChanged" id="B0C-H5-saP"/>
                                         </connections>
                                     </stepper>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vrN-9E-YNC">
-                                        <rect key="frame" x="271" y="2" width="44" height="44"/>
+                                        <rect key="frame" x="271" y="-1" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="MyLocation.png">
@@ -108,11 +108,11 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="useMyLocationAsDeparture:" destination="R2K-lh-zEE" eventType="touchUpInside" id="2iX-lJ-8Zl"/>
+                                            <action selector="userLocationAsDepartureClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="VZp-bR-cG3"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FUH-DR-DvO">
-                                        <rect key="frame" x="271" y="41" width="44" height="44"/>
+                                        <rect key="frame" x="271" y="67" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="MyLocation.png">
@@ -123,9 +123,66 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="useMyLocationAsArrival:" destination="R2K-lh-zEE" eventType="touchUpInside" id="fAT-Iv-ZXa"/>
+                                            <action selector="userLocationAsArrivalClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="5ZL-LE-2MZ"/>
                                         </connections>
                                     </button>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="Uyh-Mx-wNk">
+                                        <rect key="frame" x="130" y="140" width="59" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="R2K-lh-zEE" id="DbV-aP-WVg"/>
+                                        </connections>
+                                    </textField>
+                                    <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1000" minimumValue="100" maximumValue="2000" stepValue="100" id="jEG-Oe-mgC">
+                                        <rect key="frame" x="216" y="141" width="94" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <connections>
+                                            <action selector="radiusStepperClicked:" destination="R2K-lh-zEE" eventType="valueChanged" id="PcR-O0-vcA"/>
+                                        </connections>
+                                    </stepper>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="In a radius of" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K3X-ha-Ssg">
+                                        <rect key="frame" x="10" y="140" width="112" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Bike(s)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9FD-46-R8n">
+                                        <rect key="frame" x="10" y="41" width="112" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="m" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dtD-rH-IN8">
+                                        <rect key="frame" x="190" y="140" width="27" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Stand(s)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FbK-4M-qU4">
+                                        <rect key="frame" x="10" y="106" width="112" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="mq6-9M-CCE">
+                                        <rect key="frame" x="130" y="106" width="59" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="50" id="JtK-aR-fG7">
+                                        <rect key="frame" x="216" y="107" width="94" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <connections>
+                                            <action selector="standStepperClicked:" destination="R2K-lh-zEE" eventType="valueChanged" id="Yyj-Bn-T27"/>
+                                        </connections>
+                                    </stepper>
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -135,7 +192,7 @@
                     <navigationItem key="navigationItem" id="hmS-dC-JVN">
                         <barButtonItem key="rightBarButtonItem" image="Search.png" id="Dwx-k2-M2a">
                             <connections>
-                                <action selector="toggleSearchView:" destination="R2K-lh-zEE" id="njY-lO-BeL"/>
+                                <action selector="searchBarButtonClicked:" destination="R2K-lh-zEE" id="lUh-a4-YUx"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -144,19 +201,52 @@
                         <outlet property="bikeField" destination="gs9-Dj-mAK" id="amk-f0-sKK"/>
                         <outlet property="bikeStepper" destination="NFz-WJ-rUr" id="UCT-es-hcf"/>
                         <outlet property="departureField" destination="iYR-bn-zkd" id="AZx-VX-AIw"/>
-                        <outlet property="mapView" destination="QIt-AM-94y" id="ayC-Gs-Ple"/>
-                        <outlet property="searchView" destination="5b7-xd-UEt" id="G5h-3n-uDV"/>
+                        <outlet property="mapPanel" destination="QIt-AM-94y" id="KGF-Hb-vky"/>
+                        <outlet property="radiusField" destination="Uyh-Mx-wNk" id="hgV-Qz-riQ"/>
+                        <outlet property="radiusStepper" destination="jEG-Oe-mgC" id="U4G-mn-Kqo"/>
+                        <outlet property="searchBarButton" destination="Dwx-k2-M2a" id="MgW-nf-Ofl"/>
+                        <outlet property="searchButton" destination="7ZO-mt-kun" id="4av-zB-rIX"/>
+                        <outlet property="searchPanel" destination="5b7-xd-UEt" id="FVl-iF-TCs"/>
+                        <outlet property="standField" destination="mq6-9M-CCE" id="yX4-6J-aNc"/>
+                        <outlet property="standStepper" destination="JtK-aR-fG7" id="Oeg-Iy-sVL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mlL-JI-PpG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="791" y="35"/>
+            <point key="canvasLocation" x="803" y="32"/>
         </scene>
     </scenes>
     <resources>
         <image name="MyLocation.png" width="40" height="40"/>
         <image name="Search.png" width="20" height="20"/>
     </resources>
+    <classes>
+        <class className="MapController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapController.h"/>
+            <relationships>
+                <relationship kind="action" name="bikeStepperClicked:" candidateClass="UIStepper"/>
+                <relationship kind="action" name="radiusStepperClicked:" candidateClass="UIStepper"/>
+                <relationship kind="action" name="searchBarButtonClicked:"/>
+                <relationship kind="action" name="searchButtonClicked:"/>
+                <relationship kind="action" name="standStepperClicked:" candidateClass="UIStepper"/>
+                <relationship kind="action" name="userLocationAsArrivalClicked:"/>
+                <relationship kind="action" name="userLocationAsDepartureClicked:"/>
+                <relationship kind="outlet" name="arrivalField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="bikeField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="bikeStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="cancelBarButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="mapPanel" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="radiusField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="radiusStepper" candidateClass="UIStepper"/>
+                <relationship kind="outlet" name="searchBarButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="searchButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="searchPanel" candidateClass="UIView"/>
+                <relationship kind="outlet" name="standField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="standStepper" candidateClass="UIStepper"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

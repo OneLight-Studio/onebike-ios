@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  Velib N' Roses
+
+  Created by Sébastien BALARD on 08/07/13.
+  Copyright (c) 2013 OneLight Studio. All rights reserved.
+*/
+
+"dialog_error_title" = "Erreur";
+"dialog_warning_title" = "Alerte";
+"dialog_info_title" = "Info";
+
+"departure_not_found" = "L'adresse de départ est introuvable.";
+"arrival_not_found" = "L'adresse d'arrivée est introuvable.";
+"error" = "Oops, uen erreur s'est produite.";
+"missing_departure" = "Veuillez renseigner l'adresse de départ.";
+"missing_arrival" = "Veuillez renseigner l'adresse d'arrivée.";
+"same_location" = "Les adresses de départ et d'arrivée sont trop proches.";
+"incomplete_search_result" = "Trouver des stations répondant à vos critères est difficile pour le moment.\nEssayer d'augmenter le rayon de recherche pour améliorer les chances de réussite.";
+
+"jcd_ws_get_data_error" = "Les informations sur les stations de vélos ne sont pas accessibles pour le moment.";
