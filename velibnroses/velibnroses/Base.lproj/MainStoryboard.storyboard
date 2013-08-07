@@ -35,17 +35,17 @@
                                 </connections>
                             </mapView>
                             <view contentMode="scaleToFill" id="5b7-xd-UEt">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="205"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="211"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="99S-N3-YFi">
-                                        <rect key="frame" x="10" y="48" width="300" height="30"/>
+                                        <rect key="frame" x="10" y="73" width="300" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Arrival" minimumFontSize="17" clearButtonMode="whileEditing" id="Wdw-ii-7F2">
-                                        <rect key="frame" x="20" y="48" width="260" height="30"/>
+                                        <rect key="frame" x="20" y="73" width="260" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="next"/>
                                         <connections>
@@ -53,13 +53,13 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="GVn-s9-Vip">
-                                        <rect key="frame" x="10" y="9" width="300" height="30"/>
+                                        <rect key="frame" x="10" y="6" width="300" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Departure" minimumFontSize="17" clearButtonMode="whileEditing" id="iYR-bn-zkd">
-                                        <rect key="frame" x="20" y="9" width="260" height="30"/>
+                                        <rect key="frame" x="20" y="6" width="260" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="next"/>
                                         <connections>
@@ -67,7 +67,7 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="gs9-Dj-mAK">
-                                        <rect key="frame" x="110" y="87" width="69" height="30"/>
+                                        <rect key="frame" x="113" y="39" width="69" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
@@ -75,7 +75,7 @@
                                         </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7ZO-mt-kun">
-                                        <rect key="frame" x="216" y="163" width="94" height="30"/>
+                                        <rect key="frame" x="216" y="174" width="94" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Search">
@@ -86,18 +86,18 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="search:" destination="R2K-lh-zEE" eventType="touchUpInside" id="FmO-dR-hzO"/>
+                                            <action selector="validateSearch:" destination="R2K-lh-zEE" eventType="touchUpInside" id="T6G-G6-iQs"/>
                                         </connections>
                                     </button>
                                     <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="50" id="NFz-WJ-rUr">
-                                        <rect key="frame" x="216" y="89" width="94" height="27"/>
+                                        <rect key="frame" x="216" y="41" width="94" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <connections>
                                             <action selector="bikesChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="h0o-Wo-3DN"/>
                                         </connections>
                                     </stepper>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vrN-9E-YNC">
-                                        <rect key="frame" x="271" y="2" width="44" height="44"/>
+                                        <rect key="frame" x="271" y="-1" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="MyLocation.png">
@@ -112,7 +112,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FUH-DR-DvO">
-                                        <rect key="frame" x="271" y="41" width="44" height="44"/>
+                                        <rect key="frame" x="271" y="67" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="MyLocation.png">
@@ -127,7 +127,7 @@
                                         </connections>
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="Uyh-Mx-wNk">
-                                        <rect key="frame" x="110" y="124" width="69" height="30"/>
+                                        <rect key="frame" x="113" y="140" width="69" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -136,33 +136,53 @@
                                         </connections>
                                     </textField>
                                     <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1000" minimumValue="100" maximumValue="2000" stepValue="100" id="jEG-Oe-mgC">
-                                        <rect key="frame" x="216" y="125" width="94" height="27"/>
+                                        <rect key="frame" x="216" y="141" width="94" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <connections>
                                             <action selector="radiusChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="Omx-DU-YKG"/>
                                         </connections>
                                     </stepper>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="In a radius of" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K3X-ha-Ssg">
-                                        <rect key="frame" x="20" y="124" width="88" height="30"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="In a radius of" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K3X-ha-Ssg">
+                                        <rect key="frame" x="10" y="140" width="98" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Bike number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9FD-46-R8n">
-                                        <rect key="frame" x="20" y="89" width="88" height="27"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Bike(s)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9FD-46-R8n">
+                                        <rect key="frame" x="10" y="41" width="98" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="m" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dtD-rH-IN8">
-                                        <rect key="frame" x="179" y="124" width="29" height="29"/>
+                                        <rect key="frame" x="179" y="140" width="29" height="29"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Empty stand(s)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FbK-4M-qU4">
+                                        <rect key="frame" x="10" y="106" width="98" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="mq6-9M-CCE">
+                                        <rect key="frame" x="113" y="106" width="69" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="50" id="JtK-aR-fG7">
+                                        <rect key="frame" x="216" y="107" width="94" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <connections>
+                                            <action selector="emptyStandChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="XnF-bp-uF7"/>
+                                        </connections>
+                                    </stepper>
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -181,6 +201,8 @@
                         <outlet property="bikeField" destination="gs9-Dj-mAK" id="amk-f0-sKK"/>
                         <outlet property="bikeStepper" destination="NFz-WJ-rUr" id="UCT-es-hcf"/>
                         <outlet property="departureField" destination="iYR-bn-zkd" id="AZx-VX-AIw"/>
+                        <outlet property="emptyStandField" destination="mq6-9M-CCE" id="gLv-CT-8Hh"/>
+                        <outlet property="emptyStandStepper" destination="JtK-aR-fG7" id="MFf-rD-iNh"/>
                         <outlet property="mapView" destination="QIt-AM-94y" id="ayC-Gs-Ple"/>
                         <outlet property="radiusField" destination="Uyh-Mx-wNk" id="hgV-Qz-riQ"/>
                         <outlet property="radiusStepper" destination="jEG-Oe-mgC" id="U4G-mn-Kqo"/>
@@ -203,15 +225,18 @@
             <relationships>
                 <relationship kind="action" name="bikesChanged:" candidateClass="UIStepper"/>
                 <relationship kind="action" name="displaySearchView:"/>
+                <relationship kind="action" name="emptyStandChanged:" candidateClass="UIStepper"/>
                 <relationship kind="action" name="radiusChanged:" candidateClass="UIStepper"/>
-                <relationship kind="action" name="search:"/>
                 <relationship kind="action" name="useMyLocationAsArrival:"/>
                 <relationship kind="action" name="useMyLocationAsDeparture:"/>
+                <relationship kind="action" name="validateSearch:"/>
                 <relationship kind="outlet" name="arrivalField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="bikeField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="bikeStepper" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="emptyStandField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="emptyStandStepper" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
                 <relationship kind="outlet" name="radiusField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="radiusStepper" candidateClass="UIStepper"/>

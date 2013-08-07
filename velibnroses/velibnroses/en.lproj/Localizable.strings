@@ -12,4 +12,4 @@
 "missing_arrival" = "Please enter an arrival address";
 "missing_bikes" = "Please enter the number of bikes you need";
 "missing_departure" = "Please enter a departure address";
-"incomplete_search_result" = "Find stations matching with your criteria is difficult for the moment.\nPlease try to increase search radius or decrease bike number to improve success chances of your search.";
+"incomplete_search_result" = "Find stations matching with your criteria is difficult for the moment.\nPlease try first to increase search radius, then decrease bikes number and/or empty stands number to improve success chances of your search.";

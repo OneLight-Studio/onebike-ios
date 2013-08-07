@@ -90,6 +90,7 @@
     _mapViewState = MAP_VIEW_DEFAULT_STATE;
     _isSearchViewVisible = false;
     self.bikeField.text = @"1";
+    self.emptyStandField.text = @"1";
     self.radiusField.text = @"1000";
     
     // button bar init
@@ -365,6 +366,12 @@
 
 - (IBAction)bikesChanged:(UIStepper *)stepper {
     self.bikeField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
+    self.emptyStandStepper.value = (int) stepper.value;
+    self.emptyStandField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
+}
+
+- (IBAction)emptyStandChanged:(UIStepper *)stepper {
+    self.emptyStandField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
 }
 
 - (IBAction)radiusChanged:(UIStepper *)stepper {
@@ -397,7 +404,7 @@
     }];
 }
 
-- (IBAction)search:(id)sender {
+- (IBAction)validateSearch:(id)sender {
     [self.view endEditing:YES];
     if (self.departureField.text.length == 0) {
         [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"missing_departure", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
@@ -420,10 +427,7 @@
                     [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"departure_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                 } else {
                     _departureLocation = [[placemarks objectAtIndex:0] location];
-                    if (_arrivalLocation != nil) {
-                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                        [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withNumberOfBikes:[self.bikeField.text intValue] inARadiusOf:[self.radiusField.text intValue]];
-                    }
+                    [self search];
                 }
             }
         }];
@@ -435,18 +439,22 @@
                     [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"arrival_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                 } else {
                     _arrivalLocation = [[placemarks objectAtIndex:0] location];
-                    if (_departureLocation != nil) {
-                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                        [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withNumberOfBikes:[self.bikeField.text intValue] inARadiusOf:[self.radiusField.text intValue]];
-                    }
+                    [self search];
                 }
             }
         }];
     }
 }
 
+- (void)search {
+    if (_departureLocation != nil && _arrivalLocation != nil) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.emptyStandField.text intValue] inARadiusOf:[self.radiusField.text intValue]];
+    }
+}
+
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    if (textField == self.bikeField || textField == self.radiusField) {
+    if (textField == self.bikeField || textField == self.emptyStandField || textField == self.radiusField) {
         [self.view endEditing:YES];
         return NO;
     }
@@ -470,6 +478,7 @@
     self.departureField.text = nil;
     self.arrivalField.text = nil;
     self.bikeField.text = @"1";
+    self.emptyStandField.text = @"1";
     self.radiusField.text = @"1000";
     
     _departureLocation = nil;
@@ -478,8 +487,8 @@
     _arrivalStation = nil;
 }
 
-- (void)searchWithDeparture:(CLLocation *)departure andArrival:(CLLocation *)arrival withNumberOfBikes:(int)bikes inARadiusOf:(int)radius {
-    NSLog(@"%f,%f -> %f,%f (%d)", departure.coordinate.latitude, departure.coordinate.longitude, arrival.coordinate.latitude, arrival.coordinate.longitude, bikes);
+- (void)searchWithDeparture:(CLLocation *)departure andArrival:(CLLocation *)arrival withBikes:(int)bikes andAvailableStands:(int)availableStands inARadiusOf:(int)radius {
+    NSLog(@"%f,%f -> %f,%f (%d / %d)", departure.coordinate.latitude, departure.coordinate.longitude, arrival.coordinate.latitude, arrival.coordinate.longitude, bikes, availableStands);
     _mapViewState = MAP_VIEW_SEARCH_STATE;
     [self refreshNavigationBarWithSearchView:_isSearchViewVisible withRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
     [_routeCloseStations removeAllObjects];
@@ -487,8 +496,8 @@
     _departureStation = nil;
     _arrivalStation = nil;
     [mapView removeAnnotations:mapView.annotations];
-    _closeStationsAroundDepartureNumber = [self searchCloseStationsAround:departure isArrival:false withNumberOfBikes:bikes andStationNumber:3 inARadiusOf:radius];
-    _closeStationsAroundArrivalNumber = [self searchCloseStationsAround:arrival isArrival:true withNumberOfBikes:bikes andStationNumber:3 inARadiusOf:radius];
+    _closeStationsAroundDepartureNumber = [self searchCloseStationsAround:departure isArrival:false withElementNumber:bikes andMaxStationsNumber:3 inARadiusOf:radius];
+    _closeStationsAroundArrivalNumber = [self searchCloseStationsAround:arrival isArrival:true withElementNumber:availableStands andMaxStationsNumber:3 inARadiusOf:radius];
     [self displayCloseStations];
     if (_departureStation != nil && _arrivalStation != nil) {
       [self findAndDrawRouteFromDeparture:_departureStation toArrival:_arrivalStation];
@@ -498,14 +507,14 @@
 # pragma mark -
 # pragma mark Search utils
 
-- (int)searchCloseStationsAround:(CLLocation *)location isArrival:(BOOL)arrival withNumberOfBikes:(int)bikes andStationNumber:(int)number inARadiusOf:(int)maxRadius {
+- (int)searchCloseStationsAround:(CLLocation *)location isArrival:(BOOL)arrival withElementNumber:(int)elementsNumber andMaxStationsNumber:(int)maxStationsNumber inARadiusOf:(int)maxRadius {
     NSLog(@"searching close stations");
     int matchingStationNumber = 0;
     
     int radius = STATION_SEARCH_RADIUS_IN_METERS;
-    while (matchingStationNumber < number && radius <= maxRadius) {
+    while (matchingStationNumber < maxStationsNumber && radius <= maxRadius) {
         for (Station *station in _stations) {
-            if (matchingStationNumber < number) {
+            if (matchingStationNumber < maxStationsNumber) {
                 if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
                     
                     CLLocationCoordinate2D stationCoordinate;
@@ -513,14 +522,14 @@
                     stationCoordinate.longitude = [station.longitude doubleValue];
                     
                     if (![_routeCloseStations containsObject:station] && [self unlessInMeters:radius from:location.coordinate for:stationCoordinate]) {
-                        if (!arrival && [station.availableBikes integerValue] >= bikes) {
+                        if (!arrival && [station.availableBikes integerValue] >= elementsNumber) {
                             NSLog(@"close station found at %d m : %@ - %@ vélos dispos", radius, station.name, station.availableBikes);
                             [_routeCloseStations addObject:station];
                             if (_departureStation == nil) {
                                 _departureStation = station;
                             }
                             matchingStationNumber++;
-                        } else if (arrival && [station.availableBikeStands integerValue] >= bikes) {
+                        } else if (arrival && [station.availableBikeStands integerValue] >= elementsNumber) {
                             NSLog(@"close station found at %d m : %@ - %@ bornes dispos", radius, station.name, station.availableBikeStands);
                             [_routeCloseStations addObject:station];
                             if (_arrivalStation == nil) {
