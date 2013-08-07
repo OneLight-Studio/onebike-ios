@@ -6,10 +6,9 @@
   Copyright (c) 2013 OneLight Studio. All rights reserved.
 */
 
-"arrival_not_found" = "Could not locate arrival address";
 "departure_not_found" = "Could not locate departure address";
+"arrival_not_found" = "Could not locate arrival address";
 "error" = "Oops, an error occurred";
-"missing_arrival" = "Please enter an arrival address";
-"missing_bikes" = "Please enter the number of bikes you need";
 "missing_departure" = "Please enter a departure address";
-"incomplete_search_result" = "Find stations matching with your criteria is difficult for the moment.\nPlease try first to increase search radius, then decrease bikes number and/or empty stands number to improve success chances of your search.";
+"missing_arrival" = "Please enter an arrival address";
+"incomplete_search_result" = "Find stations matching with your criteria is difficult for the moment.\nPlease try first to increase search radius, then decrease bikes number and/or stands number to improve success chances of your search.";
