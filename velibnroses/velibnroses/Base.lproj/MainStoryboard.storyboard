@@ -86,14 +86,14 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="validateSearch:" destination="R2K-lh-zEE" eventType="touchUpInside" id="T6G-G6-iQs"/>
+                                            <action selector="searchButtonClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="6Cp-Rb-CaP"/>
                                         </connections>
                                     </button>
                                     <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="50" id="NFz-WJ-rUr">
                                         <rect key="frame" x="216" y="41" width="94" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <connections>
-                                            <action selector="bikesChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="h0o-Wo-3DN"/>
+                                            <action selector="bikeStepperClicked:" destination="R2K-lh-zEE" eventType="valueChanged" id="B0C-H5-saP"/>
                                         </connections>
                                     </stepper>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vrN-9E-YNC">
@@ -108,7 +108,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="useMyLocationAsDeparture:" destination="R2K-lh-zEE" eventType="touchUpInside" id="2iX-lJ-8Zl"/>
+                                            <action selector="userLocationAsDepartureClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="VZp-bR-cG3"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FUH-DR-DvO">
@@ -123,7 +123,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="useMyLocationAsArrival:" destination="R2K-lh-zEE" eventType="touchUpInside" id="fAT-Iv-ZXa"/>
+                                            <action selector="userLocationAsArrivalClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="5ZL-LE-2MZ"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="Uyh-Mx-wNk">
@@ -139,7 +139,7 @@
                                         <rect key="frame" x="216" y="141" width="94" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <connections>
-                                            <action selector="radiusChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="Omx-DU-YKG"/>
+                                            <action selector="radiusStepperClicked:" destination="R2K-lh-zEE" eventType="valueChanged" id="PcR-O0-vcA"/>
                                         </connections>
                                     </stepper>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="In a radius of" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K3X-ha-Ssg">
@@ -180,7 +180,7 @@
                                         <rect key="frame" x="216" y="107" width="94" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <connections>
-                                            <action selector="emptyStandChanged:" destination="R2K-lh-zEE" eventType="valueChanged" id="XnF-bp-uF7"/>
+                                            <action selector="standStepperClicked:" destination="R2K-lh-zEE" eventType="valueChanged" id="Yyj-Bn-T27"/>
                                         </connections>
                                     </stepper>
                                 </subviews>
@@ -192,7 +192,7 @@
                     <navigationItem key="navigationItem" id="hmS-dC-JVN">
                         <barButtonItem key="rightBarButtonItem" image="Search.png" id="Dwx-k2-M2a">
                             <connections>
-                                <action selector="displaySearchView:" destination="R2K-lh-zEE" id="omS-Lc-4UY"/>
+                                <action selector="searchBarButtonClicked:" destination="R2K-lh-zEE" id="lUh-a4-YUx"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -201,13 +201,14 @@
                         <outlet property="bikeField" destination="gs9-Dj-mAK" id="amk-f0-sKK"/>
                         <outlet property="bikeStepper" destination="NFz-WJ-rUr" id="UCT-es-hcf"/>
                         <outlet property="departureField" destination="iYR-bn-zkd" id="AZx-VX-AIw"/>
-                        <outlet property="emptyStandField" destination="mq6-9M-CCE" id="gLv-CT-8Hh"/>
-                        <outlet property="emptyStandStepper" destination="JtK-aR-fG7" id="MFf-rD-iNh"/>
-                        <outlet property="mapView" destination="QIt-AM-94y" id="ayC-Gs-Ple"/>
+                        <outlet property="mapPanel" destination="QIt-AM-94y" id="KGF-Hb-vky"/>
                         <outlet property="radiusField" destination="Uyh-Mx-wNk" id="hgV-Qz-riQ"/>
                         <outlet property="radiusStepper" destination="jEG-Oe-mgC" id="U4G-mn-Kqo"/>
-                        <outlet property="searchButton" destination="Dwx-k2-M2a" id="vf1-gY-RPE"/>
-                        <outlet property="searchView" destination="5b7-xd-UEt" id="G5h-3n-uDV"/>
+                        <outlet property="searchBarButton" destination="Dwx-k2-M2a" id="MgW-nf-Ofl"/>
+                        <outlet property="searchButton" destination="7ZO-mt-kun" id="4av-zB-rIX"/>
+                        <outlet property="searchPanel" destination="5b7-xd-UEt" id="FVl-iF-TCs"/>
+                        <outlet property="standField" destination="mq6-9M-CCE" id="yX4-6J-aNc"/>
+                        <outlet property="standStepper" destination="JtK-aR-fG7" id="Oeg-Iy-sVL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mlL-JI-PpG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -223,25 +224,26 @@
         <class className="MapController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MapController.h"/>
             <relationships>
-                <relationship kind="action" name="bikesChanged:" candidateClass="UIStepper"/>
-                <relationship kind="action" name="displaySearchView:"/>
-                <relationship kind="action" name="emptyStandChanged:" candidateClass="UIStepper"/>
-                <relationship kind="action" name="radiusChanged:" candidateClass="UIStepper"/>
-                <relationship kind="action" name="useMyLocationAsArrival:"/>
-                <relationship kind="action" name="useMyLocationAsDeparture:"/>
-                <relationship kind="action" name="validateSearch:"/>
+                <relationship kind="action" name="bikeStepperClicked:" candidateClass="UIStepper"/>
+                <relationship kind="action" name="radiusStepperClicked:" candidateClass="UIStepper"/>
+                <relationship kind="action" name="searchBarButtonClicked:"/>
+                <relationship kind="action" name="searchButtonClicked:"/>
+                <relationship kind="action" name="standStepperClicked:" candidateClass="UIStepper"/>
+                <relationship kind="action" name="userLocationAsArrivalClicked:"/>
+                <relationship kind="action" name="userLocationAsDepartureClicked:"/>
                 <relationship kind="outlet" name="arrivalField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="bikeField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="bikeStepper" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="cancelBarButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="emptyStandField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="emptyStandStepper" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="mapPanel" candidateClass="MKMapView"/>
                 <relationship kind="outlet" name="radiusField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="radiusStepper" candidateClass="UIStepper"/>
-                <relationship kind="outlet" name="searchButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="searchView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="searchBarButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="searchButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="searchPanel" candidateClass="UIView"/>
+                <relationship kind="outlet" name="standField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="standStepper" candidateClass="UIStepper"/>
             </relationships>
         </class>
     </classes>

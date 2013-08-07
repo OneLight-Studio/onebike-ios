@@ -5,7 +5,7 @@
 /* Class = "IBUILabel"; text = "Bike(s)"; ObjectID = "9FD-46-R8n"; */
 "9FD-46-R8n.text" = "Vélo(s)";
 
-/* Class = "IBUILabel"; text = "Empty stand(s)"; ObjectID = "FbK-4M-qU4"; */
+/* Class = "IBUILabel"; text = Stand(s)"; ObjectID = "FbK-4M-qU4"; */
 "FbK-4M-qU4.text" = "Borne(s)";
 
 /* Class = "IBUILabel"; text = "In a radius of"; ObjectID = "K3X-ha-Ssg"; */

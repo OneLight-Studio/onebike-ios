@@ -112,14 +112,14 @@
 - (void) defaultErrorHandler:(int)errorCode {
     NSLog(@"HTTP error %d", errorCode);
     if (!_background) {
-        [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"error", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"")  message:NSLocalizedString(@"error", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
     }
 }
 
 - (void) defaultExceptionHandler:(NSError *)exception {
     NSLog(@"Exception %@", exception.debugDescription);
     if (!_background) {
-        [[[UIAlertView alloc] initWithTitle:nil message:exception.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"")  message:exception.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
     }
 }
 

@@ -6,9 +6,16 @@
   Copyright (c) 2013 OneLight Studio. All rights reserved.
 */
 
-"departure_not_found" = "Could not locate departure address";
-"arrival_not_found" = "Could not locate arrival address";
-"error" = "Oops, an error occurred";
-"missing_departure" = "Please enter a departure address";
-"missing_arrival" = "Please enter an arrival address";
-"incomplete_search_result" = "Find stations matching with your criteria is difficult for the moment.\nPlease try first to increase search radius, then decrease bikes number and/or stands number to improve success chances of your search.";
+"dialog_error_title" = "Error";
+"dialog_warning_title" = "Warning";
+"dialog_info_title" = "Info";
+
+"departure_not_found" = "Could not locate departure address.";
+"arrival_not_found" = "Could not locate arrival address.";
+"error" = "Oops, an error occurred.";
+"missing_departure" = "Please enter a departure address.";
+"missing_arrival" = "Please enter an arrival address.";
+"same_location" = "Departure and arrival adresses are too close.";
+"incomplete_search_result" = "Find stations matching with your criteria is difficult for the moment.\nPlease try to increase search radius to improve success chances.";
+
+"jcd_ws_get_data_error" = "Bikes stations data are not accessible for the moment.";
