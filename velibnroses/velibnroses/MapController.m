@@ -72,7 +72,7 @@
     self.bikeField.text = @"1";
     self.standField.text = @"1";
     self.radiusField.text = @"1000";
-    self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"CloseImg"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
+    self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBClose"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
     
     _isMapLoaded = false;
     _mapViewState = MAP_VIEW_DEFAULT_STATE;
@@ -86,22 +86,22 @@
     [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
     [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateSelected];
     [self.bikeStepper setDividerImage:[UIImage new] forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
-    [self.bikeStepper setIncrementImage:[UIImage imageNamed:@"StepperIncrementBt"] forState:UIControlStateNormal];
-    [self.bikeStepper setDecrementImage:[UIImage imageNamed:@"StepperDecrementBt"] forState:UIControlStateNormal];
+    [self.bikeStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
+    [self.bikeStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
     [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
     [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateDisabled];
     [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
     [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateSelected];
     [self.standStepper setDividerImage:[UIImage new] forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
-    [self.standStepper setIncrementImage:[UIImage imageNamed:@"StepperIncrementBt"] forState:UIControlStateNormal];
-    [self.standStepper setDecrementImage:[UIImage imageNamed:@"StepperDecrementBt"] forState:UIControlStateNormal];
+    [self.standStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
+    [self.standStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
     [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
     [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateDisabled];
     [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
     [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateSelected];
     [self.radiusStepper setDividerImage:[UIImage new] forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
-    [self.radiusStepper setIncrementImage:[UIImage imageNamed:@"StepperIncrementBt"] forState:UIControlStateNormal];
-    [self.radiusStepper setDecrementImage:[UIImage imageNamed:@"StepperDecrementBt"] forState:UIControlStateNormal];
+    [self.radiusStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
+    [self.radiusStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
     
     _routeCloseStations = [[NSMutableArray alloc] init];
 }
