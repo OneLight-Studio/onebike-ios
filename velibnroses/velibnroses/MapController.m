@@ -13,6 +13,7 @@
 #import "Station.h"
 #import "GeoUtils.h"
 #import "RoutePolyline.h"
+#import "PlaceAnnotation.h"
 
 @interface MapController ()
     
@@ -215,25 +216,25 @@
     return polylineView;
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)annotation
+- (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)anAnnotation
 {
     MKPinAnnotationView *annotationView;
-    if (annotation != mapPanel.userLocation) {
+    if (anAnnotation != mapPanel.userLocation) {
         static NSString *annotationID = @"pinView";
         annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
         if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:anAnnotation reuseIdentifier:annotationID];
         }
-        if ([annotation isKindOfClass:[MKPointAnnotation class]]) {
-            MKPointAnnotation *marker = annotation;
-            if ([marker.title isEqualToString:@"departure"]) {
-                NSLog(@"render departure pin");
-                annotationView.pinColor = MKPinAnnotationColorGreen;
-            } else if ([marker.title isEqualToString:@"arrival"]) {
-                NSLog(@"render arrival pin");
-                annotationView.pinColor = MKPinAnnotationColorPurple;
+        if ([anAnnotation isKindOfClass:[PlaceAnnotation class]]) {
+            PlaceAnnotation *annotation = anAnnotation;
+            if (annotation.type == kDeparture) {
+                NSLog(@"render departure");
+                annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
+            } else if (annotation.type == kArrival) {
+                NSLog(@"render arrival");
+                annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
             } else {
-                annotationView.pinColor = MKPinAnnotationColorRed;
+                annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPStation"];
             }
         }
         annotationView.canShowCallout = YES;
@@ -452,6 +453,12 @@
     NSLog(@"centered on user location (%f,%f)", startUserLocation.coordinate.latitude, startUserLocation.coordinate.longitude);
 }
 
+- (void)centerMapOnDeparture {
+    MKCoordinateRegion currentRegion = MKCoordinateRegionMakeWithDistance(_departureLocation.coordinate, SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
+    [mapPanel setRegion:currentRegion animated:YES];
+    NSLog(@"centered on user location (%f,%f)", _departureLocation.coordinate.latitude, _departureLocation.coordinate.longitude);
+}
+
 - (void)drawStationsAroundUserAndZoom {
     if (_stations != nil) {
         NSLog(@"display stations");
@@ -476,19 +483,18 @@
     }
 }
 
-- (MKPointAnnotation *)createStationAnnotation:(Station *)station {
+- (PlaceAnnotation *)createStationAnnotation:(Station *)station {
     
     CLLocationCoordinate2D stationCoordinate;
     stationCoordinate.latitude = [station.latitude doubleValue];
     stationCoordinate.longitude = [station.longitude doubleValue];
     
-    NSMutableString *title = [NSMutableString stringWithFormat:@"nb vélos disponibles / nb places libres : %d", [station.availableBikes integerValue]];
-    [title appendFormat:@"/%d", [station.availableBikeStands integerValue]];
+    NSMutableString *infos = [NSMutableString stringWithFormat:NSLocalizedString(@"station_title", @""), [station.availableBikes integerValue], [station.availableBikeStands integerValue]];
     
-    MKPointAnnotation *marker = [[MKPointAnnotation alloc] init];
+    PlaceAnnotation *marker = [[PlaceAnnotation alloc] init];
     marker.coordinate = stationCoordinate;
-    marker.title = station.name;
-    marker.subtitle = title;
+    marker.title = [station.name substringFromIndex:[station.name rangeOfString:@" - "].location + 3];
+    marker.subtitle = infos;
     return marker;
 }
 
@@ -528,16 +534,18 @@
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"")  message:NSLocalizedString(@"incomplete_search_result", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
     }
     // departure annotation
-    MKPointAnnotation *marker = [[MKPointAnnotation alloc] init];
+    PlaceAnnotation *marker = [[PlaceAnnotation alloc] init];
+    marker.type = kDeparture;
     marker.coordinate = _departureLocation.coordinate;
-    marker.title = @"departure";
+    marker.title = self.departureField.text;
     
     [mapPanel addAnnotation:marker];
     
     // arrival annotation
-    marker = [[MKPointAnnotation alloc] init];
+    marker = [[PlaceAnnotation alloc] init];
+    marker.type = kArrival;
     marker.coordinate = _arrivalLocation.coordinate;
-    marker.title = @"arrival";
+    marker.title = self.arrivalField.text;
     
     [mapPanel addAnnotation:marker];
     
@@ -618,6 +626,8 @@
     [self drawRouteEndsCloseStations];
     if (_departureStation != nil && _arrivalStation != nil) {
       [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
+    } else {
+        [self centerMapOnDeparture];
     }
 }
 
@@ -637,14 +647,14 @@
                     
                     if (![_routeCloseStations containsObject:station] && [self unlessInMeters:radius from:location.coordinate for:stationCoordinate]) {
                         if (!arrival && [station.availableBikes integerValue] >= elementsNumber) {
-                            NSLog(@"close station found at %d m : %@ - %@ vélos dispos", radius, station.name, station.availableBikes);
+                            NSLog(@"close station found at %d m : %@ - %@ available bikes", radius, station.name, station.availableBikes);
                             [_routeCloseStations addObject:station];
                             if (_departureStation == nil) {
                                 _departureStation = station;
                             }
                             matchingStationNumber++;
                         } else if (arrival && [station.availableBikeStands integerValue] >= elementsNumber) {
-                            NSLog(@"close station found at %d m : %@ - %@ bornes dispos", radius, station.name, station.availableBikeStands);
+                            NSLog(@"close station found at %d m : %@ - %@ available stands", radius, station.name, station.availableBikeStands);
                             [_routeCloseStations addObject:station];
                             if (_arrivalStation == nil) {
                                 _arrivalStation = station;

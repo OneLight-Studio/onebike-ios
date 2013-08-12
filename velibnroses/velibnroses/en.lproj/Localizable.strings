@@ -17,5 +17,6 @@
 "missing_arrival" = "Please enter an arrival address.";
 "same_location" = "Departure and arrival adresses are too close.";
 "incomplete_search_result" = "Find stations matching with your criteria is difficult for the moment.\nPlease try to increase search radius to improve success chances.";
+"station_title" = "Bikes / Available stands: %1$d / %2$d";
 
 "jcd_ws_get_data_error" = "Bikes stations data are not accessible for the moment.";

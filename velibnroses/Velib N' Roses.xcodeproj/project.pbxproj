@@ -16,6 +16,7 @@
 		19688CE317B92880005ACA64 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19688CE217B92880005ACA64 /* Default@2x.png */; };
 		19688CE517B9288B005ACA64 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 19688CE417B9288B005ACA64 /* Default-568h@2x.png */; };
 		19688CE717B92980005ACA64 /* toulouse.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 19688CE617B92980005ACA64 /* toulouse.gpx */; };
+		19688CEA17B945B9005ACA64 /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 19688CE917B945B9005ACA64 /* PlaceAnnotation.m */; };
 		1993DCEF178F09860089A6D5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1993DCEE178F09860089A6D5 /* MapKit.framework */; };
 		19B5ADD417902AA5000E6B40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19B5ADD317902AA5000E6B40 /* CoreLocation.framework */; };
 		19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D1F7421793FDEC0051D13B /* WSRequest.m */; };
@@ -42,6 +43,8 @@
 		19688CE217B92880005ACA64 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		19688CE417B9288B005ACA64 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		19688CE617B92980005ACA64 /* toulouse.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = toulouse.gpx; sourceTree = "<group>"; };
+		19688CE817B945B9005ACA64 /* PlaceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceAnnotation.h; sourceTree = "<group>"; };
+		19688CE917B945B9005ACA64 /* PlaceAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceAnnotation.m; sourceTree = "<group>"; };
 		1993DCEE178F09860089A6D5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		19B5ADD317902AA5000E6B40 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		19CED9FE17AAA4120069ECDC /* RoutePolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoutePolyline.h; sourceTree = "<group>"; };
@@ -117,6 +120,8 @@
 				19FD1B5E179591BE00309FD0 /* Station.m */,
 				19CED9FE17AAA4120069ECDC /* RoutePolyline.h */,
 				19CED9FF17AAA4120069ECDC /* RoutePolyline.m */,
+				19688CE817B945B9005ACA64 /* PlaceAnnotation.h */,
+				19688CE917B945B9005ACA64 /* PlaceAnnotation.m */,
 			);
 			name = Domain;
 			sourceTree = "<group>";
@@ -269,6 +274,7 @@
 				190777011796F3BE00180530 /* GeoUtils.m in Sources */,
 				19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */,
 				19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */,
+				19688CEA17B945B9005ACA64 /* PlaceAnnotation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
