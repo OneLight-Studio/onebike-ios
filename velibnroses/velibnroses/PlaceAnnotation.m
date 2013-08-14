@@ -10,12 +10,15 @@
 
 @implementation PlaceAnnotation
 
-@synthesize type;
+@synthesize placeType;
+@synthesize placeLocation;
+@synthesize placeStation;
 
 - (id)init {
     self = [super init];
     if (self) {
-        type = kStation;
+        placeType = kStation;
+        placeLocation = kUndefined;
     }
     return self;
 }
