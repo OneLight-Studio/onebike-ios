@@ -7,14 +7,22 @@
 //
 
 #import <MapKit/MapKit.h>
+#import "Station.h"
 
 typedef enum
 {
     kDeparture, kArrival, kStation
 } PlaceAnnotationType;
 
+typedef enum
+{
+    kUndefined, kNearDeparture, kNearArrival
+} PlaceAnnotationLocation;
+
 @interface PlaceAnnotation : MKPointAnnotation
 
-@property (nonatomic, assign) PlaceAnnotationType type;
+@property (nonatomic, assign) PlaceAnnotationType placeType;
+@property (nonatomic, assign) PlaceAnnotationLocation placeLocation;
+@property (nonatomic, strong) Station *placeStation;
 
 @end

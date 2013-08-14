@@ -32,9 +32,8 @@
     RoutePolyline *_route;
     int _mapViewState;
     BOOL _isSearchViewVisible;
-    NSMutableArray *_routeCloseStations;
-    NSInteger _closeStationsAroundDepartureNumber;
-    NSInteger _closeStationsAroundArrivalNumber;
+    NSMutableArray *_departureCloseStations;
+    NSMutableArray *_arrivalCloseStations;
     Station *_departureStation;
     Station *_arrivalStation;
     int _jcdRequestAttemptsNumber;
@@ -104,7 +103,8 @@
     [self.radiusStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
     [self.radiusStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
     
-    _routeCloseStations = [[NSMutableArray alloc] init];
+    _departureCloseStations = [[NSMutableArray alloc] init];
+    _arrivalCloseStations = [[NSMutableArray alloc] init];
 }
 
 - (void) startTimer {
@@ -220,17 +220,17 @@
 {
     MKPinAnnotationView *annotationView;
     if (anAnnotation != mapPanel.userLocation) {
-        static NSString *annotationID = @"pinView";
+        static NSString *annotationID = @"annotation";
         annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
         if (annotationView == nil) {
             annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:anAnnotation reuseIdentifier:annotationID];
         }
         if ([anAnnotation isKindOfClass:[PlaceAnnotation class]]) {
             PlaceAnnotation *annotation = anAnnotation;
-            if (annotation.type == kDeparture) {
+            if (annotation.placeType == kDeparture) {
                 NSLog(@"render departure");
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
-            } else if (annotation.type == kArrival) {
+            } else if (annotation.placeType == kArrival) {
                 NSLog(@"render arrival");
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
             } else {
@@ -240,6 +240,31 @@
         annotationView.canShowCallout = YES;
     }
     return annotationView;
+}
+
+- (void)mapView:(MKMapView *)aMapView didSelectAnnotationView:(MKAnnotationView *)aView {
+    if (!_isSearchViewVisible && _mapViewState == MAP_VIEW_SEARCH_STATE) {
+        if ([aView.annotation isKindOfClass:[PlaceAnnotation class]]) {
+            PlaceAnnotation *annotation = aView.annotation;
+            if (annotation.placeType != kDeparture && annotation.placeType != kArrival && annotation.placeLocation != kUndefined) {
+                BOOL redraw = false;
+                if (annotation.placeLocation == kNearDeparture && _departureStation != annotation.placeStation) {
+                    NSLog(@"change departure");
+                    _departureStation = annotation.placeStation;
+                    redraw = true;
+                } else if (annotation.placeLocation == kNearArrival && _arrivalStation != annotation.placeStation) {
+                    NSLog(@"change departure");
+                    _arrivalStation = annotation.placeStation;
+                    redraw = true;
+                }
+                if (redraw) {
+                    [self eraseRoute];
+                    [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
+                }
+            }
+        }
+    }
+    
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
@@ -468,7 +493,7 @@
         for (Station *station in _stations) {
             if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
                 if ([self isVisibleStation:station]) {
-                    [mapPanel addAnnotation:[self createStationAnnotation:station]];
+                    [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kUndefined]];
                     displayedStations++;
                 }
             } else {
@@ -483,18 +508,32 @@
     }
 }
 
-- (PlaceAnnotation *)createStationAnnotation:(Station *)station {
+- (void)createStationsAnnotationsAroundDeparture {
+    for (Station *station in _departureCloseStations) {
+        [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kNearDeparture]];
+    }
+}
+
+- (void)createStationsAnnotationsAroundArrival {
+    for (Station *station in _arrivalCloseStations) {
+        [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kNearArrival]];
+    }
+}
+
+- (PlaceAnnotation *)createStationAnnotation:(Station *)aStation withLocation:(PlaceAnnotationLocation) aLocation {
     
     CLLocationCoordinate2D stationCoordinate;
-    stationCoordinate.latitude = [station.latitude doubleValue];
-    stationCoordinate.longitude = [station.longitude doubleValue];
+    stationCoordinate.latitude = [aStation.latitude doubleValue];
+    stationCoordinate.longitude = [aStation.longitude doubleValue];
     
-    NSMutableString *infos = [NSMutableString stringWithFormat:NSLocalizedString(@"station_title", @""), [station.availableBikes integerValue], [station.availableBikeStands integerValue]];
+    NSMutableString *infos = [NSMutableString stringWithFormat:NSLocalizedString(@"station_title", @""), [aStation.availableBikes integerValue], [aStation.availableBikeStands integerValue]];
     
     PlaceAnnotation *marker = [[PlaceAnnotation alloc] init];
+    marker.placeLocation = aLocation;
     marker.coordinate = stationCoordinate;
-    marker.title = [station.name substringFromIndex:[station.name rangeOfString:@" - "].location + 3];
+    marker.title = [aStation.name substringFromIndex:[aStation.name rangeOfString:@" - "].location + 3];
     marker.subtitle = infos;
+    marker.placeStation = aStation;
     return marker;
 }
 
@@ -530,12 +569,13 @@
 }
 
 - (void)drawRouteEndsCloseStations {
-    if ([_routeCloseStations count] == 0 || _closeStationsAroundDepartureNumber == 0 || _closeStationsAroundArrivalNumber == 0) {
+    if ([_departureCloseStations count] == 0 || [_arrivalCloseStations count] == 0) {
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"")  message:NSLocalizedString(@"incomplete_search_result", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
     }
+    
     // departure annotation
     PlaceAnnotation *marker = [[PlaceAnnotation alloc] init];
-    marker.type = kDeparture;
+    marker.placeType = kDeparture;
     marker.coordinate = _departureLocation.coordinate;
     marker.title = self.departureField.text;
     
@@ -543,15 +583,14 @@
     
     // arrival annotation
     marker = [[PlaceAnnotation alloc] init];
-    marker.type = kArrival;
+    marker.placeType = kArrival;
     marker.coordinate = _arrivalLocation.coordinate;
     marker.title = self.arrivalField.text;
     
     [mapPanel addAnnotation:marker];
     
-    for (Station *station in _routeCloseStations) {
-        [mapPanel addAnnotation:[self createStationAnnotation:station]];
-    }
+    [self createStationsAnnotationsAroundDeparture];
+    [self createStationsAnnotationsAroundArrival];
 }
 
 - (void)drawRouteFromStationDeparture:(Station *)departure toStationArrival:(Station *)arrival {
@@ -616,13 +655,14 @@
     NSLog(@"%f,%f -> %f,%f (%d / %d)", departure.coordinate.latitude, departure.coordinate.longitude, arrival.coordinate.latitude, arrival.coordinate.longitude, bikes, availableStands);
     _mapViewState = MAP_VIEW_SEARCH_STATE;
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
-    [_routeCloseStations removeAllObjects];
+    [_departureCloseStations removeAllObjects];
+    [_arrivalCloseStations removeAllObjects];
     [self eraseRoute];
     _departureStation = nil;
     _arrivalStation = nil;
     [mapPanel removeAnnotations:mapPanel.annotations];
-    _closeStationsAroundDepartureNumber = [self searchCloseStationsAround:departure isArrival:false withElementNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
-    _closeStationsAroundArrivalNumber = [self searchCloseStationsAround:arrival isArrival:true withElementNumber:availableStands andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
+    [self searchCloseStationsAroundDeparture:departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
+    [self searchCloseStationsAroundArrival:arrival withAvailableStandsNumber:availableStands andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
     [self drawRouteEndsCloseStations];
     if (_departureStation != nil && _arrivalStation != nil) {
       [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
@@ -631,8 +671,8 @@
     }
 }
 
-- (int)searchCloseStationsAround:(CLLocation *)location isArrival:(BOOL)arrival withElementNumber:(int)elementsNumber andMaxStationsNumber:(int)maxStationsNumber inARadiusOf:(int)maxRadius {
-    NSLog(@"searching close stations");
+- (void)searchCloseStationsAroundDeparture:(CLLocation *)location withBikesNumber:(int)bikesNumber andMaxStationsNumber:(int)maxStationsNumber inARadiusOf:(int)maxRadius {
+    NSLog(@"searching %d close stations around departure", maxStationsNumber);
     int matchingStationNumber = 0;
     
     int radius = STATION_SEARCH_RADIUS_IN_METERS;
@@ -645,17 +685,44 @@
                     stationCoordinate.latitude = [station.latitude doubleValue];
                     stationCoordinate.longitude = [station.longitude doubleValue];
                     
-                    if (![_routeCloseStations containsObject:station] && [self unlessInMeters:radius from:location.coordinate for:stationCoordinate]) {
-                        if (!arrival && [station.availableBikes integerValue] >= elementsNumber) {
+                    if (![_departureCloseStations containsObject:station] && [self unlessInMeters:radius from:location.coordinate for:stationCoordinate]) {
+                        if ([station.availableBikes integerValue] >= bikesNumber) {
                             NSLog(@"close station found at %d m : %@ - %@ available bikes", radius, station.name, station.availableBikes);
-                            [_routeCloseStations addObject:station];
+                            [_departureCloseStations addObject:station];
                             if (_departureStation == nil) {
                                 _departureStation = station;
                             }
                             matchingStationNumber++;
-                        } else if (arrival && [station.availableBikeStands integerValue] >= elementsNumber) {
+                        }
+                    }
+                }
+            } else {
+                // station max number is reached for this location
+                break;
+            }
+        }
+        radius += STATION_SEARCH_RADIUS_IN_METERS;
+    }
+}
+
+- (void)searchCloseStationsAroundArrival:(CLLocation *)location withAvailableStandsNumber:(int)availableStandsNumber andMaxStationsNumber:(int)maxStationsNumber inARadiusOf:(int)maxRadius {
+    NSLog(@"searching %d close stations around arrival", maxStationsNumber);
+    int matchingStationNumber = 0;
+    
+    int radius = STATION_SEARCH_RADIUS_IN_METERS;
+    while (matchingStationNumber < maxStationsNumber && radius <= maxRadius) {
+        for (Station *station in _stations) {
+            if (matchingStationNumber < maxStationsNumber) {
+                if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
+                    
+                    CLLocationCoordinate2D stationCoordinate;
+                    stationCoordinate.latitude = [station.latitude doubleValue];
+                    stationCoordinate.longitude = [station.longitude doubleValue];
+                    
+                    if (![_arrivalCloseStations containsObject:station] && [self unlessInMeters:radius from:location.coordinate for:stationCoordinate]) {
+                        if ([station.availableBikeStands integerValue] >= availableStandsNumber) {
                             NSLog(@"close station found at %d m : %@ - %@ available stands", radius, station.name, station.availableBikeStands);
-                            [_routeCloseStations addObject:station];
+                            [_arrivalCloseStations addObject:station];
                             if (_arrivalStation == nil) {
                                 _arrivalStation = station;
                             }
@@ -670,7 +737,6 @@
         }
         radius += STATION_SEARCH_RADIUS_IN_METERS;
     }
-    return matchingStationNumber;
 }
 
 # pragma mark -
