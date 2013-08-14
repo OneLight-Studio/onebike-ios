@@ -17,5 +17,6 @@
 "missing_arrival" = "Veuillez renseigner l'adresse d'arrivée.";
 "same_location" = "Les adresses de départ et d'arrivée sont trop proches.";
 "incomplete_search_result" = "Trouver des stations répondant à vos critères est difficile pour le moment.\nEssayer d'augmenter le rayon de recherche pour améliorer les chances de réussite.";
+"station_title" = "Vélos / Bornes libres : %1$d / %2$d";
 
 "jcd_ws_get_data_error" = "Les informations sur les stations de vélos ne sont pas accessibles pour le moment.";
