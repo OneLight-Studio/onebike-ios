@@ -15,21 +15,16 @@
 @property (weak, nonatomic) IBOutlet UITextField *departureField;
 @property (weak, nonatomic) IBOutlet UITextField *arrivalField;
 @property (weak, nonatomic) IBOutlet UITextField *bikeField;
-@property (weak, nonatomic) IBOutlet UIStepper *bikeStepper;
 @property (weak, nonatomic) IBOutlet UITextField *standField;
-@property (weak, nonatomic) IBOutlet UIStepper *standStepper;
-@property (weak, nonatomic) IBOutlet UITextField *radiusField;
-@property (weak, nonatomic) IBOutlet UIStepper *radiusStepper;
+@property (weak, nonatomic) IBOutlet UIButton *closeSearchPanelButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *searchBarButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelBarButton;
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
 
-- (IBAction)bikeStepperClicked:(UIStepper *)stepper;
-- (IBAction)standStepperClicked:(UIStepper *)stepper;
-- (IBAction)radiusStepperClicked:(UIStepper *)stepper;
 - (IBAction)searchBarButtonClicked:(id)sender;
 - (IBAction)userLocationAsDepartureClicked:(id)sender;
 - (IBAction)userLocationAsArrivalClicked:(id)sender;
 - (IBAction)searchButtonClicked:(id)sender;
+- (IBAction)cancelBarButtonClicked:(id)sender;
 
 @end

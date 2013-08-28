@@ -44,9 +44,8 @@
 @synthesize departureField;
 @synthesize arrivalField;
 @synthesize bikeField;
-@synthesize bikeStepper;
-@synthesize radiusField;
-@synthesize radiusStepper;
+@synthesize standField;
+@synthesize closeSearchPanelButton;
 @synthesize searchBarButton;
 @synthesize searchButton;
 
@@ -65,13 +64,13 @@
 {
     self.mapPanel.delegate = self;
     self.mapPanel.showsUserLocation = YES;
+    [self.mapPanel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapMap:)]];
     
     CGRect searchFrame = self.searchPanel.frame;
     searchFrame.origin.y = -searchFrame.size.height;
     self.searchPanel.frame = searchFrame;
     self.bikeField.text = @"1";
     self.standField.text = @"1";
-    self.radiusField.text = @"1000";
     self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBClose"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
     
     _isMapLoaded = false;
@@ -81,27 +80,9 @@
     [self.searchBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.cancelBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
-    [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
-    [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateDisabled];
-    [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
-    [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateSelected];
-    [self.bikeStepper setDividerImage:[UIImage new] forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
-    [self.bikeStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
-    [self.bikeStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
-    [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
-    [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateDisabled];
-    [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
-    [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateSelected];
-    [self.standStepper setDividerImage:[UIImage new] forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
-    [self.standStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
-    [self.standStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
-    [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
-    [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateDisabled];
-    [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
-    [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateSelected];
-    [self.radiusStepper setDividerImage:[UIImage new] forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
-    [self.radiusStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
-    [self.radiusStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
+    UIImage *buttonBg = [[UIImage imageNamed:@"Images/SearchPanel/SPButtonBg.png"]
+                            resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
+    [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
     
     _departureCloseStations = [[NSMutableArray alloc] init];
     _arrivalCloseStations = [[NSMutableArray alloc] init];
@@ -212,7 +193,7 @@
     RoutePolyline *polyline = overlay;
     MKPolylineView *polylineView = [[MKPolylineView alloc] initWithPolyline:polyline.polyline];
     polylineView.lineWidth = 5;
-    polylineView.strokeColor = [UIColor blackColor];
+    polylineView.strokeColor = [UIColor greenColor];
     return polylineView;
 }
 
@@ -267,10 +248,20 @@
     
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    if (textField == self.bikeField || textField == self.standField || textField == self.radiusField) {
-        [self.view endEditing:YES];
-        return NO;
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    if (textField == self.bikeField) {
+        if ([textField.text isEqualToString:@""]) {
+            self.bikeField.text = @"1";
+        } else if (textField.text.length > 2) {
+            self.bikeField.text = @"99";
+        }
+        self.standField.text = self.bikeField.text;
+    } else if (textField == self.standField) {
+        if ([textField.text isEqualToString:@""]) {
+            self.standField.text = @"1";
+        } else if (textField.text.length > 2) {
+            self.standField.text = @"99";
+        }
     }
     return YES;
 }
@@ -278,14 +269,10 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.departureField) {
         [self.arrivalField becomeFirstResponder];
-    } else if (textField == self.arrivalField) {
+    } else {
         [self.view endEditing:YES];
     }
     return YES;
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self.view endEditing:YES];
 }
 
 # pragma mark Event(s)
@@ -297,31 +284,26 @@
     [_wsRequest call];
 }
 
-- (IBAction)searchBarButtonClicked:(id)sender {
-    _isSearchViewVisible = true;
-    [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
-    [UIView animateWithDuration:0.3 animations:^{
-        CGRect searchFrame = self.searchPanel.frame;
-        CGRect mapFrame = self.mapPanel.frame;
-        searchFrame.origin.y = 0;
-        mapFrame.origin.y = searchFrame.size.height;
-        self.searchPanel.frame = searchFrame;
-        self.mapPanel.frame = mapFrame;
-    }];
-}
-
-- (void)cancelBarButtonClicked:(id)sender {
+- (void)didTapMap:(UITapGestureRecognizer *)sender
+{
+    NSLog(@"tap map fired");
     if (_isSearchViewVisible) {
         _isSearchViewVisible = false;
-        [UIView animateWithDuration:0.3 animations:^{
-            CGRect searchFrame = self.searchPanel.frame;
-            CGRect mapFrame = self.mapPanel.frame;
-            searchFrame.origin.y = -searchFrame.size.height;
-            mapFrame.origin.y = 0;
-            [self.view endEditing:YES];
-            self.searchPanel.frame = searchFrame;
-            self.mapPanel.frame = mapFrame;
-        }];
+        [self closeSearchPanel];
+    }
+    [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
+}
+
+- (IBAction)searchBarButtonClicked:(id)sender {
+    _isSearchViewVisible = true;
+    [self openSearchPanel];
+    [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
+}
+
+- (IBAction)cancelBarButtonClicked:(id)sender {
+    if (_isSearchViewVisible) {
+        _isSearchViewVisible = false;
+        [self closeSearchPanel];
     } else {
         _mapViewState = MAP_VIEW_DEFAULT_STATE;
         [self resetSearchViewFields];
@@ -330,20 +312,6 @@
         [self drawStationsAroundUserAndZoom];
     }
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
-}
-
-- (IBAction)bikeStepperClicked:(UIStepper *)stepper {
-    self.bikeField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
-    self.standStepper.value = (int) stepper.value;
-    self.standField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
-}
-
-- (IBAction)standStepperClicked:(UIStepper *)stepper {
-    self.standField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
-}
-
-- (IBAction)radiusStepperClicked:(UIStepper *)stepper {
-    self.radiusField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
 }
 
 - (IBAction)userLocationAsDepartureClicked:(id)sender {
@@ -398,7 +366,7 @@
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         if (![self areEqualLocationsBetween:_departureLocation and:_arrivalLocation]) {
                             [self cancelBarButtonClicked:nil];
-                            [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:[self.radiusField.text intValue]];
+                            [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                         } else {
                             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                         }
@@ -418,7 +386,7 @@
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         if (![self areEqualLocationsBetween:_departureLocation and:_arrivalLocation]) {
                             [self cancelBarButtonClicked:nil];
-                            [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:[self.radiusField.text intValue]];
+                            [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                         } else {
                             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                         }
@@ -466,7 +434,7 @@
         }
     } else {
         self.navigationItem.rightBarButtonItems = nil;
-        self.navigationItem.rightBarButtonItem = self.cancelBarButton;
+        self.navigationItem.rightBarButtonItem = nil;
     }
 }
 
@@ -643,12 +611,27 @@
     self.arrivalField.text = nil;
     self.bikeField.text = @"1";
     self.standField.text = @"1";
-    self.radiusField.text = @"1000";
     
     _departureLocation = nil;
     _departureStation = nil;
     _arrivalLocation = nil;
     _arrivalStation = nil;
+}
+
+- (void)openSearchPanel {
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect searchFrame = self.searchPanel.frame;
+        searchFrame.origin.y = 0;
+        self.searchPanel.frame = searchFrame;
+    }];
+}
+
+- (void)closeSearchPanel {
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect searchFrame = self.searchPanel.frame;
+        searchFrame.origin.y = -searchFrame.size.height;
+        self.searchPanel.frame = searchFrame;
+    }];
 }
 
 - (void)searchWithDeparture:(CLLocation *)departure andArrival:(CLLocation *)arrival withBikes:(int)bikes andAvailableStands:(int)availableStands inARadiusOf:(int)radius {

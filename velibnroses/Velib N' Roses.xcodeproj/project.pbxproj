@@ -20,6 +20,7 @@
 		1993DCEF178F09860089A6D5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1993DCEE178F09860089A6D5 /* MapKit.framework */; };
 		19B5ADD417902AA5000E6B40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19B5ADD317902AA5000E6B40 /* CoreLocation.framework */; };
 		19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D1F7421793FDEC0051D13B /* WSRequest.m */; };
+		19C9C67817CE674600805611 /* update_storyboard_strings.sh in Resources */ = {isa = PBXBuildFile; fileRef = 19C9C67717CE674600805611 /* update_storyboard_strings.sh */; };
 		19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CED9FF17AAA4120069ECDC /* RoutePolyline.m */; };
 		19FD1B5F179591BE00309FD0 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FD1B5E179591BE00309FD0 /* Station.m */; };
 		E931956617858121009AFCC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956517858121009AFCC1 /* UIKit.framework */; };
@@ -47,6 +48,7 @@
 		19688CE917B945B9005ACA64 /* PlaceAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceAnnotation.m; sourceTree = "<group>"; };
 		1993DCEE178F09860089A6D5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		19B5ADD317902AA5000E6B40 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		19C9C67717CE674600805611 /* update_storyboard_strings.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update_storyboard_strings.sh; sourceTree = "<group>"; };
 		19CED9FE17AAA4120069ECDC /* RoutePolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoutePolyline.h; sourceTree = "<group>"; };
 		19CED9FF17AAA4120069ECDC /* RoutePolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoutePolyline.m; sourceTree = "<group>"; };
 		19F3F49C17B250B900DCCC47 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainStoryboard.strings; sourceTree = "<group>"; };
@@ -113,6 +115,14 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		19C9C67917CE674B00805611 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				19C9C67717CE674600805611 /* update_storyboard_strings.sh */,
+			);
+			name = Scripts;
+			sourceTree = "<group>";
+		};
 		19FD1B5C1795916600309FD0 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +141,7 @@
 			children = (
 				E931956417858121009AFCC1 /* Frameworks */,
 				E931956317858121009AFCC1 /* Products */,
+				19C9C67917CE674B00805611 /* Scripts */,
 				E931956B17858121009AFCC1 /* velibnroses */,
 			);
 			sourceTree = "<group>";
@@ -204,6 +215,7 @@
 				E931955E17858121009AFCC1 /* Sources */,
 				E931955F17858121009AFCC1 /* Frameworks */,
 				E931956017858121009AFCC1 /* Resources */,
+				19C9C67A17CE692D00805611 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -257,10 +269,28 @@
 				19688CE317B92880005ACA64 /* Default@2x.png in Resources */,
 				19688CE517B9288B005ACA64 /* Default-568h@2x.png in Resources */,
 				19688CE717B92980005ACA64 /* toulouse.gpx in Resources */,
+				19C9C67817CE674600805611 /* update_storyboard_strings.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		19C9C67A17CE692D00805611 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PROJECT_DIR}/update_storyboard_strings.sh";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E931955E17858121009AFCC1 /* Sources */ = {
