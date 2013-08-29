@@ -14,6 +14,7 @@
 #import "GeoUtils.h"
 #import "RoutePolyline.h"
 #import "PlaceAnnotation.h"
+#import "ImageUtils.h"
 
 @interface MapController ()
     
@@ -66,6 +67,8 @@
     self.mapPanel.showsUserLocation = YES;
     [self.mapPanel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapMap:)]];
     
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBLogo"]];
+    
     CGRect searchFrame = self.searchPanel.frame;
     searchFrame.origin.y = -searchFrame.size.height;
     self.searchPanel.frame = searchFrame;
@@ -80,7 +83,7 @@
     [self.searchBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.cancelBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
-    UIImage *buttonBg = [[UIImage imageNamed:@"Images/SearchPanel/SPButtonBg.png"]
+    UIImage *buttonBg = [[UIImage imageNamed:@"Images/SearchPanel/SPButtonBg"]
                             resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
     [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
     
@@ -174,13 +177,13 @@
     }
 }
 
-- (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated {
+/*- (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated {
     if (_isMapLoaded && _mapViewState == MAP_VIEW_DEFAULT_STATE) {
         NSLog(@"region has changed");
         [self determineSpanCoordinates];
         [self drawStationsAroundUserAndZoom];
     }
-}
+}*/
 
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)aMapView {
     NSLog(@"map is loaded");
@@ -215,7 +218,13 @@
                 NSLog(@"render arrival");
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
             } else {
-                annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPStation"];
+                UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
+                UIImage *bikes = [ImageUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
+                UIImage *tmp = [ImageUtils placeBikes:bikes onImage:background];
+                UIImage *stands = [ImageUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
+                UIImage *image = [ImageUtils placeStands:stands onImage:tmp];
+                annotationView.image = image;
+            
             }
         }
         annotationView.canShowCallout = YES;
@@ -423,7 +432,6 @@
 # pragma mark Navigation Bar
 
 - (void)refreshNavigationBarHasSearchView:(BOOL)hasSearchView hasRideView:(BOOL)hasRideView {
-    
     if (hasSearchView == false) {
         if (hasRideView == false) {
             self.navigationItem.rightBarButtonItems = nil;
@@ -460,10 +468,10 @@
         int displayedStations = 0;
         for (Station *station in _stations) {
             if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
-                if ([self isVisibleStation:station]) {
+                /*if ([self isVisibleStation:station]) {*/
                     [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kUndefined]];
                     displayedStations++;
-                }
+                //}
             } else {
                 NSLog(@"%@ : %@", station.name, station.contract);
                 invalidStations++;
@@ -494,13 +502,10 @@
     stationCoordinate.latitude = [aStation.latitude doubleValue];
     stationCoordinate.longitude = [aStation.longitude doubleValue];
     
-    NSMutableString *infos = [NSMutableString stringWithFormat:NSLocalizedString(@"station_title", @""), [aStation.availableBikes integerValue], [aStation.availableBikeStands integerValue]];
-    
     PlaceAnnotation *marker = [[PlaceAnnotation alloc] init];
     marker.placeLocation = aLocation;
     marker.coordinate = stationCoordinate;
-    marker.title = [aStation.name substringFromIndex:[aStation.name rangeOfString:@" - "].location + 3];
-    marker.subtitle = infos;
+    marker.title = [self cleanStationName:aStation];
     marker.placeStation = aStation;
     return marker;
 }
@@ -733,6 +738,24 @@
 - (BOOL)areEqualLocationsBetween:(CLLocation *)first and:(CLLocation *)second {
     return fabs(first.coordinate.latitude - second.coordinate.latitude) < 0.001 &&
     fabs(first.coordinate.longitude - second.coordinate.longitude) < 0.001;
+}
+
+- (NSString *)cleanStationName:(Station *)aStation {
+    NSString *regexp = @"^[a-zA-Z](.*)$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regexp];
+    NSMutableString *tmp = [aStation.name mutableCopy];
+    while (![predicate evaluateWithObject: tmp] || tmp.length == 0) {
+        // remove first character while is not a letter
+        tmp = (NSMutableString *)[tmp substringFromIndex:1];
+    }
+    
+    NSString *result;
+    if (tmp.length > 0) {
+        result = [NSString stringWithString:tmp];
+    } else {
+        result = @"###";
+    }
+    return result;
 }
 
 @end
