@@ -107,8 +107,23 @@
                                             <action selector="userLocationAsDepartureClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="VZp-bR-cG3"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Mox-8D-SpL">
+                                        <rect key="frame" x="246" y="1" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="Images/SearchPanel/SPBike.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="userLocationAsDepartureClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="iF6-cA-pZq"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CKQ-mF-mOJ">
-                                        <rect key="frame" x="129" y="118" width="62" height="20"/>
+                                        <rect key="frame" x="130" y="118" width="62" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="Images/SearchPanel/SPCloseSearch.png">
@@ -153,6 +168,21 @@
                                             <outlet property="delegate" destination="R2K-lh-zEE" id="d71-x2-hle"/>
                                         </connections>
                                     </textField>
+                                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GYp-LB-C2k">
+                                        <rect key="frame" x="246" y="38" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" image="Images/SearchPanel/SPStand.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="userLocationAsDepartureClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="pBO-q0-Qev"/>
+                                        </connections>
+                                    </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" id="Vmt-5T-0GU">
                                         <rect key="frame" x="278" y="45" width="32" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -194,8 +224,10 @@
     </scenes>
     <resources>
         <image name="Images/NavigationBar/NBSearch.png" width="16" height="16"/>
+        <image name="Images/SearchPanel/SPBike.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPCloseSearch.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPMyLocation.png" width="16" height="16"/>
+        <image name="Images/SearchPanel/SPStand.png" width="16" height="16"/>
     </resources>
     <classes>
         <class className="MapController" superclassName="UIViewController">
