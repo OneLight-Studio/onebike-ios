@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		190709D417CF72F300C8C454 /* ImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190709D317CF72F300C8C454 /* ImageUtils.m */; };
 		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
 		19688CC617B90770005ACA64 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19688CC417B90770005ACA64 /* MainStoryboard.storyboard */; };
 		19688CD717B91FE4005ACA64 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 19688CD617B91FE4005ACA64 /* Images */; };
@@ -34,6 +35,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		190709D217CF72F300C8C454 /* ImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtils.h; sourceTree = "<group>"; };
+		190709D317CF72F300C8C454 /* ImageUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtils.m; sourceTree = "<group>"; };
 		190776FF1796F3BE00180530 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
 		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
 		19688CC517B90770005ACA64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
@@ -57,14 +60,14 @@
 		19FD1B5817958E4B00309FD0 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		19FD1B5D179591BE00309FD0 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Station.h; sourceTree = "<group>"; };
 		19FD1B5E179591BE00309FD0 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Station.m; sourceTree = "<group>"; };
-		E931956217858121009AFCC1 /* Velib N' Roses.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Velib N' Roses.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E931956217858121009AFCC1 /* OneBike.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneBike.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E931956517858121009AFCC1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E931956717858121009AFCC1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E931956917858121009AFCC1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		E931956D17858121009AFCC1 /* Velib N' Roses-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Velib N' Roses-Info.plist"; sourceTree = "<group>"; };
+		E931956D17858121009AFCC1 /* OneBike-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OneBike-Info.plist"; sourceTree = "<group>"; };
 		E931956F17858121009AFCC1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E931957117858121009AFCC1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		E931957317858121009AFCC1 /* Velib N' Roses-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Velib N' Roses-Prefix.pch"; sourceTree = "<group>"; };
+		E931957317858121009AFCC1 /* OneBike-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OneBike-Prefix.pch"; sourceTree = "<group>"; };
 		E931957417858121009AFCC1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E931957517858121009AFCC1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		E931958017858121009AFCC1 /* MapController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapController.h; sourceTree = "<group>"; };
@@ -111,6 +114,8 @@
 				19FD1B5817958E4B00309FD0 /* Constants.h */,
 				190776FF1796F3BE00180530 /* GeoUtils.h */,
 				190777001796F3BE00180530 /* GeoUtils.m */,
+				190709D217CF72F300C8C454 /* ImageUtils.h */,
+				190709D317CF72F300C8C454 /* ImageUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -142,14 +147,14 @@
 				E931956417858121009AFCC1 /* Frameworks */,
 				E931956317858121009AFCC1 /* Products */,
 				19C9C67917CE674B00805611 /* Scripts */,
-				E931956B17858121009AFCC1 /* velibnroses */,
+				E931956B17858121009AFCC1 /* Application */,
 			);
 			sourceTree = "<group>";
 		};
 		E931956317858121009AFCC1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E931956217858121009AFCC1 /* Velib N' Roses.app */,
+				E931956217858121009AFCC1 /* OneBike.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -167,7 +172,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E931956B17858121009AFCC1 /* velibnroses */ = {
+		E931956B17858121009AFCC1 /* Application */ = {
 			isa = PBXGroup;
 			children = (
 				E931957417858121009AFCC1 /* AppDelegate.h */,
@@ -181,6 +186,7 @@
 				19B5ADD517902ACF000E6B40 /* Utils */,
 				E9D1F7401793FDC40051D13B /* Web Services */,
 			);
+			name = Application;
 			path = velibnroses;
 			sourceTree = "<group>";
 		};
@@ -190,8 +196,8 @@
 				E931956E17858121009AFCC1 /* InfoPlist.strings */,
 				E9D1F73D1793FA690051D13B /* Localizable.strings */,
 				E931957117858121009AFCC1 /* main.m */,
-				E931956D17858121009AFCC1 /* Velib N' Roses-Info.plist */,
-				E931957317858121009AFCC1 /* Velib N' Roses-Prefix.pch */,
+				E931956D17858121009AFCC1 /* OneBike-Info.plist */,
+				E931957317858121009AFCC1 /* OneBike-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -208,9 +214,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E931956117858121009AFCC1 /* Velib N' Roses */ = {
+		E931956117858121009AFCC1 /* OneBike */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E931959A17858122009AFCC1 /* Build configuration list for PBXNativeTarget "Velib N' Roses" */;
+			buildConfigurationList = E931959A17858122009AFCC1 /* Build configuration list for PBXNativeTarget "OneBike" */;
 			buildPhases = (
 				E931955E17858121009AFCC1 /* Sources */,
 				E931955F17858121009AFCC1 /* Frameworks */,
@@ -221,9 +227,9 @@
 			);
 			dependencies = (
 			);
-			name = "Velib N' Roses";
+			name = OneBike;
 			productName = velibnroses;
-			productReference = E931956217858121009AFCC1 /* Velib N' Roses.app */;
+			productReference = E931956217858121009AFCC1 /* OneBike.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -235,7 +241,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "OneLight Studio";
 			};
-			buildConfigurationList = E931955D17858121009AFCC1 /* Build configuration list for PBXProject "Velib N' Roses" */;
+			buildConfigurationList = E931955D17858121009AFCC1 /* Build configuration list for PBXProject "OneBike" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -249,7 +255,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E931956117858121009AFCC1 /* Velib N' Roses */,
+				E931956117858121009AFCC1 /* OneBike */,
 			);
 		};
 /* End PBXProject section */
@@ -305,6 +311,7 @@
 				19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */,
 				19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */,
 				19688CEA17B945B9005ACA64 /* PlaceAnnotation.m in Sources */,
+				190709D417CF72F300C8C454 /* ImageUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,10 +409,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "velibnroses/Velib N' Roses-Prefix.pch";
-				INFOPLIST_FILE = "velibnroses/Velib N' Roses-Info.plist";
+				GCC_PREFIX_HEADER = "velibnroses/OneBike-Prefix.pch";
+				INFOPLIST_FILE = "velibnroses/OneBike-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "Velib N' Roses";
+				PRODUCT_NAME = OneBike;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -414,10 +421,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "velibnroses/Velib N' Roses-Prefix.pch";
-				INFOPLIST_FILE = "velibnroses/Velib N' Roses-Info.plist";
+				GCC_PREFIX_HEADER = "velibnroses/OneBike-Prefix.pch";
+				INFOPLIST_FILE = "velibnroses/OneBike-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "Velib N' Roses";
+				PRODUCT_NAME = OneBike;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -425,7 +432,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E931955D17858121009AFCC1 /* Build configuration list for PBXProject "Velib N' Roses" */ = {
+		E931955D17858121009AFCC1 /* Build configuration list for PBXProject "OneBike" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E931959817858122009AFCC1 /* Debug */,
@@ -434,7 +441,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E931959A17858122009AFCC1 /* Build configuration list for PBXNativeTarget "Velib N' Roses" */ = {
+		E931959A17858122009AFCC1 /* Build configuration list for PBXNativeTarget "OneBike" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E931959B17858122009AFCC1 /* Debug */,
