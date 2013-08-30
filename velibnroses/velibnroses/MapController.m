@@ -15,6 +15,10 @@
 #import "RoutePolyline.h"
 #import "PlaceAnnotation.h"
 #import "UIUtils.h"
+#import "TRAutocompleteView.h"
+#import "TRGoogleMapsAutocompleteItemsSource.h"
+#import "TRTextFieldExtensions.h"
+#import "TRGoogleMapsAutocompletionCellFactory.h"
 
 @interface MapController ()
     
@@ -39,6 +43,9 @@
     Station *_departureStation;
     Station *_arrivalStation;
     int _jcdRequestAttemptsNumber;
+    
+    TRAutocompleteView *_departureAutocompleteView;
+    TRAutocompleteView *_arrivalAutocompleteView;
 }
 
 @synthesize mapPanel;
@@ -176,9 +183,30 @@
 # pragma mark Delegate
 
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
-    if (startUserLocation == nil) {
+    NSLog(@"receive user location update (%f,%f)", aUserLocation.coordinate.latitude, aUserLocation.coordinate.longitude);
+    if (startUserLocation == nil || [self isEqualToLocationZero:startUserLocation]) {
+        // TODO update before test
         startUserLocation = aUserLocation;
-        [self centerMapOnUserLocation];
+        //startUserLocation = [aUserLocation copy];
+        if (![self isEqualToLocationZero:startUserLocation]) {
+            [self centerMapOnUserLocation];
+            
+            _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:@"AIzaSyDgKRier12bPPknXhPRvuAvPdNn3vFQbW8" andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _departureAutocompleteView.topMargin = -65;
+            _departureAutocompleteView.backgroundColor = [UIColor colorWithRed:(255) / 255.0f green:(255) / 255.0f blue:(255) / 255.0f alpha:1];
+            _departureAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
+            {
+                NSLog(@"Departure autocompleted with: %@", item.completionText);
+            };
+            
+            _arrivalAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:arrivalField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:@"AIzaSyDgKRier12bPPknXhPRvuAvPdNn3vFQbW8" andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _arrivalAutocompleteView.topMargin = -65;
+            _arrivalAutocompleteView.backgroundColor = [UIColor colorWithRed:(255) / 255.0f green:(255) / 255.0f blue:(255) / 255.0f alpha:1];
+            _arrivalAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
+            {
+                NSLog(@"Arrival autocompleted with: %@", item.completionText);
+            };
+        }
     }
 }
 
@@ -259,7 +287,11 @@
 }
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    if (textField == self.bikeField) {
+    if (textField == self.departureField) {
+        [_departureAutocompleteView hide];
+    } else if (textField == self.arrivalField) {
+        [_arrivalAutocompleteView hide];
+    } else if (textField == self.bikeField) {
         if ([textField.text isEqualToString:@""]) {
             self.bikeField.text = @"1";
         } else if (textField.text.length > 2) {
@@ -724,6 +756,16 @@
 - (BOOL)unlessInMeters:(double)radius from:(CLLocationCoordinate2D)origin for:(CLLocationCoordinate2D)location {
     double dist = [GeoUtils getDistanceFromLat:origin.latitude toLat:location.latitude fromLong:origin.longitude toLong:location.longitude];
     return dist <= radius;
+}
+
+- (BOOL)isEqualToLocationZero:(MKUserLocation *)newLocation {
+    BOOL isLocationZero = fabs(newLocation.coordinate.latitude - 0.00000) < 0.00001 && fabs(newLocation.coordinate.longitude -  - 0.00000) < 0.00001;
+    if (isLocationZero) {
+        NSLog(@"location zero");
+    } else {
+        NSLog(@"valid location");
+    }
+    return isLocationZero;
 }
 
 - (BOOL)areEqualLocationsBetween:(CLLocation *)first and:(CLLocation *)second {
