@@ -28,9 +28,6 @@
     NSMutableArray *_arrivalCloseStations;
     NSMutableArray *_stationsAnnotations;
     NSMutableArray *_searchAnnotations;
-    /*NSMutableArray *_departureCloseStationsAnnotations;
-    NSMutableArray *_arrivalCloseStationsAnnotations;*/
-    //CLLocationCoordinate2D _northWestSpanCorner, _southEastSpanCorner;
     BOOL _isMapLoaded;
     BOOL _searching;
     CLLocation *_departureLocation;
@@ -95,8 +92,6 @@
     _arrivalCloseStations = [[NSMutableArray alloc] init];
     _stationsAnnotations = [[NSMutableArray alloc] init];
     _searchAnnotations = [[NSMutableArray alloc] init];
-    /*_departureCloseStationsAnnotations = [[NSMutableArray alloc] init];
-    _arrivalCloseStationsAnnotations = [[NSMutableArray alloc] init];*/
 }
 
 - (void) startTimer {
@@ -530,37 +525,6 @@
     marker.placeStation = aStation;
     return marker;
 }
-
-/*- (BOOL)isVisibleStation:(Station *)station {
-    
-    BOOL visible = false;
-    
-    CLLocationCoordinate2D stationCoordinate;
-    stationCoordinate.latitude = [station.latitude doubleValue];
-    stationCoordinate.longitude = [station.longitude doubleValue];
-    
-    CLLocationCoordinate2D userLocation = self.mapPanel.userLocation.coordinate;
-    CLLocationCoordinate2D spanCenter = self.mapPanel.region.center;
-    
-    if (stationCoordinate.latitude >= _northWestSpanCorner.latitude && stationCoordinate.latitude <= _southEastSpanCorner.latitude
-        && stationCoordinate.longitude >= _northWestSpanCorner.longitude && stationCoordinate.longitude <= _southEastSpanCorner.longitude
-        && ([self unlessInMeters:SPAN_SIDE_MAX_LENGTH_IN_METERS from:userLocation for:stationCoordinate]
-            || [self unlessInMeters:SPAN_SIDE_MAX_LENGTH_IN_METERS from:spanCenter for:stationCoordinate])) {
-            visible = true;
-        }
-    
-    return visible;
-}*/
-
-/*- (void)determineSpanCoordinates {
-    MKCoordinateRegion region = self.mapPanel.region;
-    CLLocationCoordinate2D center = region.center;
-    NSLog(@"determine span coordinates");
-    _northWestSpanCorner.latitude  = center.latitude  - (region.span.latitudeDelta  / 2.0);
-    _northWestSpanCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
-    _southEastSpanCorner.latitude  = center.latitude  + (region.span.latitudeDelta  / 2.0);
-    _southEastSpanCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
-}*/
 
 - (void)drawRouteEndsCloseStations {
     if ([_departureCloseStations count] == 0 || [_arrivalCloseStations count] == 0) {

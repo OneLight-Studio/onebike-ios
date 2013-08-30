@@ -11,46 +11,14 @@
 @implementation UIUtils
 
 + (UIImage*)placeBikes:(UIImage*)image onImage:(UIImage*)background {
-    
-    CGSize size = background.size;
-    
-    if ([UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0f) {
-        UIGraphicsBeginImageContextWithOptions(size, NO, 2.0f);
-    } else {
-        UIGraphicsBeginImageContext(size);
-    }
-    
-    [background drawAtPoint:CGPointMake(0, 0)];
-    [image drawAtPoint:CGPointMake(10, 0)];
-    
-    UIImage* result = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return result;
+    return [self placeImage:image onBackground:background atPoint:CGPointMake(10,0)];
 }
 
 + (UIImage*)placeStands:(UIImage*)image onImage:(UIImage*)background {
-    
-    CGSize size = background.size;
-    
-    if ([UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0f) {
-        UIGraphicsBeginImageContextWithOptions(size, NO, 2.0f);
-    } else {
-        UIGraphicsBeginImageContext(size);
-    }
-    
-    [background drawAtPoint:CGPointMake(0, 0)];
-    [image drawAtPoint:CGPointMake(10,15)];
-    
-    UIImage* result = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return result;
+    return [self placeImage:image onBackground:background atPoint:CGPointMake(10,15)];
 }
 
 + (UIImage*)drawBikesText:(NSString*)text {
-    
-    // set rect, size, font
     
     CGRect rect;
     switch (text.length) {
@@ -63,37 +31,10 @@
         default:
             break;
     }
-    
-    CGSize size = CGSizeMake(rect.size.width, rect.size.height);
-    UIFont *font = [UIFont fontWithName:@"Helvetica-Bold" size:11];
-    
-    // retina display, double resolution
-    
-    if ([UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0f) {
-        UIGraphicsBeginImageContextWithOptions(size, NO, 2.0f);
-    } else {
-        UIGraphicsBeginImageContext(size);
-    }
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    // draw fill
-    
-    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
-    CGContextSetTextDrawingMode(context, kCGTextFill);
-    [text drawInRect:CGRectIntegral(rect) withFont:font];
-    
-    // convert to image and return
-    
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-    
+    return [self drawText:text onRect:rect];
 }
 
 + (UIImage*)drawStandsText:(NSString*)text {
-    
-    // set rect, size, font
     
     CGRect rect;
     switch (text.length) {
@@ -106,6 +47,29 @@
         default:
             break;
     }
+    return [self drawText:text onRect:rect];    
+}
+
++ (UIImage *)placeImage:(UIImage *)image onBackground:(UIImage *)background atPoint:(CGPoint) position {
+    CGSize size = background.size;
+    
+    if ([UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0f) {
+        UIGraphicsBeginImageContextWithOptions(size, NO, 2.0f);
+    } else {
+        UIGraphicsBeginImageContext(size);
+    }
+    
+    [background drawAtPoint:CGPointMake(0, 0)];
+    [image drawAtPoint:position];
+    
+    UIImage* result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return result;
+}
+
++ (UIImage*)drawText:(NSString*)text onRect:(CGRect)rect {
+    
+    // size and font
     
     CGSize size = CGSizeMake(rect.size.width, rect.size.height);
     UIFont *font = [UIFont fontWithName:@"Helvetica-Bold" size:11];
@@ -131,7 +95,6 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
-    
 }
 
 #pragma mark Color
