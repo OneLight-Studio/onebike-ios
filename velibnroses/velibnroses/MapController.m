@@ -14,7 +14,7 @@
 #import "GeoUtils.h"
 #import "RoutePolyline.h"
 #import "PlaceAnnotation.h"
-#import "ImageUtils.h"
+#import "UIUtils.h"
 
 @interface MapController ()
     
@@ -24,7 +24,13 @@
     MKUserLocation *startUserLocation;
     WSRequest *_wsRequest;
     NSMutableArray *_stations;
-    CLLocationCoordinate2D _northWestSpanCorner, _southEastSpanCorner;
+    NSMutableArray *_departureCloseStations;
+    NSMutableArray *_arrivalCloseStations;
+    NSMutableArray *_stationsAnnotations;
+    NSMutableArray *_searchAnnotations;
+    /*NSMutableArray *_departureCloseStationsAnnotations;
+    NSMutableArray *_arrivalCloseStationsAnnotations;*/
+    //CLLocationCoordinate2D _northWestSpanCorner, _southEastSpanCorner;
     BOOL _isMapLoaded;
     BOOL _searching;
     CLLocation *_departureLocation;
@@ -33,8 +39,6 @@
     RoutePolyline *_route;
     int _mapViewState;
     BOOL _isSearchViewVisible;
-    NSMutableArray *_departureCloseStations;
-    NSMutableArray *_arrivalCloseStations;
     Station *_departureStation;
     Station *_arrivalStation;
     int _jcdRequestAttemptsNumber;
@@ -89,6 +93,10 @@
     
     _departureCloseStations = [[NSMutableArray alloc] init];
     _arrivalCloseStations = [[NSMutableArray alloc] init];
+    _stationsAnnotations = [[NSMutableArray alloc] init];
+    _searchAnnotations = [[NSMutableArray alloc] init];
+    /*_departureCloseStationsAnnotations = [[NSMutableArray alloc] init];
+    _arrivalCloseStationsAnnotations = [[NSMutableArray alloc] init];*/
 }
 
 - (void) startTimer {
@@ -126,10 +134,12 @@
         _jcdRequestAttemptsNumber = 0;
         _stations = (NSMutableArray *)[Station fromJSONArray:json];
         NSLog(@"stations count %i", _stations.count);
-        if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
-            [self determineSpanCoordinates];
-            [self drawStationsAroundUserAndZoom];
-        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, (unsigned long)NULL), ^(void) {
+            [self createStationsAnnotations];
+            if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
+                [self displayStationsAnnotations];
+            }
+        });
         [self startTimer];
     }];
     [_wsRequest handleExceptionWith:^(NSError *exception) {
@@ -177,14 +187,6 @@
     }
 }
 
-/*- (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated {
-    if (_isMapLoaded && _mapViewState == MAP_VIEW_DEFAULT_STATE) {
-        NSLog(@"region has changed");
-        [self determineSpanCoordinates];
-        [self drawStationsAroundUserAndZoom];
-    }
-}*/
-
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)aMapView {
     NSLog(@"map is loaded");
     _isMapLoaded = true;
@@ -195,8 +197,12 @@
     NSLog(@"render route");
     RoutePolyline *polyline = overlay;
     MKPolylineView *polylineView = [[MKPolylineView alloc] initWithPolyline:polyline.polyline];
-    polylineView.lineWidth = 5;
-    polylineView.strokeColor = [UIColor greenColor];
+    if ([UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0f) {
+        polylineView.lineWidth = 10;
+    } else {
+        polylineView.lineWidth = 5;
+    }
+    polylineView.strokeColor = [UIUtils colorWithHexaString:@"#b2ca04"];
     return polylineView;
 }
 
@@ -219,10 +225,10 @@
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
             } else {
                 UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
-                UIImage *bikes = [ImageUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
-                UIImage *tmp = [ImageUtils placeBikes:bikes onImage:background];
-                UIImage *stands = [ImageUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
-                UIImage *image = [ImageUtils placeStands:stands onImage:tmp];
+                UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
+                UIImage *tmp = [UIUtils placeBikes:bikes onImage:background];
+                UIImage *stands = [UIUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
+                UIImage *image = [UIUtils placeStands:stands onImage:tmp];
                 annotationView.image = image;
             
             }
@@ -243,7 +249,7 @@
                     _departureStation = annotation.placeStation;
                     redraw = true;
                 } else if (annotation.placeLocation == kNearArrival && _arrivalStation != annotation.placeStation) {
-                    NSLog(@"change departure");
+                    NSLog(@"change arrival");
                     _arrivalStation = annotation.placeStation;
                     redraw = true;
                 }
@@ -317,8 +323,11 @@
         _mapViewState = MAP_VIEW_DEFAULT_STATE;
         [self resetSearchViewFields];
         [self eraseRoute];
+        [self eraseSearchAnnotations];
         [self centerMapOnUserLocation];
-        [self drawStationsAroundUserAndZoom];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, (unsigned long)NULL), ^(void) {
+            [self displayStationsAnnotations];
+        });
     }
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
 }
@@ -460,39 +469,51 @@
     NSLog(@"centered on user location (%f,%f)", _departureLocation.coordinate.latitude, _departureLocation.coordinate.longitude);
 }
 
-- (void)drawStationsAroundUserAndZoom {
-    if (_stations != nil) {
-        NSLog(@"display stations");
-        [mapPanel removeAnnotations:mapPanel.annotations];
-        int invalidStations = 0;
-        int displayedStations = 0;
-        for (Station *station in _stations) {
-            if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
-                /*if ([self isVisibleStation:station]) {*/
-                    [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kUndefined]];
-                    displayedStations++;
-                //}
-            } else {
-                NSLog(@"%@ : %@", station.name, station.contract);
-                invalidStations++;
-            }
+- (void)createStationsAnnotations {
+    NSLog(@"create stations annotations");
+    [mapPanel removeAnnotations:_stationsAnnotations];
+    [_stationsAnnotations removeAllObjects];
+    int invalidStations = 0;
+    int displayedStations = 0;
+    for (Station *station in _stations) {
+        if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
+            [_stationsAnnotations addObject:[self createStationAnnotation:station withLocation:kUndefined]];   
+        } else {
+            NSLog(@"%@ : %@", station.name, station.contract);
+            invalidStations++;
         }
-        NSLog(@"displayed stations count : %i", displayedStations);
-        if (invalidStations > 0) {
-            NSLog(@"invalid stations count : %i", invalidStations);
-        }
+    }
+    NSLog(@"localized stations count : %i", displayedStations);
+    if (invalidStations > 0) {
+        NSLog(@"invalid stations count : %i", invalidStations);
+    }
+}
+
+- (void)displayStationsAnnotations {
+    NSLog(@"display stations");
+    for (PlaceAnnotation *annotation in _stationsAnnotations) {
+        [mapPanel addAnnotation:annotation];
     }
 }
 
 - (void)createStationsAnnotationsAroundDeparture {
     for (Station *station in _departureCloseStations) {
-        [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kNearDeparture]];
+        [_searchAnnotations addObject:[self createStationAnnotation:station withLocation:kNearDeparture]];
     }
 }
 
 - (void)createStationsAnnotationsAroundArrival {
     for (Station *station in _arrivalCloseStations) {
-        [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kNearArrival]];
+        [_searchAnnotations addObject:[self createStationAnnotation:station withLocation:kNearArrival]];
+    }
+}
+
+- (void)drawSearchAnnotations {
+    NSLog(@"draw search stations");
+    [self createStationsAnnotationsAroundDeparture];
+    [self createStationsAnnotationsAroundArrival];
+    for (PlaceAnnotation *annotation in _searchAnnotations) {
+        [mapPanel addAnnotation:annotation];
     }
 }
 
@@ -510,7 +531,7 @@
     return marker;
 }
 
-- (BOOL)isVisibleStation:(Station *)station {
+/*- (BOOL)isVisibleStation:(Station *)station {
     
     BOOL visible = false;
     
@@ -529,9 +550,9 @@
         }
     
     return visible;
-}
+}*/
 
-- (void)determineSpanCoordinates {
+/*- (void)determineSpanCoordinates {
     MKCoordinateRegion region = self.mapPanel.region;
     CLLocationCoordinate2D center = region.center;
     NSLog(@"determine span coordinates");
@@ -539,7 +560,7 @@
     _northWestSpanCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
     _southEastSpanCorner.latitude  = center.latitude  + (region.span.latitudeDelta  / 2.0);
     _southEastSpanCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
-}
+}*/
 
 - (void)drawRouteEndsCloseStations {
     if ([_departureCloseStations count] == 0 || [_arrivalCloseStations count] == 0) {
@@ -552,7 +573,7 @@
     marker.coordinate = _departureLocation.coordinate;
     marker.title = self.departureField.text;
     
-    [mapPanel addAnnotation:marker];
+    [_searchAnnotations addObject:marker];
     
     // arrival annotation
     marker = [[PlaceAnnotation alloc] init];
@@ -560,10 +581,9 @@
     marker.coordinate = _arrivalLocation.coordinate;
     marker.title = self.arrivalField.text;
     
-    [mapPanel addAnnotation:marker];
+    [_searchAnnotations addObject:marker];
     
-    [self createStationsAnnotationsAroundDeparture];
-    [self createStationsAnnotationsAroundArrival];
+    [self drawSearchAnnotations];
 }
 
 - (void)drawRouteFromStationDeparture:(Station *)departure toStationArrival:(Station *)arrival {
@@ -606,6 +626,13 @@
     if (_route != nil) {
         [mapPanel removeOverlay:_route];
         _route = nil;
+    }
+}
+
+- (void)eraseSearchAnnotations {
+    if (_searchAnnotations != nil) {
+        [mapPanel removeAnnotations:_searchAnnotations];
+        [_searchAnnotations removeAllObjects];
     }
 }
 

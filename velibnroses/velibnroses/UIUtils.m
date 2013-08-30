@@ -1,14 +1,14 @@
 //
-//  ImageUtils.m
-//  Velib N' Roses
+//  UIUtils.m
+//  OneBike
 //
-//  Created by Sébastien BALARD on 29/08/13.
+//  Created by Sébastien BALARD on 30/08/13.
 //  Copyright (c) 2013 OneLight Studio. All rights reserved.
 //
 
-#import "ImageUtils.h"
+#import "UIUtils.h"
 
-@implementation ImageUtils
+@implementation UIUtils
 
 + (UIImage*)placeBikes:(UIImage*)image onImage:(UIImage*)background {
     
@@ -132,6 +132,26 @@
     UIGraphicsEndImageContext();
     return newImage;
     
+}
+
+#pragma mark Color
+
++ (UIColor *)colorWithHexaString:(NSString *)hexa
+{
+    
+    // Convert hex string to an integer
+    unsigned int hexInt = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexa];
+    // Tell scanner to skip the # character
+    [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@"#"]];
+    // Scan hex value
+    [scanner scanHexInt:&hexInt];
+    
+    // Create color object, specifying alpha as well
+    UIColor *color =
+    [UIColor colorWithRed:((CGFloat) ((hexInt & 0xFF0000) >> 16)) / 255 green:((CGFloat) ((hexInt & 0xFF00) >> 8)) / 255 blue:((CGFloat) (hexInt & 0xFF)) / 255 alpha:1.0];
+    
+    return color;
 }
 
 @end

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		190709D417CF72F300C8C454 /* ImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190709D317CF72F300C8C454 /* ImageUtils.m */; };
 		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
 		19688CC617B90770005ACA64 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19688CC417B90770005ACA64 /* MainStoryboard.storyboard */; };
 		19688CD717B91FE4005ACA64 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 19688CD617B91FE4005ACA64 /* Images */; };
@@ -22,6 +21,7 @@
 		19B5ADD417902AA5000E6B40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19B5ADD317902AA5000E6B40 /* CoreLocation.framework */; };
 		19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D1F7421793FDEC0051D13B /* WSRequest.m */; };
 		19C9C67817CE674600805611 /* update_storyboard_strings.sh in Resources */ = {isa = PBXBuildFile; fileRef = 19C9C67717CE674600805611 /* update_storyboard_strings.sh */; };
+		19CC9CAA17D0B0B700119925 /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CC9CA917D0B0B700119925 /* UIUtils.m */; };
 		19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CED9FF17AAA4120069ECDC /* RoutePolyline.m */; };
 		19FD1B5F179591BE00309FD0 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FD1B5E179591BE00309FD0 /* Station.m */; };
 		E931956617858121009AFCC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956517858121009AFCC1 /* UIKit.framework */; };
@@ -35,8 +35,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		190709D217CF72F300C8C454 /* ImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtils.h; sourceTree = "<group>"; };
-		190709D317CF72F300C8C454 /* ImageUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtils.m; sourceTree = "<group>"; };
 		190776FF1796F3BE00180530 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
 		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
 		19688CC517B90770005ACA64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
@@ -52,6 +50,8 @@
 		1993DCEE178F09860089A6D5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		19B5ADD317902AA5000E6B40 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		19C9C67717CE674600805611 /* update_storyboard_strings.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update_storyboard_strings.sh; sourceTree = "<group>"; };
+		19CC9CA817D0B0B700119925 /* UIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIUtils.h; sourceTree = "<group>"; };
+		19CC9CA917D0B0B700119925 /* UIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIUtils.m; sourceTree = "<group>"; };
 		19CED9FE17AAA4120069ECDC /* RoutePolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoutePolyline.h; sourceTree = "<group>"; };
 		19CED9FF17AAA4120069ECDC /* RoutePolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoutePolyline.m; sourceTree = "<group>"; };
 		19F3F49C17B250B900DCCC47 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainStoryboard.strings; sourceTree = "<group>"; };
@@ -114,8 +114,8 @@
 				19FD1B5817958E4B00309FD0 /* Constants.h */,
 				190776FF1796F3BE00180530 /* GeoUtils.h */,
 				190777001796F3BE00180530 /* GeoUtils.m */,
-				190709D217CF72F300C8C454 /* ImageUtils.h */,
-				190709D317CF72F300C8C454 /* ImageUtils.m */,
+				19CC9CA817D0B0B700119925 /* UIUtils.h */,
+				19CC9CA917D0B0B700119925 /* UIUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -311,7 +311,7 @@
 				19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */,
 				19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */,
 				19688CEA17B945B9005ACA64 /* PlaceAnnotation.m in Sources */,
-				190709D417CF72F300C8C454 /* ImageUtils.m in Sources */,
+				19CC9CAA17D0B0B700119925 /* UIUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
