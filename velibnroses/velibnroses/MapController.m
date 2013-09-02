@@ -141,10 +141,14 @@
         _jcdRequestAttemptsNumber = 0;
         _stations = (NSMutableArray *)[Station fromJSONArray:json];
         NSLog(@"stations count %i", _stations.count);
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, (unsigned long)NULL), ^(void) {
+        dispatch_queue_t parent = dispatch_get_main_queue();
+        dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+        dispatch_async(child, ^(void) {
             [self createStationsAnnotations];
             if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
-                [self displayStationsAnnotations];
+                dispatch_async(parent, ^(void) {
+                    [self displayStationsAnnotations];
+                });
             }
         });
         [self startTimer];
@@ -188,7 +192,7 @@
 # pragma mark Delegate
 
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
-    NSLog(@"receive user location update (%f,%f)", aUserLocation.coordinate.latitude, aUserLocation.coordinate.longitude);
+    //NSLog(@"receive user location update (%f,%f)", aUserLocation.coordinate.latitude, aUserLocation.coordinate.longitude);
     if ([self isEqualToLocationZero:startUserLocation]) {
         startUserLocation.coordinate = aUserLocation.coordinate;
         if (![self isEqualToLocationZero:startUserLocation]) {
@@ -353,10 +357,16 @@
         _mapViewState = MAP_VIEW_DEFAULT_STATE;
         [self resetSearchViewFields];
         [self eraseRoute];
-        [self eraseSearchAnnotations];
         [self centerMapOnUserLocation];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, (unsigned long)NULL), ^(void) {
-            [self displayStationsAnnotations];
+        [self eraseSearchAnnotations];
+        dispatch_queue_t parent = dispatch_get_main_queue();
+        dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+        dispatch_async(child, ^(void) {
+            // necessary time to trigger effective zoom
+            [NSThread sleepForTimeInterval:1.0f];
+            dispatch_async(parent, ^(void) {
+                [self displayStationsAnnotations];
+            });
         });
     }
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
@@ -515,7 +525,7 @@
     int displayedStations = 0;
     for (Station *station in _stations) {
         if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
-            [_stationsAnnotations addObject:[self createStationAnnotation:station withLocation:kUndefined]];   
+            [_stationsAnnotations addObject:[self createStationAnnotation:station withLocation:kUndefined]];
         } else {
             NSLog(@"%@ : %@", station.name, station.contract);
             invalidStations++;
@@ -611,7 +621,7 @@
             NSString *encodedPolyline = [[[[json objectForKey:@"routes"] firstObject] objectForKey:@"overview_polyline"] valueForKey:@"points"];
             _route = [RoutePolyline routePolylineFromPolyline:[GeoUtils polylineWithEncodedString:encodedPolyline]];
             [mapPanel addOverlay:_route];
-            [mapPanel setVisibleMapRect:_route.boundingMapRect animated:YES];
+            [mapPanel setVisibleMapRect:[self mapRectForAnnotations] animated:YES];
             
         } else {
             NSLog(@"Google Maps API error %@", status);
@@ -641,6 +651,23 @@
         [mapPanel removeAnnotations:_searchAnnotations];
         [_searchAnnotations removeAllObjects];
     }
+}
+
+- (MKMapRect)mapRectForAnnotations {
+    
+    MKMapRect mapRect = MKMapRectNull;
+    for (id<MKAnnotation> annotation in _searchAnnotations) {
+        
+        MKMapPoint annotationPoint = MKMapPointForCoordinate(annotation.coordinate);
+        MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
+        
+        if (MKMapRectIsNull(mapRect)) {
+            mapRect = pointRect;
+        } else {
+            mapRect = MKMapRectUnion(mapRect, pointRect);
+        }
+    }
+    return mapRect;
 }
 
 # pragma mark Search panel
@@ -773,8 +800,6 @@
     BOOL isLocationZero = fabs(newLocation.coordinate.latitude - 0.00000) < 0.00001 && fabs(newLocation.coordinate.longitude -  - 0.00000) < 0.00001;
     if (isLocationZero) {
         NSLog(@"location zero");
-    } else {
-        NSLog(@"valid location");
     }
     return isLocationZero;
 }
