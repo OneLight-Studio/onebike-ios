@@ -26,5 +26,7 @@
 - (IBAction)userLocationAsArrivalClicked:(id)sender;
 - (IBAction)searchButtonClicked:(id)sender;
 - (IBAction)cancelBarButtonClicked:(id)sender;
+- (IBAction)bikeIconClicked:(id)sender;
+- (IBAction)standIconClicked:(id)sender;
 
 @end

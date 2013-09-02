@@ -362,6 +362,14 @@
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
 }
 
+- (IBAction)bikeIconClicked:(id)sender {
+    [self.bikeField becomeFirstResponder];
+}
+
+- (IBAction)standIconClicked:(id)sender {
+    [self.standField becomeFirstResponder];
+}
+
 - (IBAction)userLocationAsDepartureClicked:(id)sender {
     CLLocationCoordinate2D userLocation = self.mapPanel.userLocation.coordinate;
     CLLocation *location = [[CLLocation alloc] initWithLatitude:userLocation.latitude longitude:userLocation.longitude];

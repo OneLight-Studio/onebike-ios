@@ -107,7 +107,7 @@
                                             <action selector="userLocationAsDepartureClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="VZp-bR-cG3"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Mox-8D-SpL">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Mox-8D-SpL">
                                         <rect key="frame" x="246" y="8" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -119,7 +119,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="userLocationAsDepartureClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="iF6-cA-pZq"/>
+                                            <action selector="bikeIconClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="yRu-8M-zGu"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CKQ-mF-mOJ">
@@ -168,7 +168,7 @@
                                             <outlet property="delegate" destination="R2K-lh-zEE" id="d71-x2-hle"/>
                                         </connections>
                                     </textField>
-                                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GYp-LB-C2k">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GYp-LB-C2k">
                                         <rect key="frame" x="246" y="55" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -180,7 +180,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="userLocationAsDepartureClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="pBO-q0-Qev"/>
+                                            <action selector="standIconClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="TvK-Eh-Bpk"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" id="Vmt-5T-0GU">
@@ -233,9 +233,11 @@
         <class className="MapController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MapController.h"/>
             <relationships>
+                <relationship kind="action" name="bikeIconClicked:"/>
                 <relationship kind="action" name="cancelBarButtonClicked:"/>
                 <relationship kind="action" name="searchBarButtonClicked:"/>
                 <relationship kind="action" name="searchButtonClicked:"/>
+                <relationship kind="action" name="standIconClicked:"/>
                 <relationship kind="action" name="userLocationAsArrivalClicked:"/>
                 <relationship kind="action" name="userLocationAsDepartureClicked:"/>
                 <relationship kind="outlet" name="arrivalField" candidateClass="UITextField"/>
