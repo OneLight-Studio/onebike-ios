@@ -85,6 +85,11 @@
     self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBClose"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
     
     _isMapLoaded = false;
+    startUserLocation = [[MKUserLocation alloc] init];
+    CLLocationCoordinate2D zero;
+    zero.latitude = 0;
+    zero.longitude = 0;
+    startUserLocation.coordinate = zero;
     _mapViewState = MAP_VIEW_DEFAULT_STATE;
     _isSearchViewVisible = false;
     
@@ -184,16 +189,14 @@
 
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
     NSLog(@"receive user location update (%f,%f)", aUserLocation.coordinate.latitude, aUserLocation.coordinate.longitude);
-    if (startUserLocation == nil || [self isEqualToLocationZero:startUserLocation]) {
-        // TODO update before test
-        startUserLocation = aUserLocation;
-        //startUserLocation = [aUserLocation copy];
+    if ([self isEqualToLocationZero:startUserLocation]) {
+        startUserLocation.coordinate = aUserLocation.coordinate;
         if (![self isEqualToLocationZero:startUserLocation]) {
             [self centerMapOnUserLocation];
             
             _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:@"AIzaSyDgKRier12bPPknXhPRvuAvPdNn3vFQbW8" andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
             _departureAutocompleteView.topMargin = -65;
-            _departureAutocompleteView.backgroundColor = [UIColor colorWithRed:(255) / 255.0f green:(255) / 255.0f blue:(255) / 255.0f alpha:1];
+            _departureAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
             _departureAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
             {
                 NSLog(@"Departure autocompleted with: %@", item.completionText);
@@ -201,7 +204,7 @@
             
             _arrivalAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:arrivalField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:@"AIzaSyDgKRier12bPPknXhPRvuAvPdNn3vFQbW8" andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
             _arrivalAutocompleteView.topMargin = -65;
-            _arrivalAutocompleteView.backgroundColor = [UIColor colorWithRed:(255) / 255.0f green:(255) / 255.0f blue:(255) / 255.0f alpha:1];
+            _arrivalAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
             _arrivalAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
             {
                 NSLog(@"Arrival autocompleted with: %@", item.completionText);
