@@ -1,21 +1,9 @@
-
-/* Class = "IBUIButton"; normalTitle = "Search"; ObjectID = "7ZO-mt-kun"; */
+/* Class = "IBUIButton"; normalTitle = "Let's go !"; ObjectID = "7ZO-mt-kun"; */
 "7ZO-mt-kun.normalTitle" = "Rechercher";
-
-/* Class = "IBUILabel"; text = "Bike(s)"; ObjectID = "9FD-46-R8n"; */
-"9FD-46-R8n.text" = "Vélo(s)";
-
-/* Class = "IBUILabel"; text = Stand(s)"; ObjectID = "FbK-4M-qU4"; */
-"FbK-4M-qU4.text" = "Borne(s)";
-
-/* Class = "IBUILabel"; text = "In a radius of"; ObjectID = "K3X-ha-Ssg"; */
-"K3X-ha-Ssg.text" = "Dans un rayon de";
 
 /* Class = "IBUITextField"; placeholder = "Arrival"; ObjectID = "Wdw-ii-7F2"; */
 "Wdw-ii-7F2.placeholder" = "Arrivée";
 
-/* Class = "IBUILabel"; text = "m"; ObjectID = "dtD-rH-IN8"; */
-"dtD-rH-IN8.text" = "m";
-
 /* Class = "IBUITextField"; placeholder = "Departure"; ObjectID = "iYR-bn-zkd"; */
 "iYR-bn-zkd.placeholder" = "Départ";
+
