@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
+        <!--Navigation Controller - Main-->
         <scene sceneID="D9f-GM-kd8">
             <objects>
-                <navigationController definesPresentationContext="YES" id="SBZ-qn-Jb4" sceneMemberID="viewController">
+                <navigationController title="Main" definesPresentationContext="YES" id="SBZ-qn-Jb4" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="nxb-eS-038">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -199,6 +199,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="hmS-dC-JVN">
+                        <barButtonItem key="leftBarButtonItem" image="Images/NavigationBar/NBInfo.png" id="lbv-EE-UWT">
+                            <connections>
+                                <segue destination="tZ9-pt-7Wc" kind="modal" id="cYT-AZ-jws"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="Images/NavigationBar/NBSearch.png" id="Dwx-k2-M2a">
                             <connections>
                                 <action selector="searchBarButtonClicked:" destination="R2K-lh-zEE" id="lUh-a4-YUx"/>
@@ -210,6 +215,7 @@
                         <outlet property="bikeField" destination="R5K-Zh-q0x" id="FoO-r3-tHr"/>
                         <outlet property="closeSearchPanelButton" destination="CKQ-mF-mOJ" id="3Zz-Vr-K8L"/>
                         <outlet property="departureField" destination="iYR-bn-zkd" id="AZx-VX-AIw"/>
+                        <outlet property="infoBarButton" destination="lbv-EE-UWT" id="yOY-yq-68u"/>
                         <outlet property="mapPanel" destination="QIt-AM-94y" id="KGF-Hb-vky"/>
                         <outlet property="searchBarButton" destination="Dwx-k2-M2a" id="MgW-nf-Ofl"/>
                         <outlet property="searchButton" destination="7ZO-mt-kun" id="4av-zB-rIX"/>
@@ -221,8 +227,49 @@
             </objects>
             <point key="canvasLocation" x="803" y="32"/>
         </scene>
+        <!--Navigation Controller - Info-->
+        <scene sceneID="uYZ-CS-on6">
+            <objects>
+                <navigationController title="Info" definesPresentationContext="YES" id="tZ9-pt-7Wc" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HHE-g6-wp7">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="bvp-23-NgP" kind="relationship" relationship="rootViewController" id="wwX-Kq-lTd"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JhP-nQ-I0E" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1287" y="32"/>
+        </scene>
+        <!--Info Controller-->
+        <scene sceneID="dm3-0m-aSt">
+            <objects>
+                <viewController id="bvp-23-NgP" customClass="InfoController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jQW-Ab-Pvt">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="z6X-Rv-N35">
+                        <barButtonItem key="leftBarButtonItem" image="Images/NavigationBar/NBBack.png" id="fU2-59-jYH">
+                            <connections>
+                                <action selector="backBarButtonClicked:" destination="bvp-23-NgP" id="O6e-3P-hBd"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="backBarButton" destination="fU2-59-jYH" id="IW7-5g-Ceb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fmj-fu-8Gx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1756" y="32"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="Images/NavigationBar/NBBack.png" width="16" height="16"/>
+        <image name="Images/NavigationBar/NBInfo.png" width="16" height="16"/>
         <image name="Images/NavigationBar/NBSearch.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPBike.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPCloseSearch.png" width="16" height="16"/>
@@ -230,6 +277,13 @@
         <image name="Images/SearchPanel/SPStand.png" width="16" height="16"/>
     </resources>
     <classes>
+        <class className="InfoController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/InfoController.h"/>
+            <relationships>
+                <relationship kind="action" name="backBarButtonClicked:"/>
+                <relationship kind="outlet" name="backBarButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
         <class className="MapController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MapController.h"/>
             <relationships>
@@ -245,6 +299,7 @@
                 <relationship kind="outlet" name="cancelBarButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="closeSearchPanelButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="infoBarButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="mapPanel" candidateClass="MKMapView"/>
                 <relationship kind="outlet" name="searchBarButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="searchButton" candidateClass="UIButton"/>

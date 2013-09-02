@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *closeSearchPanelButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *searchBarButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelBarButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *infoBarButton;
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
 
 - (IBAction)searchBarButtonClicked:(id)sender;

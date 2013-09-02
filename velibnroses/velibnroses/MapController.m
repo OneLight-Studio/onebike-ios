@@ -56,6 +56,7 @@
 @synthesize standField;
 @synthesize closeSearchPanelButton;
 @synthesize searchBarButton;
+@synthesize infoBarButton;
 @synthesize searchButton;
 
 # pragma mark -
@@ -93,11 +94,12 @@
     _mapViewState = MAP_VIEW_DEFAULT_STATE;
     _isSearchViewVisible = false;
     
+    [self.infoBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.searchBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.cancelBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
     UIImage *buttonBg = [[UIImage imageNamed:@"Images/SearchPanel/SPButtonBg"]
-                            resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
+                         resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
     [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
     
     _departureCloseStations = [[NSMutableArray alloc] init];
@@ -178,15 +180,16 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    // centered by default on Toulouse
-    CLLocationCoordinate2D tls;
-    tls.latitude = TLS_LAT;
-    tls.longitude = TLS_LONG;
-    
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(tls,
-        SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
-    [mapPanel setRegion:viewRegion animated:YES];
-    NSLog(@"centered on Toulouse (%f,%f)", tls.latitude, tls.longitude);
+    if (!_isMapLoaded) {
+        // centered by default on Toulouse
+        CLLocationCoordinate2D tls;
+        tls.latitude = TLS_LAT;
+        tls.longitude = TLS_LONG;
+        
+        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(tls, SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
+        [mapPanel setRegion:viewRegion animated:YES];
+        NSLog(@"centered on Toulouse (%f,%f)", tls.latitude, tls.longitude);
+    }
 }
 
 # pragma mark Delegate
