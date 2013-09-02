@@ -14,6 +14,11 @@
 #import "GeoUtils.h"
 #import "RoutePolyline.h"
 #import "PlaceAnnotation.h"
+#import "UIUtils.h"
+#import "TRAutocompleteView.h"
+#import "TRGoogleMapsAutocompleteItemsSource.h"
+#import "TRTextFieldExtensions.h"
+#import "TRGoogleMapsAutocompletionCellFactory.h"
 
 @interface MapController ()
     
@@ -23,7 +28,10 @@
     MKUserLocation *startUserLocation;
     WSRequest *_wsRequest;
     NSMutableArray *_stations;
-    CLLocationCoordinate2D _northWestSpanCorner, _southEastSpanCorner;
+    NSMutableArray *_departureCloseStations;
+    NSMutableArray *_arrivalCloseStations;
+    NSMutableArray *_stationsAnnotations;
+    NSMutableArray *_searchAnnotations;
     BOOL _isMapLoaded;
     BOOL _searching;
     CLLocation *_departureLocation;
@@ -32,11 +40,12 @@
     RoutePolyline *_route;
     int _mapViewState;
     BOOL _isSearchViewVisible;
-    NSMutableArray *_departureCloseStations;
-    NSMutableArray *_arrivalCloseStations;
     Station *_departureStation;
     Station *_arrivalStation;
     int _jcdRequestAttemptsNumber;
+    
+    TRAutocompleteView *_departureAutocompleteView;
+    TRAutocompleteView *_arrivalAutocompleteView;
 }
 
 @synthesize mapPanel;
@@ -44,9 +53,8 @@
 @synthesize departureField;
 @synthesize arrivalField;
 @synthesize bikeField;
-@synthesize bikeStepper;
-@synthesize radiusField;
-@synthesize radiusStepper;
+@synthesize standField;
+@synthesize closeSearchPanelButton;
 @synthesize searchBarButton;
 @synthesize searchButton;
 
@@ -65,46 +73,37 @@
 {
     self.mapPanel.delegate = self;
     self.mapPanel.showsUserLocation = YES;
+    [self.mapPanel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapMap:)]];
+    
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBLogo"]];
     
     CGRect searchFrame = self.searchPanel.frame;
     searchFrame.origin.y = -searchFrame.size.height;
     self.searchPanel.frame = searchFrame;
     self.bikeField.text = @"1";
     self.standField.text = @"1";
-    self.radiusField.text = @"1000";
     self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBClose"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
     
     _isMapLoaded = false;
+    startUserLocation = [[MKUserLocation alloc] init];
+    CLLocationCoordinate2D zero;
+    zero.latitude = 0;
+    zero.longitude = 0;
+    startUserLocation.coordinate = zero;
     _mapViewState = MAP_VIEW_DEFAULT_STATE;
     _isSearchViewVisible = false;
     
     [self.searchBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.cancelBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
-    [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
-    [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateDisabled];
-    [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
-    [self.bikeStepper setBackgroundImage:[UIImage new] forState:UIControlStateSelected];
-    [self.bikeStepper setDividerImage:[UIImage new] forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
-    [self.bikeStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
-    [self.bikeStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
-    [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
-    [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateDisabled];
-    [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
-    [self.standStepper setBackgroundImage:[UIImage new] forState:UIControlStateSelected];
-    [self.standStepper setDividerImage:[UIImage new] forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
-    [self.standStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
-    [self.standStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
-    [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
-    [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateDisabled];
-    [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
-    [self.radiusStepper setBackgroundImage:[UIImage new] forState:UIControlStateSelected];
-    [self.radiusStepper setDividerImage:[UIImage new] forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
-    [self.radiusStepper setIncrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperIncrement"] forState:UIControlStateNormal];
-    [self.radiusStepper setDecrementImage:[UIImage imageNamed:@"Images/SearchPanel/SPStepperDecrement"] forState:UIControlStateNormal];
+    UIImage *buttonBg = [[UIImage imageNamed:@"Images/SearchPanel/SPButtonBg"]
+                            resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
+    [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
     
     _departureCloseStations = [[NSMutableArray alloc] init];
     _arrivalCloseStations = [[NSMutableArray alloc] init];
+    _stationsAnnotations = [[NSMutableArray alloc] init];
+    _searchAnnotations = [[NSMutableArray alloc] init];
 }
 
 - (void) startTimer {
@@ -142,10 +141,16 @@
         _jcdRequestAttemptsNumber = 0;
         _stations = (NSMutableArray *)[Station fromJSONArray:json];
         NSLog(@"stations count %i", _stations.count);
-        if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
-            [self determineSpanCoordinates];
-            [self drawStationsAroundUserAndZoom];
-        }
+        dispatch_queue_t parent = dispatch_get_main_queue();
+        dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+        dispatch_async(child, ^(void) {
+            [self createStationsAnnotations];
+            if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
+                dispatch_async(parent, ^(void) {
+                    [self displayStationsAnnotations];
+                });
+            }
+        });
         [self startTimer];
     }];
     [_wsRequest handleExceptionWith:^(NSError *exception) {
@@ -187,17 +192,28 @@
 # pragma mark Delegate
 
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
-    if (startUserLocation == nil) {
-        startUserLocation = aUserLocation;
-        [self centerMapOnUserLocation];
-    }
-}
-
-- (void)mapView:(MKMapView *)aMapView regionDidChangeAnimated:(BOOL)animated {
-    if (_isMapLoaded && _mapViewState == MAP_VIEW_DEFAULT_STATE) {
-        NSLog(@"region has changed");
-        [self determineSpanCoordinates];
-        [self drawStationsAroundUserAndZoom];
+    //NSLog(@"receive user location update (%f,%f)", aUserLocation.coordinate.latitude, aUserLocation.coordinate.longitude);
+    if ([self isEqualToLocationZero:startUserLocation]) {
+        startUserLocation.coordinate = aUserLocation.coordinate;
+        if (![self isEqualToLocationZero:startUserLocation]) {
+            [self centerMapOnUserLocation];
+            
+            _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:@"AIzaSyDgKRier12bPPknXhPRvuAvPdNn3vFQbW8" andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _departureAutocompleteView.topMargin = -65;
+            _departureAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
+            _departureAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
+            {
+                NSLog(@"Departure autocompleted with: %@", item.completionText);
+            };
+            
+            _arrivalAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:arrivalField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:@"AIzaSyDgKRier12bPPknXhPRvuAvPdNn3vFQbW8" andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _arrivalAutocompleteView.topMargin = -65;
+            _arrivalAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
+            _arrivalAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
+            {
+                NSLog(@"Arrival autocompleted with: %@", item.completionText);
+            };
+        }
     }
 }
 
@@ -211,8 +227,12 @@
     NSLog(@"render route");
     RoutePolyline *polyline = overlay;
     MKPolylineView *polylineView = [[MKPolylineView alloc] initWithPolyline:polyline.polyline];
-    polylineView.lineWidth = 5;
-    polylineView.strokeColor = [UIColor blackColor];
+    if ([UIScreen instancesRespondToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0f) {
+        polylineView.lineWidth = 10;
+    } else {
+        polylineView.lineWidth = 5;
+    }
+    polylineView.strokeColor = [UIUtils colorWithHexaString:@"#b2ca04"];
     return polylineView;
 }
 
@@ -234,7 +254,13 @@
                 NSLog(@"render arrival");
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
             } else {
-                annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPStation"];
+                UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
+                UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
+                UIImage *tmp = [UIUtils placeBikes:bikes onImage:background];
+                UIImage *stands = [UIUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
+                UIImage *image = [UIUtils placeStands:stands onImage:tmp];
+                annotationView.image = image;
+            
             }
         }
         annotationView.canShowCallout = YES;
@@ -253,7 +279,7 @@
                     _departureStation = annotation.placeStation;
                     redraw = true;
                 } else if (annotation.placeLocation == kNearArrival && _arrivalStation != annotation.placeStation) {
-                    NSLog(@"change departure");
+                    NSLog(@"change arrival");
                     _arrivalStation = annotation.placeStation;
                     redraw = true;
                 }
@@ -267,10 +293,24 @@
     
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    if (textField == self.bikeField || textField == self.standField || textField == self.radiusField) {
-        [self.view endEditing:YES];
-        return NO;
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    if (textField == self.departureField) {
+        [_departureAutocompleteView hide];
+    } else if (textField == self.arrivalField) {
+        [_arrivalAutocompleteView hide];
+    } else if (textField == self.bikeField) {
+        if ([textField.text isEqualToString:@""]) {
+            self.bikeField.text = @"1";
+        } else if (textField.text.length > 2) {
+            self.bikeField.text = @"99";
+        }
+        self.standField.text = self.bikeField.text;
+    } else if (textField == self.standField) {
+        if ([textField.text isEqualToString:@""]) {
+            self.standField.text = @"1";
+        } else if (textField.text.length > 2) {
+            self.standField.text = @"99";
+        }
     }
     return YES;
 }
@@ -278,14 +318,10 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.departureField) {
         [self.arrivalField becomeFirstResponder];
-    } else if (textField == self.arrivalField) {
+    } else {
         [self.view endEditing:YES];
     }
     return YES;
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self.view endEditing:YES];
 }
 
 # pragma mark Event(s)
@@ -297,53 +333,51 @@
     [_wsRequest call];
 }
 
-- (IBAction)searchBarButtonClicked:(id)sender {
-    _isSearchViewVisible = true;
-    [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
-    [UIView animateWithDuration:0.3 animations:^{
-        CGRect searchFrame = self.searchPanel.frame;
-        CGRect mapFrame = self.mapPanel.frame;
-        searchFrame.origin.y = 0;
-        mapFrame.origin.y = searchFrame.size.height;
-        self.searchPanel.frame = searchFrame;
-        self.mapPanel.frame = mapFrame;
-    }];
-}
-
-- (void)cancelBarButtonClicked:(id)sender {
+- (void)didTapMap:(UITapGestureRecognizer *)sender
+{
+    NSLog(@"tap map fired");
     if (_isSearchViewVisible) {
         _isSearchViewVisible = false;
-        [UIView animateWithDuration:0.3 animations:^{
-            CGRect searchFrame = self.searchPanel.frame;
-            CGRect mapFrame = self.mapPanel.frame;
-            searchFrame.origin.y = -searchFrame.size.height;
-            mapFrame.origin.y = 0;
-            [self.view endEditing:YES];
-            self.searchPanel.frame = searchFrame;
-            self.mapPanel.frame = mapFrame;
-        }];
+        [self closeSearchPanel];
+    }
+    [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
+}
+
+- (IBAction)searchBarButtonClicked:(id)sender {
+    _isSearchViewVisible = true;
+    [self openSearchPanel];
+    [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
+}
+
+- (IBAction)cancelBarButtonClicked:(id)sender {
+    if (_isSearchViewVisible) {
+        _isSearchViewVisible = false;
+        [self closeSearchPanel];
     } else {
         _mapViewState = MAP_VIEW_DEFAULT_STATE;
         [self resetSearchViewFields];
         [self eraseRoute];
         [self centerMapOnUserLocation];
-        [self drawStationsAroundUserAndZoom];
+        [self eraseSearchAnnotations];
+        dispatch_queue_t parent = dispatch_get_main_queue();
+        dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+        dispatch_async(child, ^(void) {
+            // necessary time to trigger effective zoom
+            [NSThread sleepForTimeInterval:1.0f];
+            dispatch_async(parent, ^(void) {
+                [self displayStationsAnnotations];
+            });
+        });
     }
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
 }
 
-- (IBAction)bikeStepperClicked:(UIStepper *)stepper {
-    self.bikeField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
-    self.standStepper.value = (int) stepper.value;
-    self.standField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
+- (IBAction)bikeIconClicked:(id)sender {
+    [self.bikeField becomeFirstResponder];
 }
 
-- (IBAction)standStepperClicked:(UIStepper *)stepper {
-    self.standField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
-}
-
-- (IBAction)radiusStepperClicked:(UIStepper *)stepper {
-    self.radiusField.text = [NSString stringWithFormat:@"%d", (int) stepper.value];
+- (IBAction)standIconClicked:(id)sender {
+    [self.standField becomeFirstResponder];
 }
 
 - (IBAction)userLocationAsDepartureClicked:(id)sender {
@@ -398,7 +432,7 @@
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         if (![self areEqualLocationsBetween:_departureLocation and:_arrivalLocation]) {
                             [self cancelBarButtonClicked:nil];
-                            [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:[self.radiusField.text intValue]];
+                            [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                         } else {
                             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                         }
@@ -418,7 +452,7 @@
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         if (![self areEqualLocationsBetween:_departureLocation and:_arrivalLocation]) {
                             [self cancelBarButtonClicked:nil];
-                            [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:[self.radiusField.text intValue]];
+                            [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                         } else {
                             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                         }
@@ -455,7 +489,6 @@
 # pragma mark Navigation Bar
 
 - (void)refreshNavigationBarHasSearchView:(BOOL)hasSearchView hasRideView:(BOOL)hasRideView {
-    
     if (hasSearchView == false) {
         if (hasRideView == false) {
             self.navigationItem.rightBarButtonItems = nil;
@@ -466,7 +499,7 @@
         }
     } else {
         self.navigationItem.rightBarButtonItems = nil;
-        self.navigationItem.rightBarButtonItem = self.cancelBarButton;
+        self.navigationItem.rightBarButtonItem = nil;
     }
 }
 
@@ -484,39 +517,51 @@
     NSLog(@"centered on user location (%f,%f)", _departureLocation.coordinate.latitude, _departureLocation.coordinate.longitude);
 }
 
-- (void)drawStationsAroundUserAndZoom {
-    if (_stations != nil) {
-        NSLog(@"display stations");
-        [mapPanel removeAnnotations:mapPanel.annotations];
-        int invalidStations = 0;
-        int displayedStations = 0;
-        for (Station *station in _stations) {
-            if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
-                if ([self isVisibleStation:station]) {
-                    [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kUndefined]];
-                    displayedStations++;
-                }
-            } else {
-                NSLog(@"%@ : %@", station.name, station.contract);
-                invalidStations++;
-            }
+- (void)createStationsAnnotations {
+    NSLog(@"create stations annotations");
+    [mapPanel removeAnnotations:_stationsAnnotations];
+    [_stationsAnnotations removeAllObjects];
+    int invalidStations = 0;
+    int displayedStations = 0;
+    for (Station *station in _stations) {
+        if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
+            [_stationsAnnotations addObject:[self createStationAnnotation:station withLocation:kUndefined]];
+        } else {
+            NSLog(@"%@ : %@", station.name, station.contract);
+            invalidStations++;
         }
-        NSLog(@"displayed stations count : %i", displayedStations);
-        if (invalidStations > 0) {
-            NSLog(@"invalid stations count : %i", invalidStations);
-        }
+    }
+    NSLog(@"localized stations count : %i", displayedStations);
+    if (invalidStations > 0) {
+        NSLog(@"invalid stations count : %i", invalidStations);
+    }
+}
+
+- (void)displayStationsAnnotations {
+    NSLog(@"display stations");
+    for (PlaceAnnotation *annotation in _stationsAnnotations) {
+        [mapPanel addAnnotation:annotation];
     }
 }
 
 - (void)createStationsAnnotationsAroundDeparture {
     for (Station *station in _departureCloseStations) {
-        [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kNearDeparture]];
+        [_searchAnnotations addObject:[self createStationAnnotation:station withLocation:kNearDeparture]];
     }
 }
 
 - (void)createStationsAnnotationsAroundArrival {
     for (Station *station in _arrivalCloseStations) {
-        [mapPanel addAnnotation:[self createStationAnnotation:station withLocation:kNearArrival]];
+        [_searchAnnotations addObject:[self createStationAnnotation:station withLocation:kNearArrival]];
+    }
+}
+
+- (void)drawSearchAnnotations {
+    NSLog(@"draw search stations");
+    [self createStationsAnnotationsAroundDeparture];
+    [self createStationsAnnotationsAroundArrival];
+    for (PlaceAnnotation *annotation in _searchAnnotations) {
+        [mapPanel addAnnotation:annotation];
     }
 }
 
@@ -526,46 +571,12 @@
     stationCoordinate.latitude = [aStation.latitude doubleValue];
     stationCoordinate.longitude = [aStation.longitude doubleValue];
     
-    NSMutableString *infos = [NSMutableString stringWithFormat:NSLocalizedString(@"station_title", @""), [aStation.availableBikes integerValue], [aStation.availableBikeStands integerValue]];
-    
     PlaceAnnotation *marker = [[PlaceAnnotation alloc] init];
     marker.placeLocation = aLocation;
     marker.coordinate = stationCoordinate;
-    marker.title = [aStation.name substringFromIndex:[aStation.name rangeOfString:@" - "].location + 3];
-    marker.subtitle = infos;
+    marker.title = [self cleanStationName:aStation];
     marker.placeStation = aStation;
     return marker;
-}
-
-- (BOOL)isVisibleStation:(Station *)station {
-    
-    BOOL visible = false;
-    
-    CLLocationCoordinate2D stationCoordinate;
-    stationCoordinate.latitude = [station.latitude doubleValue];
-    stationCoordinate.longitude = [station.longitude doubleValue];
-    
-    CLLocationCoordinate2D userLocation = self.mapPanel.userLocation.coordinate;
-    CLLocationCoordinate2D spanCenter = self.mapPanel.region.center;
-    
-    if (stationCoordinate.latitude >= _northWestSpanCorner.latitude && stationCoordinate.latitude <= _southEastSpanCorner.latitude
-        && stationCoordinate.longitude >= _northWestSpanCorner.longitude && stationCoordinate.longitude <= _southEastSpanCorner.longitude
-        && ([self unlessInMeters:SPAN_SIDE_MAX_LENGTH_IN_METERS from:userLocation for:stationCoordinate]
-            || [self unlessInMeters:SPAN_SIDE_MAX_LENGTH_IN_METERS from:spanCenter for:stationCoordinate])) {
-            visible = true;
-        }
-    
-    return visible;
-}
-
-- (void)determineSpanCoordinates {
-    MKCoordinateRegion region = self.mapPanel.region;
-    CLLocationCoordinate2D center = region.center;
-    NSLog(@"determine span coordinates");
-    _northWestSpanCorner.latitude  = center.latitude  - (region.span.latitudeDelta  / 2.0);
-    _northWestSpanCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
-    _southEastSpanCorner.latitude  = center.latitude  + (region.span.latitudeDelta  / 2.0);
-    _southEastSpanCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
 }
 
 - (void)drawRouteEndsCloseStations {
@@ -579,7 +590,7 @@
     marker.coordinate = _departureLocation.coordinate;
     marker.title = self.departureField.text;
     
-    [mapPanel addAnnotation:marker];
+    [_searchAnnotations addObject:marker];
     
     // arrival annotation
     marker = [[PlaceAnnotation alloc] init];
@@ -587,10 +598,9 @@
     marker.coordinate = _arrivalLocation.coordinate;
     marker.title = self.arrivalField.text;
     
-    [mapPanel addAnnotation:marker];
+    [_searchAnnotations addObject:marker];
     
-    [self createStationsAnnotationsAroundDeparture];
-    [self createStationsAnnotationsAroundArrival];
+    [self drawSearchAnnotations];
 }
 
 - (void)drawRouteFromStationDeparture:(Station *)departure toStationArrival:(Station *)arrival {
@@ -611,7 +621,7 @@
             NSString *encodedPolyline = [[[[json objectForKey:@"routes"] firstObject] objectForKey:@"overview_polyline"] valueForKey:@"points"];
             _route = [RoutePolyline routePolylineFromPolyline:[GeoUtils polylineWithEncodedString:encodedPolyline]];
             [mapPanel addOverlay:_route];
-            [mapPanel setVisibleMapRect:_route.boundingMapRect animated:YES];
+            [mapPanel setVisibleMapRect:[self mapRectForAnnotations] animated:YES];
             
         } else {
             NSLog(@"Google Maps API error %@", status);
@@ -636,6 +646,30 @@
     }
 }
 
+- (void)eraseSearchAnnotations {
+    if (_searchAnnotations != nil) {
+        [mapPanel removeAnnotations:_searchAnnotations];
+        [_searchAnnotations removeAllObjects];
+    }
+}
+
+- (MKMapRect)mapRectForAnnotations {
+    
+    MKMapRect mapRect = MKMapRectNull;
+    for (id<MKAnnotation> annotation in _searchAnnotations) {
+        
+        MKMapPoint annotationPoint = MKMapPointForCoordinate(annotation.coordinate);
+        MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
+        
+        if (MKMapRectIsNull(mapRect)) {
+            mapRect = pointRect;
+        } else {
+            mapRect = MKMapRectUnion(mapRect, pointRect);
+        }
+    }
+    return mapRect;
+}
+
 # pragma mark Search panel
 
 - (void)resetSearchViewFields {
@@ -643,12 +677,27 @@
     self.arrivalField.text = nil;
     self.bikeField.text = @"1";
     self.standField.text = @"1";
-    self.radiusField.text = @"1000";
     
     _departureLocation = nil;
     _departureStation = nil;
     _arrivalLocation = nil;
     _arrivalStation = nil;
+}
+
+- (void)openSearchPanel {
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect searchFrame = self.searchPanel.frame;
+        searchFrame.origin.y = 0;
+        self.searchPanel.frame = searchFrame;
+    }];
+}
+
+- (void)closeSearchPanel {
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect searchFrame = self.searchPanel.frame;
+        searchFrame.origin.y = -searchFrame.size.height;
+        self.searchPanel.frame = searchFrame;
+    }];
 }
 
 - (void)searchWithDeparture:(CLLocation *)departure andArrival:(CLLocation *)arrival withBikes:(int)bikes andAvailableStands:(int)availableStands inARadiusOf:(int)radius {
@@ -747,9 +796,35 @@
     return dist <= radius;
 }
 
+- (BOOL)isEqualToLocationZero:(MKUserLocation *)newLocation {
+    BOOL isLocationZero = fabs(newLocation.coordinate.latitude - 0.00000) < 0.00001 && fabs(newLocation.coordinate.longitude -  - 0.00000) < 0.00001;
+    if (isLocationZero) {
+        NSLog(@"location zero");
+    }
+    return isLocationZero;
+}
+
 - (BOOL)areEqualLocationsBetween:(CLLocation *)first and:(CLLocation *)second {
     return fabs(first.coordinate.latitude - second.coordinate.latitude) < 0.001 &&
     fabs(first.coordinate.longitude - second.coordinate.longitude) < 0.001;
+}
+
+- (NSString *)cleanStationName:(Station *)aStation {
+    NSString *regexp = @"^[a-zA-Z](.*)$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regexp];
+    NSMutableString *tmp = [aStation.name mutableCopy];
+    while (![predicate evaluateWithObject: tmp] || tmp.length == 0) {
+        // remove first character while is not a letter
+        tmp = (NSMutableString *)[tmp substringFromIndex:1];
+    }
+    
+    NSString *result;
+    if (tmp.length > 0) {
+        result = [NSString stringWithString:tmp];
+    } else {
+        result = @"###";
+    }
+    return result;
 }
 
 @end
