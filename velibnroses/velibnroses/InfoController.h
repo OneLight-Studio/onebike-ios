@@ -11,6 +11,7 @@
 @interface InfoController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backBarButton;
+@property (weak, nonatomic) IBOutlet UIImageView *contentImage;
 
 - (IBAction)backBarButtonClicked:(id)sender;
 

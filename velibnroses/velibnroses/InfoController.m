@@ -15,6 +15,7 @@
 @implementation InfoController
 
 @synthesize backBarButton;
+@synthesize contentImage;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -31,6 +32,11 @@
     
     self.navigationItem.hidesBackButton = YES;
 	[self.backBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    NSString *path = NSLocalizedString(@"Images/InfoPanel/",@"");
+    path = [path stringByAppendingString:[[NSLocale preferredLanguages] objectAtIndex:0]];
+    path = [path stringByAppendingString:@"/IPContent"];
+    NSLog(@"@%@", path);
+    [self.contentImage setImage:[UIImage imageNamed:path]];
 }
 
 - (void)didReceiveMemoryWarning
