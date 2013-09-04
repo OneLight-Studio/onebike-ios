@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
+		191E7C3617D793D1002C6109 /* ADClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 191E7C2F17D793D1002C6109 /* ADClusterAnnotation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		191E7C3717D793D1002C6109 /* ADClusterMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 191E7C3117D793D1002C6109 /* ADClusterMapView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		191E7C3817D793D1002C6109 /* ADMapCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 191E7C3317D793D1002C6109 /* ADMapCluster.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		191E7C3917D793D1002C6109 /* ADMapPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 191E7C3517D793D1002C6109 /* ADMapPointAnnotation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		19688CC617B90770005ACA64 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19688CC417B90770005ACA64 /* MainStoryboard.storyboard */; };
 		19688CD717B91FE4005ACA64 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 19688CD617B91FE4005ACA64 /* Images */; };
 		19688CDD17B92850005ACA64 /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 19688CDC17B92850005ACA64 /* Logo.png */; };
@@ -58,6 +62,14 @@
 /* Begin PBXFileReference section */
 		190776FF1796F3BE00180530 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
 		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
+		191E7C2E17D793D1002C6109 /* ADClusterAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADClusterAnnotation.h; sourceTree = "<group>"; };
+		191E7C2F17D793D1002C6109 /* ADClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADClusterAnnotation.m; sourceTree = "<group>"; };
+		191E7C3017D793D1002C6109 /* ADClusterMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADClusterMapView.h; sourceTree = "<group>"; };
+		191E7C3117D793D1002C6109 /* ADClusterMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADClusterMapView.m; sourceTree = "<group>"; };
+		191E7C3217D793D1002C6109 /* ADMapCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADMapCluster.h; sourceTree = "<group>"; };
+		191E7C3317D793D1002C6109 /* ADMapCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADMapCluster.m; sourceTree = "<group>"; };
+		191E7C3417D793D1002C6109 /* ADMapPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADMapPointAnnotation.h; sourceTree = "<group>"; };
+		191E7C3517D793D1002C6109 /* ADMapPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADMapPointAnnotation.m; sourceTree = "<group>"; };
 		19688CC517B90770005ACA64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		19688CD617B91FE4005ACA64 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
 		19688CDC17B92850005ACA64 /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Logo.png; path = ../Logo.png; sourceTree = "<group>"; };
@@ -164,6 +176,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		191E7C2D17D793D1002C6109 /* ADClusterMapView */ = {
+			isa = PBXGroup;
+			children = (
+				191E7C2E17D793D1002C6109 /* ADClusterAnnotation.h */,
+				191E7C2F17D793D1002C6109 /* ADClusterAnnotation.m */,
+				191E7C3017D793D1002C6109 /* ADClusterMapView.h */,
+				191E7C3117D793D1002C6109 /* ADClusterMapView.m */,
+				191E7C3217D793D1002C6109 /* ADMapCluster.h */,
+				191E7C3317D793D1002C6109 /* ADMapCluster.m */,
+				191E7C3417D793D1002C6109 /* ADMapPointAnnotation.h */,
+				191E7C3517D793D1002C6109 /* ADMapPointAnnotation.m */,
+			);
+			path = ADClusterMapView;
+			sourceTree = "<group>";
+		};
 		19688CD517B91F5E005ACA64 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				19E4E14817D8E813001A47DF /* libz.dylib */,
+				191E7C2D17D793D1002C6109 /* ADClusterMapView */,
 				19E4E13E17D8E775001A47DF /* TestFlightSDK2.0.0 */,
 				19F1D67F17D10B0000BA53AF /* AFNetworking */,
 				19F1D69C17D10B2900BA53AF /* TRAutocompleteView */,
@@ -474,6 +502,10 @@
 				19F1D6AF17D10B2900BA53AF /* TRStringExtensions.m in Sources */,
 				19F1D6B017D10B2900BA53AF /* TRTextFieldExtensions.m in Sources */,
 				19CA3C7717D4E1CF00366535 /* InfoController.m in Sources */,
+				191E7C3617D793D1002C6109 /* ADClusterAnnotation.m in Sources */,
+				191E7C3717D793D1002C6109 /* ADClusterMapView.m in Sources */,
+				191E7C3817D793D1002C6109 /* ADMapCluster.m in Sources */,
+				191E7C3917D793D1002C6109 /* ADMapPointAnnotation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

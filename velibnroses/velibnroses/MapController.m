@@ -244,13 +244,14 @@
 {
     MKPinAnnotationView *annotationView;
     if (anAnnotation != mapPanel.userLocation) {
-        static NSString *annotationID = @"annotation";
+        static NSString *annotationID = @"PlaceAnnotation";
         annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
         if (annotationView == nil) {
             annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:anAnnotation reuseIdentifier:annotationID];
         }
-        if ([anAnnotation isKindOfClass:[PlaceAnnotation class]]) {
-            PlaceAnnotation *annotation = anAnnotation;
+        ADClusterAnnotation *adAnnotation = anAnnotation;
+        if ([[adAnnotation originalAnnotations][0] isKindOfClass:[PlaceAnnotation class]]) {
+            PlaceAnnotation *annotation = [adAnnotation originalAnnotations][0];
             if (annotation.placeType == kDeparture) {
                 NSLog(@"render departure");
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
@@ -274,8 +275,11 @@
 
 - (void)mapView:(MKMapView *)aMapView didSelectAnnotationView:(MKAnnotationView *)aView {
     if (!_isSearchViewVisible && _mapViewState == MAP_VIEW_SEARCH_STATE) {
-        if ([aView.annotation isKindOfClass:[PlaceAnnotation class]]) {
-            PlaceAnnotation *annotation = aView.annotation;
+        ADClusterAnnotation *adAnnotation = aView.annotation;
+        if ([[adAnnotation originalAnnotations][0] isKindOfClass:[PlaceAnnotation class]]) {
+            PlaceAnnotation *annotation = [adAnnotation originalAnnotations][0];
+        /*if ([aView.annotation isKindOfClass:[PlaceAnnotation class]]) {
+            PlaceAnnotation *annotation = aView.annotation;*/
             if (annotation.placeType != kDeparture && annotation.placeType != kArrival && annotation.placeLocation != kUndefined) {
                 BOOL redraw = false;
                 if (annotation.placeLocation == kNearDeparture && _departureStation != annotation.placeStation) {
@@ -534,6 +538,7 @@
     for (Station *station in _stations) {
         if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
             [_stationsAnnotations addObject:[self createStationAnnotation:station withLocation:kUndefined]];
+            displayedStations++;
         } else {
             NSLog(@"%@ : %@", station.name, station.contract);
             invalidStations++;
@@ -547,9 +552,10 @@
 
 - (void)displayStationsAnnotations {
     NSLog(@"display stations");
-    for (PlaceAnnotation *annotation in _stationsAnnotations) {
+    /*for (PlaceAnnotation *annotation in _stationsAnnotations) {
         [mapPanel addAnnotation:annotation];
-    }
+    }*/
+    [mapPanel setAnnotations:_stationsAnnotations];
 }
 
 - (void)createStationsAnnotationsAroundDeparture {
@@ -568,9 +574,10 @@
     NSLog(@"draw search stations");
     [self createStationsAnnotationsAroundDeparture];
     [self createStationsAnnotationsAroundArrival];
-    for (PlaceAnnotation *annotation in _searchAnnotations) {
+    /*for (PlaceAnnotation *annotation in _searchAnnotations) {
         [mapPanel addAnnotation:annotation];
-    }
+    }*/
+    [mapPanel setAnnotations:_searchAnnotations];
 }
 
 - (PlaceAnnotation *)createStationAnnotation:(Station *)aStation withLocation:(PlaceAnnotationLocation) aLocation {
@@ -840,6 +847,39 @@
         result = @"###";
     }
     return result;
+}
+
+# pragma mark -
+# pragma mark AD
+
+- (MKAnnotationView *)mapView:(ADClusterMapView *)mapView viewForClusterAnnotation:(id<MKAnnotation>)annotation {
+    MKAnnotationView * pinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"PlaceAnnotationCluster"];
+    if (!pinView) {
+        pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"PlaceAnnotationCluster"];
+        pinView.image = [UIImage imageNamed:@"Images/MapPanel/MPCluster"];
+        pinView.canShowCallout = YES;
+    }
+    else {
+        pinView.annotation = annotation;
+    }
+    return pinView;
+}
+
+
+- (void)mapViewDidFinishClustering:(ADClusterMapView *)mapView {
+    NSLog(@"Clustering done");
+}
+
+- (NSInteger)numberOfClustersInMapView:(ADClusterMapView *)mapView {
+    return 30;
+}
+
+- (double)clusterDiscriminationPowerForMapView:(ADClusterMapView *)mapView {
+    return 1;
+}
+
+- (NSString *)clusterTitleForMapView:(ADClusterMapView *)mapView {
+    return @"%d stations";
 }
 
 @end

@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 OneLight Studio. All rights reserved.
 //
 
-#import <MapKit/MapKit.h>
+#import "ADClusterMapView.h"
 
-@interface MapController : UIViewController <MKMapViewDelegate, UITextFieldDelegate>
+@interface MapController : UIViewController <ADClusterMapViewDelegate, UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet MKMapView *mapPanel;
+@property (weak, nonatomic) IBOutlet ADClusterMapView *mapPanel;
 @property (weak, nonatomic) IBOutlet UIView *searchPanel;
 @property (weak, nonatomic) IBOutlet UITextField *departureField;
 @property (weak, nonatomic) IBOutlet UITextField *arrivalField;
