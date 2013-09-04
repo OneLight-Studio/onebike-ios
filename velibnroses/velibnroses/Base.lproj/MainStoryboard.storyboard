@@ -17,18 +17,18 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PLT-Kz-m19" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="351" y="32"/>
+            <point key="canvasLocation" x="347" y="32"/>
         </scene>
         <!--Map Controller-->
         <scene sceneID="zyg-xC-811">
             <objects>
                 <viewController id="R2K-lh-zEE" customClass="MapController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Xpv-kR-8Ki">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" id="QIt-AM-94y">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="R2K-lh-zEE" id="6qq-j7-0P0"/>
@@ -199,6 +199,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="hmS-dC-JVN">
+                        <barButtonItem key="leftBarButtonItem" image="Images/NavigationBar/NBInfo.png" id="lbv-EE-UWT">
+                            <connections>
+                                <segue destination="mZx-XO-NyK" kind="push" id="dt9-Xg-diD"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="Images/NavigationBar/NBSearch.png" id="Dwx-k2-M2a">
                             <connections>
                                 <action selector="searchBarButtonClicked:" destination="R2K-lh-zEE" id="lUh-a4-YUx"/>
@@ -210,6 +215,7 @@
                         <outlet property="bikeField" destination="R5K-Zh-q0x" id="FoO-r3-tHr"/>
                         <outlet property="closeSearchPanelButton" destination="CKQ-mF-mOJ" id="3Zz-Vr-K8L"/>
                         <outlet property="departureField" destination="iYR-bn-zkd" id="AZx-VX-AIw"/>
+                        <outlet property="infoBarButton" destination="lbv-EE-UWT" id="yOY-yq-68u"/>
                         <outlet property="mapPanel" destination="QIt-AM-94y" id="KGF-Hb-vky"/>
                         <outlet property="searchBarButton" destination="Dwx-k2-M2a" id="MgW-nf-Ofl"/>
                         <outlet property="searchButton" destination="7ZO-mt-kun" id="4av-zB-rIX"/>
@@ -221,8 +227,40 @@
             </objects>
             <point key="canvasLocation" x="803" y="32"/>
         </scene>
+        <!--Info Controller-->
+        <scene sceneID="DJc-Ks-pak">
+            <objects>
+                <viewController id="mZx-XO-NyK" customClass="InfoController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zTG-hz-Ftm">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="dyJ-RV-8n7">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="441"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                        </subviews>
+                    </view>
+                    <navigationItem key="navigationItem" id="PnZ-q7-OJc">
+                        <barButtonItem key="leftBarButtonItem" image="Images/NavigationBar/NBBack.png" id="K2C-dy-2tc">
+                            <connections>
+                                <action selector="backBarButtonClicked:" destination="mZx-XO-NyK" id="8wJ-xD-br6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="backBarButton" destination="K2C-dy-2tc" id="Gom-pg-78P"/>
+                        <outlet property="contentImage" destination="dyJ-RV-8n7" id="paI-Un-ucJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LYB-5i-1bQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1276" y="32"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="Images/NavigationBar/NBBack.png" width="16" height="16"/>
+        <image name="Images/NavigationBar/NBInfo.png" width="16" height="16"/>
         <image name="Images/NavigationBar/NBSearch.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPBike.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPCloseSearch.png" width="16" height="16"/>
@@ -230,9 +268,18 @@
         <image name="Images/SearchPanel/SPStand.png" width="16" height="16"/>
     </resources>
     <classes>
+        <class className="InfoController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/InfoController.h"/>
+            <relationships>
+                <relationship kind="action" name="backBarButtonClicked:"/>
+                <relationship kind="outlet" name="backBarButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="contentImage" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
         <class className="MapController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MapController.h"/>
             <relationships>
+                <relationship kind="action" name="backBarButtonClicked:"/>
                 <relationship kind="action" name="bikeIconClicked:"/>
                 <relationship kind="action" name="cancelBarButtonClicked:"/>
                 <relationship kind="action" name="searchBarButtonClicked:"/>
@@ -245,6 +292,7 @@
                 <relationship kind="outlet" name="cancelBarButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="closeSearchPanelButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="infoBarButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="mapPanel" candidateClass="MKMapView"/>
                 <relationship kind="outlet" name="searchBarButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="searchButton" candidateClass="UIButton"/>
@@ -256,6 +304,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
 </document>
