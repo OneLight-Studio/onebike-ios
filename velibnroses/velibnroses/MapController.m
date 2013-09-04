@@ -375,6 +375,10 @@
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
 }
 
+- (IBAction)backBarButtonClicked:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (IBAction)bikeIconClicked:(id)sender {
     [self.bikeField becomeFirstResponder];
 }
