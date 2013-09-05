@@ -871,7 +871,7 @@
 }
 
 - (NSInteger)numberOfClustersInMapView:(ADClusterMapView *)mapView {
-    return 30;
+    return 32;
 }
 
 - (double)clusterDiscriminationPowerForMapView:(ADClusterMapView *)mapView {

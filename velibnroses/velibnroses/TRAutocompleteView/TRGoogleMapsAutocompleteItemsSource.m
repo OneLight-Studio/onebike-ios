@@ -88,6 +88,8 @@
                                                             {
                                                                 NSMutableArray *suggestions = [[NSMutableArray alloc] init];
                                                                 NSArray *predictions = [JSON objectForKey:@"predictions"];
+                                                                
+                                                                NSLog(@"Status: %@", [JSON objectForKey:@"status"]);
 
                                                                 for (NSDictionary *place in predictions)
                                                                 {
