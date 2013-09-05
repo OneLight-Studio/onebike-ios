@@ -17,6 +17,8 @@
 {
     UIImage *navBackgroundImage = [UIImage imageNamed:@"Images/NavigationBar/NBBg"];
     [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
+    
+    [TestFlight takeOff:@"44655804545709ead34396e241668031_MjY2MDYxMjAxMy0wOS0wNSAxMjo0MzoxNS42MDE0NDE"];
 
     return YES;
 }
