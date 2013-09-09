@@ -24,6 +24,8 @@
 		19CA3C7717D4E1CF00366535 /* InfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CA3C7617D4E1CF00366535 /* InfoController.m */; };
 		19CC9CAA17D0B0B700119925 /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CC9CA917D0B0B700119925 /* UIUtils.m */; };
 		19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CED9FF17AAA4120069ECDC /* RoutePolyline.m */; };
+		19E4E14517D8E775001A47DF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19E4E13F17D8E775001A47DF /* libTestFlight.a */; };
+		19E4E14917D8E813001A47DF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 19E4E14817D8E813001A47DF /* libz.dylib */; };
 		19F1D67A17D0E81400BA53AF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F1D67917D0E81400BA53AF /* SystemConfiguration.framework */; };
 		19F1D67C17D0E81C00BA53AF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F1D67B17D0E81C00BA53AF /* MobileCoreServices.framework */; };
 		19F1D67E17D0E9C500BA53AF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F1D67D17D0E9C500BA53AF /* Security.framework */; };
@@ -67,6 +69,7 @@
 		19688CE817B945B9005ACA64 /* PlaceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceAnnotation.h; sourceTree = "<group>"; };
 		19688CE917B945B9005ACA64 /* PlaceAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceAnnotation.m; sourceTree = "<group>"; };
 		1993DCEE178F09860089A6D5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		199697E217DDC922002B10C8 /* Keys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keys.h; sourceTree = "<group>"; };
 		19B5ADD317902AA5000E6B40 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		19C9C67717CE674600805611 /* update_storyboard_strings.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update_storyboard_strings.sh; sourceTree = "<group>"; };
 		19CA3C7517D4E1CF00366535 /* InfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoController.h; sourceTree = "<group>"; };
@@ -75,6 +78,11 @@
 		19CC9CA917D0B0B700119925 /* UIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIUtils.m; sourceTree = "<group>"; };
 		19CED9FE17AAA4120069ECDC /* RoutePolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoutePolyline.h; sourceTree = "<group>"; };
 		19CED9FF17AAA4120069ECDC /* RoutePolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoutePolyline.m; sourceTree = "<group>"; };
+		19E4E13F17D8E775001A47DF /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		19E4E14217D8E775001A47DF /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
+		19E4E14317D8E775001A47DF /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
+		19E4E14417D8E775001A47DF /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		19E4E14817D8E813001A47DF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		19F1D67917D0E81400BA53AF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		19F1D67B17D0E81C00BA53AF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		19F1D67D17D0E9C500BA53AF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -140,6 +148,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19E4E14917D8E813001A47DF /* libz.dylib in Frameworks */,
 				19F1D67E17D0E9C500BA53AF /* Security.framework in Frameworks */,
 				19F1D67C17D0E81C00BA53AF /* MobileCoreServices.framework in Frameworks */,
 				19F1D67A17D0E81400BA53AF /* SystemConfiguration.framework in Frameworks */,
@@ -148,6 +157,7 @@
 				E931956617858121009AFCC1 /* UIKit.framework in Frameworks */,
 				E931956817858121009AFCC1 /* Foundation.framework in Frameworks */,
 				E931956A17858121009AFCC1 /* CoreGraphics.framework in Frameworks */,
+				19E4E14517D8E775001A47DF /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,6 +184,7 @@
 				19FD1B5817958E4B00309FD0 /* Constants.h */,
 				190776FF1796F3BE00180530 /* GeoUtils.h */,
 				190777001796F3BE00180530 /* GeoUtils.m */,
+				199697E217DDC922002B10C8 /* Keys.h */,
 				19CC9CA817D0B0B700119925 /* UIUtils.h */,
 				19CC9CA917D0B0B700119925 /* UIUtils.m */,
 			);
@@ -188,9 +199,22 @@
 			name = Scripts;
 			sourceTree = "<group>";
 		};
+		19E4E13E17D8E775001A47DF /* TestFlightSDK2.0.0 */ = {
+			isa = PBXGroup;
+			children = (
+				19E4E13F17D8E775001A47DF /* libTestFlight.a */,
+				19E4E14217D8E775001A47DF /* TestFlight+AsyncLogging.h */,
+				19E4E14317D8E775001A47DF /* TestFlight+ManualSessions.h */,
+				19E4E14417D8E775001A47DF /* TestFlight.h */,
+			);
+			path = TestFlightSDK2.0.0;
+			sourceTree = "<group>";
+		};
 		19F1D65B17D0E4A900BA53AF /* External APIs */ = {
 			isa = PBXGroup;
 			children = (
+				19E4E14817D8E813001A47DF /* libz.dylib */,
+				19E4E13E17D8E775001A47DF /* TestFlightSDK2.0.0 */,
 				19F1D67F17D10B0000BA53AF /* AFNetworking */,
 				19F1D69C17D10B2900BA53AF /* TRAutocompleteView */,
 			);
@@ -546,10 +570,15 @@
 		E931959B17858122009AFCC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "velibnroses/OneBike-Prefix.pch";
 				INFOPLIST_FILE = "velibnroses/OneBike-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/velibnroses/TestFlightSDK2.0.0\"",
+				);
 				PRODUCT_NAME = OneBike;
 				WRAPPER_EXTENSION = app;
 			};
@@ -558,10 +587,15 @@
 		E931959C17858122009AFCC1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "velibnroses/OneBike-Prefix.pch";
 				INFOPLIST_FILE = "velibnroses/OneBike-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/velibnroses/TestFlightSDK2.0.0\"",
+				);
 				PRODUCT_NAME = OneBike;
 				WRAPPER_EXTENSION = app;
 			};

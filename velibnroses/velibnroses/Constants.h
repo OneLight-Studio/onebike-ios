@@ -25,7 +25,6 @@
 #define JCD_TIMED_OUT_REQUEST_EXCEPTION_CODE -1001
 #define JCD_WS_ENTRY_POINT_PARAM_VALUE @"https://api.jcdecaux.com/vls/v1/stations"
 #define JCD_API_KEY_PARAM_NAME @"apiKey"
-#define JCD_API_KEY_PARAM_VALUE @"e774968643aee3788d9b83be4651ba671aba7611"
 #define JCD_CONTRACT_KEY_PARAM_NAME @"contract"
 
 #define GOOGLE_MAPS_WS_ENTRY_POINT_PARAM_VALUE @"https://maps.googleapis.com/maps/api/directions/json"
