@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Constants.h"
+#import "Keys.h"
 
 @implementation AppDelegate {
     double _sleepingStartDate;
@@ -18,7 +19,7 @@
     UIImage *navBackgroundImage = [UIImage imageNamed:@"Images/NavigationBar/NBBg"];
     [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
     
-    [TestFlight takeOff:@"44655804545709ead34396e241668031_MjY2MDYxMjAxMy0wOS0wNSAxMjo0MzoxNS42MDE0NDE"];
+    [TestFlight takeOff:KEY_TESTFLIGHT];
 
     return YES;
 }
