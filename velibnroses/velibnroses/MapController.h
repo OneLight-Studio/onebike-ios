@@ -21,6 +21,11 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelBarButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *infoBarButton;
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
+@property (weak, nonatomic) IBOutlet UIButton *departureLocation;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *departureSpinner;
+@property (weak, nonatomic) IBOutlet UIButton *arrivalLocation;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *arrivalSpinner;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *searchSpinner;
 
 - (IBAction)searchBarButtonClicked:(id)sender;
 - (IBAction)userLocationAsDepartureClicked:(id)sender;

@@ -619,6 +619,8 @@
 		E931959C17858122009AFCC1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Prometil";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Prometil";
 				COPY_PHASE_STRIP = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "velibnroses/OneBike-Prefix.pch";
@@ -629,6 +631,8 @@
 					"\"$(SRCROOT)/velibnroses/TestFlightSDK2.0.0\"",
 				);
 				PRODUCT_NAME = OneBike;
+				PROVISIONING_PROFILE = "B4E729AB-E08D-4740-995E-23322433AF8B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B4E729AB-E08D-4740-995E-23322433AF8B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

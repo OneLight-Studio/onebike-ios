@@ -59,6 +59,11 @@
 @synthesize searchBarButton;
 @synthesize infoBarButton;
 @synthesize searchButton;
+@synthesize departureLocation;
+@synthesize departureSpinner;
+@synthesize arrivalLocation;
+@synthesize arrivalSpinner;
+@synthesize searchSpinner;
 
 # pragma mark -
 
@@ -85,6 +90,14 @@
     self.bikeField.text = @"1";
     self.standField.text = @"1";
     self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBClose"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
+    
+    departureSpinner.hidesWhenStopped = YES;
+    [departureSpinner setColor:[UIUtils colorWithHexaString:@"#b2ca04"]];
+    arrivalSpinner.hidesWhenStopped = YES;
+    [arrivalSpinner setColor:[UIUtils colorWithHexaString:@"#b2ca04"]];
+    searchSpinner.hidesWhenStopped = YES;
+    [searchSpinner setColor:[UIUtils colorWithHexaString:@"#ffffff"]];
+    [searchSpinner setHidden:true];
     
     _isMapLoaded = false;
     startUserLocation = [[MKUserLocation alloc] init];
@@ -393,6 +406,9 @@
 }
 
 - (IBAction)userLocationAsDepartureClicked:(id)sender {
+    [self.departureLocation setHidden:true];
+    [self.departureSpinner startAnimating];
+    
     CLLocationCoordinate2D userLocation = self.mapPanel.userLocation.coordinate;
     CLLocation *location = [[CLLocation alloc] initWithLatitude:userLocation.latitude longitude:userLocation.longitude];
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
@@ -402,10 +418,15 @@
         } else {
             self.departureField.text = [[[(CLPlacemark *)[placemarks objectAtIndex:0] addressDictionary] valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
         }
+        [self.departureSpinner stopAnimating];
+        [self.departureLocation setHidden:false];
     }];
 }
 
 - (IBAction)userLocationAsArrivalClicked:(id)sender {
+    [self.arrivalLocation setHidden:true];
+    [self.arrivalSpinner startAnimating];
+    
     CLLocationCoordinate2D userLocation = self.mapPanel.userLocation.coordinate;
     CLLocation *location = [[CLLocation alloc] initWithLatitude:userLocation.latitude longitude:userLocation.longitude];
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
@@ -415,6 +436,8 @@
         } else {
             self.arrivalField.text = [[[(CLPlacemark *)[placemarks objectAtIndex:0] addressDictionary] valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
         }
+        [self.arrivalSpinner stopAnimating];
+        [self.arrivalLocation setHidden:false];
     }];
 }
 
@@ -426,6 +449,7 @@
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"") message:NSLocalizedString(@"missing_arrival", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
     } else {
         [self.view endEditing:YES];
+        [self disableSearchButton];
         _departureLocation = nil;
         _arrivalLocation = nil;
         _searching = YES;
@@ -438,6 +462,7 @@
                     _searching = NO;
                     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"departure_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+                   [self enableSearchButton];
                 } else {
                     _departureLocation = [[placemarks objectAtIndex:0] location];
                     if (_departureLocation != nil && _arrivalLocation != nil) {
@@ -447,6 +472,7 @@
                             [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                         } else {
                             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                            [self enableSearchButton];
                         }
                     }
                 }
@@ -458,6 +484,7 @@
                     _searching = NO;
                     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"arrival_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+                    [self enableSearchButton];
                 } else {
                     _arrivalLocation = [[placemarks objectAtIndex:0] location];
                     if (_departureLocation != nil && _arrivalLocation != nil) {
@@ -467,6 +494,7 @@
                             [self searchWithDeparture:_departureLocation andArrival:_arrivalLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                         } else {
                             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                            [self enableSearchButton];
                         }
                     }
                 }
@@ -636,12 +664,13 @@
             NSString *encodedPolyline = [[[[json objectForKey:@"routes"] firstObject] objectForKey:@"overview_polyline"] valueForKey:@"points"];
             _route = [RoutePolyline routePolylineFromPolyline:[GeoUtils polylineWithEncodedString:encodedPolyline]];
             [mapPanel addOverlay:_route];
-            [mapPanel setVisibleMapRect:[self mapRectForAnnotations] animated:YES];
+            [mapPanel setVisibleMapRect:[self mapRectWithAllAnnotations] animated:YES];
             
         } else {
             NSLog(@"Google Maps API error %@", status);
             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"")  message:@"Google Maps API error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         }
+        [self enableSearchButton];
     }];
     [googleRequest handleErrorWith:^(int errorCode) {
         NSLog(@"HTTP error %d", errorCode);
@@ -678,7 +707,7 @@
     }
 }
 
-- (MKMapRect)mapRectForAnnotations {
+- (MKMapRect)mapRectWithAllAnnotations {
     
     MKMapRect mapRect = MKMapRectNull;
     for (id<MKAnnotation> annotation in _searchAnnotations) {
@@ -696,6 +725,19 @@
 }
 
 # pragma mark Search panel
+
+- (void)enableSearchButton {
+    searchButton.enabled = true;
+    [searchButton setTitle:NSLocalizedString(@"7ZO-mt-kun.normalTitle", @"") forState:UIControlStateApplication];
+    [searchSpinner setHidden:true];
+}
+
+- (void)disableSearchButton {
+    searchButton.enabled = false;
+    [searchButton setTitle:@"" forState:UIControlStateDisabled];
+    [searchSpinner setHidden:false];
+    [self.searchSpinner startAnimating];
+}
 
 - (void)resetSearchViewFields {
     self.departureField.text = nil;
@@ -739,6 +781,7 @@
       [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
     } else {
         [self centerMapOnDeparture];
+        [self enableSearchButton];
     }
 }
 
