@@ -19,6 +19,7 @@
 #import "TRGoogleMapsAutocompleteItemsSource.h"
 #import "TRTextFieldExtensions.h"
 #import "TRGoogleMapsAutocompletionCellFactory.h"
+#import "Keys.h"
 
 @interface MapController ()
     
@@ -137,7 +138,7 @@
     _jcdRequestAttemptsNumber = 0;
     NSLog(@"init jcd ws");
     _wsRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:TRUE];
-    [_wsRequest appendParameterWithKey:JCD_API_KEY_PARAM_NAME andValue:JCD_API_KEY_PARAM_VALUE];
+    [_wsRequest appendParameterWithKey:JCD_API_KEY_PARAM_NAME andValue:KEY_JCD];
     [_wsRequest handleResultWith:^(id json) {
         NSLog(@"jcd ws result");
         _jcdRequestAttemptsNumber = 0;
@@ -201,7 +202,7 @@
         if (![self isEqualToLocationZero:startUserLocation]) {
             [self centerMapOnUserLocation];
             
-            _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:@"AIzaSyDgKRier12bPPknXhPRvuAvPdNn3vFQbW8" andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
             _departureAutocompleteView.topMargin = -65;
             _departureAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
             _departureAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
@@ -209,7 +210,7 @@
                 NSLog(@"Departure autocompleted with: %@", item.completionText);
             };
             
-            _arrivalAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:arrivalField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:@"AIzaSyDgKRier12bPPknXhPRvuAvPdNn3vFQbW8" andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _arrivalAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:arrivalField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
             _arrivalAutocompleteView.topMargin = -65;
             _arrivalAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
             _arrivalAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
@@ -526,7 +527,7 @@
 
 - (void)createStationsAnnotations {
     NSLog(@"create stations annotations");
-    [mapPanel removeAnnotations:_stationsAnnotations];
+    [self eraseAnnotations];
     [_stationsAnnotations removeAllObjects];
     int invalidStations = 0;
     int displayedStations = 0;
@@ -653,10 +654,20 @@
     }
 }
 
+- (void)eraseAnnotations {
+    if (_stationsAnnotations != nil) {
+        [mapPanel removeAnnotations:_stationsAnnotations];
+    }
+}
+
 - (void)eraseSearchAnnotations {
     if (_searchAnnotations != nil) {
         [mapPanel removeAnnotations:_searchAnnotations];
         [_searchAnnotations removeAllObjects];
+        [_departureCloseStations removeAllObjects];
+        [_arrivalCloseStations removeAllObjects];
+        _departureStation = nil;
+        _arrivalStation = nil;
     }
 }
 
@@ -711,12 +722,9 @@
     NSLog(@"%f,%f -> %f,%f (%d / %d)", departure.coordinate.latitude, departure.coordinate.longitude, arrival.coordinate.latitude, arrival.coordinate.longitude, bikes, availableStands);
     _mapViewState = MAP_VIEW_SEARCH_STATE;
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
-    [_departureCloseStations removeAllObjects];
-    [_arrivalCloseStations removeAllObjects];
     [self eraseRoute];
-    _departureStation = nil;
-    _arrivalStation = nil;
-    [mapPanel removeAnnotations:mapPanel.annotations];
+    [self eraseSearchAnnotations];
+    [self eraseAnnotations];
     [self searchCloseStationsAroundDeparture:departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
     [self searchCloseStationsAroundArrival:arrival withAvailableStandsNumber:availableStands andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
     [self drawRouteEndsCloseStations];
