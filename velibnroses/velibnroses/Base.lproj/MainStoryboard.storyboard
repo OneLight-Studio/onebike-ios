@@ -201,7 +201,7 @@
                                         </connections>
                                     </button>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" style="whiteLarge" id="SEV-HS-aUN">
-                                        <rect key="frame" x="142" y="109" width="37" height="37"/>
+                                        <rect key="frame" x="144" y="108" width="37" height="37"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </activityIndicatorView>
                                 </subviews>

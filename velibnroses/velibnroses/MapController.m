@@ -278,7 +278,6 @@
                 UIImage *stands = [UIUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
                 UIImage *image = [UIUtils placeStands:stands onImage:tmp];
                 annotationView.image = image;
-            
             }
         }
         annotationView.canShowCallout = YES;
@@ -291,8 +290,6 @@
         ADClusterAnnotation *adAnnotation = aView.annotation;
         if ([[adAnnotation originalAnnotations][0] isKindOfClass:[PlaceAnnotation class]]) {
             PlaceAnnotation *annotation = [adAnnotation originalAnnotations][0];
-        /*if ([aView.annotation isKindOfClass:[PlaceAnnotation class]]) {
-            PlaceAnnotation *annotation = aView.annotation;*/
             if (annotation.placeType != kDeparture && annotation.placeType != kArrival && annotation.placeLocation != kUndefined) {
                 BOOL redraw = false;
                 if (annotation.placeLocation == kNearDeparture && _departureStation != annotation.placeStation) {
@@ -896,29 +893,20 @@
 # pragma mark AD
 
 - (MKAnnotationView *)mapView:(ADClusterMapView *)mapView viewForClusterAnnotation:(id<MKAnnotation>)annotation {
-    MKAnnotationView * pinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"PlaceAnnotationCluster"];
-    if (!pinView) {
-        pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"PlaceAnnotationCluster"];
-        pinView.image = [UIImage imageNamed:@"Images/MapPanel/MPCluster"];
-        pinView.canShowCallout = YES;
+    MKAnnotationView *clusterView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"PlaceAnnotationCluster"];
+    if (!clusterView) {
+        clusterView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"PlaceAnnotationCluster"];
+        clusterView.image = [UIImage imageNamed:@"Images/MapPanel/MPCluster"];
+        clusterView.canShowCallout = YES;
     }
     else {
-        pinView.annotation = annotation;
+        clusterView.annotation = annotation;
     }
-    return pinView;
+    return clusterView;
 }
-
 
 - (void)mapViewDidFinishClustering:(ADClusterMapView *)mapView {
     NSLog(@"Clustering done");
-}
-
-- (NSInteger)numberOfClustersInMapView:(ADClusterMapView *)mapView {
-    return 32;
-}
-
-- (double)clusterDiscriminationPowerForMapView:(ADClusterMapView *)mapView {
-    return 1;
 }
 
 - (NSString *)clusterTitleForMapView:(ADClusterMapView *)mapView {
