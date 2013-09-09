@@ -526,7 +526,7 @@
 
 - (void)createStationsAnnotations {
     NSLog(@"create stations annotations");
-    [mapPanel removeAnnotations:_stationsAnnotations];
+    [self eraseAnnotations];
     [_stationsAnnotations removeAllObjects];
     int invalidStations = 0;
     int displayedStations = 0;
@@ -653,10 +653,20 @@
     }
 }
 
+- (void)eraseAnnotations {
+    if (_stationsAnnotations != nil) {
+        [mapPanel removeAnnotations:_stationsAnnotations];
+    }
+}
+
 - (void)eraseSearchAnnotations {
     if (_searchAnnotations != nil) {
         [mapPanel removeAnnotations:_searchAnnotations];
         [_searchAnnotations removeAllObjects];
+        [_departureCloseStations removeAllObjects];
+        [_arrivalCloseStations removeAllObjects];
+        _departureStation = nil;
+        _arrivalStation = nil;
     }
 }
 
@@ -711,12 +721,9 @@
     NSLog(@"%f,%f -> %f,%f (%d / %d)", departure.coordinate.latitude, departure.coordinate.longitude, arrival.coordinate.latitude, arrival.coordinate.longitude, bikes, availableStands);
     _mapViewState = MAP_VIEW_SEARCH_STATE;
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
-    [_departureCloseStations removeAllObjects];
-    [_arrivalCloseStations removeAllObjects];
     [self eraseRoute];
-    _departureStation = nil;
-    _arrivalStation = nil;
-    [mapPanel removeAnnotations:mapPanel.annotations];
+    [self eraseSearchAnnotations];
+    [self eraseAnnotations];
     [self searchCloseStationsAroundDeparture:departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
     [self searchCloseStationsAroundArrival:arrival withAvailableStandsNumber:availableStands andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
     [self drawRouteEndsCloseStations];

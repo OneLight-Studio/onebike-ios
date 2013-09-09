@@ -211,6 +211,7 @@
 		19F1D65B17D0E4A900BA53AF /* External APIs */ = {
 			isa = PBXGroup;
 			children = (
+				19E4E14817D8E813001A47DF /* libz.dylib */,
 				19E4E13E17D8E775001A47DF /* TestFlightSDK2.0.0 */,
 				19F1D67F17D10B0000BA53AF /* AFNetworking */,
 				19F1D69C17D10B2900BA53AF /* TRAutocompleteView */,
@@ -281,7 +282,6 @@
 		E931955917858121009AFCC1 = {
 			isa = PBXGroup;
 			children = (
-				19E4E14817D8E813001A47DF /* libz.dylib */,
 				E931956417858121009AFCC1 /* Frameworks */,
 				E931956317858121009AFCC1 /* Products */,
 				19C9C67917CE674B00805611 /* Scripts */,
