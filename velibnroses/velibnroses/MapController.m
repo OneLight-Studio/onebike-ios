@@ -620,27 +620,24 @@
 }
 
 - (void)drawRouteEndsCloseStations {
-    if ([_departureCloseStations count] == 0 || [_arrivalCloseStations count] == 0) {
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"")  message:NSLocalizedString(@"incomplete_search_result", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
-    }
     
-    // departure annotation
-    PlaceAnnotation *marker = [[PlaceAnnotation alloc] init];
-    marker.placeType = kDeparture;
-    marker.coordinate = _departureLocation.coordinate;
-    marker.title = self.departureField.text;
-    
-    [_searchAnnotations addObject:marker];
-    
-    // arrival annotation
-    marker = [[PlaceAnnotation alloc] init];
-    marker.placeType = kArrival;
-    marker.coordinate = _arrivalLocation.coordinate;
-    marker.title = self.arrivalField.text;
-    
-    [_searchAnnotations addObject:marker];
-    
-    [self drawSearchAnnotations];
+        // departure annotation
+        PlaceAnnotation *marker = [[PlaceAnnotation alloc] init];
+        marker.placeType = kDeparture;
+        marker.coordinate = _departureLocation.coordinate;
+        marker.title = self.departureField.text;
+        
+        [_searchAnnotations addObject:marker];
+        
+        // arrival annotation
+        marker = [[PlaceAnnotation alloc] init];
+        marker.placeType = kArrival;
+        marker.coordinate = _arrivalLocation.coordinate;
+        marker.title = self.arrivalField.text;
+        
+        [_searchAnnotations addObject:marker];
+        
+        [self drawSearchAnnotations];
 }
 
 - (void)drawRouteFromStationDeparture:(Station *)departure toStationArrival:(Station *)arrival {
@@ -774,12 +771,13 @@
     [self eraseAnnotations];
     [self searchCloseStationsAroundDeparture:departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
     [self searchCloseStationsAroundArrival:arrival withAvailableStandsNumber:availableStands andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
-    [self drawRouteEndsCloseStations];
-    if (_departureStation != nil && _arrivalStation != nil) {
-      [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
+    if ([_departureCloseStations count] > 0 && [_arrivalCloseStations count] > 0 && _departureStation != nil && _arrivalStation != nil) {
+        [self drawRouteEndsCloseStations];
+        [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
     } else {
-        [self centerMapOnDeparture];
-        [self enableSearchButton];
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"")  message:NSLocalizedString(@"incomplete_search_result", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+        [self centerMapOnUserLocation];
+        [mapPanel setAnnotations:_searchAnnotations];
     }
 }
 
