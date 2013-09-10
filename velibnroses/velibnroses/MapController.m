@@ -754,6 +754,7 @@
         searchFrame.origin.y = 0;
         self.searchPanel.frame = searchFrame;
     }];
+    [self enableSearchButton];
 }
 
 - (void)closeSearchPanel {
