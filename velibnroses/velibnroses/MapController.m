@@ -76,6 +76,15 @@
     NSLog(@"register on %@", NOTIFICATION_WILL_ENTER_FOREGROUND);
 }
 
+- (void)resetUserLocation
+{
+    startUserLocation = [[MKUserLocation alloc] init];
+    CLLocationCoordinate2D zero;
+    zero.latitude = 0;
+    zero.longitude = 0;
+    startUserLocation.coordinate = zero;
+}
+
 - (void)initView
 {
     self.mapPanel.delegate = self;
@@ -100,11 +109,7 @@
     [searchSpinner setHidden:true];
     
     _isMapLoaded = false;
-    startUserLocation = [[MKUserLocation alloc] init];
-    CLLocationCoordinate2D zero;
-    zero.latitude = 0;
-    zero.longitude = 0;
-    startUserLocation.coordinate = zero;
+    [self resetUserLocation];
     _mapViewState = MAP_VIEW_DEFAULT_STATE;
     _isSearchViewVisible = false;
     
@@ -519,6 +524,7 @@
             NSLog(@"call ws");
             [_wsRequest call];
         }
+        [self resetUserLocation];
     }
 }
 
