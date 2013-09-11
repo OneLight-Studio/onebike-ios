@@ -26,7 +26,7 @@
 @end
 
 @implementation MapController {
-    MKUserLocation *startUserLocation;
+    CLLocationCoordinate2D startUserLocation;
     WSRequest *_wsRequest;
     NSMutableArray *_stations;
     NSMutableArray *_departureCloseStations;
@@ -78,11 +78,8 @@
 
 - (void)resetUserLocation
 {
-    startUserLocation = [[MKUserLocation alloc] init];
-    CLLocationCoordinate2D zero;
-    zero.latitude = 0;
-    zero.longitude = 0;
-    startUserLocation.coordinate = zero;
+    startUserLocation.latitude = 0;
+    startUserLocation.longitude = 0;
 }
 
 - (void)initView
@@ -214,13 +211,13 @@
 # pragma mark Delegate
 
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
-    //NSLog(@"receive user location update (%f,%f)", aUserLocation.coordinate.latitude, aUserLocation.coordinate.longitude);
     if ([self isEqualToLocationZero:startUserLocation]) {
-        startUserLocation.coordinate = aUserLocation.coordinate;
+        NSLog(@"receive user location update (%f,%f)", aUserLocation.location.coordinate.latitude, aUserLocation.location.coordinate.longitude);
+        startUserLocation = aUserLocation.location.coordinate;
         if (![self isEqualToLocationZero:startUserLocation]) {
             [self centerMapOnUserLocation];
             
-            _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:startUserLocation]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
             _departureAutocompleteView.topMargin = -65;
             _departureAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
             _departureAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
@@ -228,7 +225,7 @@
                 NSLog(@"Departure autocompleted with: %@", item.completionText);
             };
             
-            _arrivalAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:arrivalField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:startUserLocation.coordinate]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _arrivalAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:arrivalField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:startUserLocation]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
             _arrivalAutocompleteView.topMargin = -65;
             _arrivalAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
             _arrivalAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
@@ -549,15 +546,9 @@
 # pragma mark Map panel
 
 - (void)centerMapOnUserLocation {
-    MKCoordinateRegion currentRegion = MKCoordinateRegionMakeWithDistance(startUserLocation.coordinate, SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
+    MKCoordinateRegion currentRegion = MKCoordinateRegionMakeWithDistance(startUserLocation, SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
     [mapPanel setRegion:currentRegion animated:YES];
-    NSLog(@"centered on user location (%f,%f)", startUserLocation.coordinate.latitude, startUserLocation.coordinate.longitude);
-}
-
-- (void)centerMapOnDeparture {
-    MKCoordinateRegion currentRegion = MKCoordinateRegionMakeWithDistance(_departureLocation.coordinate, SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
-    [mapPanel setRegion:currentRegion animated:YES];
-    NSLog(@"centered on user location (%f,%f)", _departureLocation.coordinate.latitude, _departureLocation.coordinate.longitude);
+    NSLog(@"centered on user location (%f,%f)", startUserLocation.latitude, startUserLocation.longitude);
 }
 
 - (void)createStationsAnnotations {
@@ -863,8 +854,8 @@
     return dist <= radius;
 }
 
-- (BOOL)isEqualToLocationZero:(MKUserLocation *)newLocation {
-    BOOL isLocationZero = fabs(newLocation.coordinate.latitude - 0.00000) < 0.00001 && fabs(newLocation.coordinate.longitude -  - 0.00000) < 0.00001;
+- (BOOL)isEqualToLocationZero:(CLLocationCoordinate2D)newLocation {
+    BOOL isLocationZero = fabs(newLocation.latitude - 0.00000) < 0.00001 && fabs(newLocation.longitude -  - 0.00000) < 0.00001;
     if (isLocationZero) {
         NSLog(@"location zero");
     }
