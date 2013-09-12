@@ -270,28 +270,56 @@
 - (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)anAnnotation
 {
     MKPinAnnotationView *annotationView;
+    static NSString *annotationID;
+    
     if (anAnnotation != mapPanel.userLocation) {
-        static NSString *annotationID = @"PlaceAnnotation";
-        annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
-        if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:anAnnotation reuseIdentifier:annotationID];
-        }
         ADClusterAnnotation *adAnnotation = anAnnotation;
         if ([[adAnnotation originalAnnotations][0] isKindOfClass:[PlaceAnnotation class]]) {
+            
             PlaceAnnotation *annotation = [adAnnotation originalAnnotations][0];
             if (annotation.placeType == kDeparture) {
-                NSLog(@"render departure");
-                annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
+                annotationID = @"Departure";
+                NSLog(@"process %@", annotationID);
+                annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+                if (annotationView == nil) {
+                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:adAnnotation reuseIdentifier:annotationID];
+                    annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
+                    NSLog(@"create");
+                } else {
+                    NSLog(@"reuse");
+                }
             } else if (annotation.placeType == kArrival) {
-                NSLog(@"render arrival");
-                annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
+                annotationID = @"Arrival";
+                NSLog(@"process %@", annotationID);
+                annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+                if (annotationView == nil) {
+                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:adAnnotation reuseIdentifier:annotationID];
+                    annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
+                    NSLog(@"create");
+                } else {
+                    NSLog(@"reuse");
+                }
             } else {
-                UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
-                UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
-                UIImage *tmp = [UIUtils placeBikes:bikes onImage:background];
-                UIImage *stands = [UIUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
-                UIImage *image = [UIUtils placeStands:stands onImage:tmp];
-                annotationView.image = image;
+                NSMutableString *loc = [[NSMutableString alloc] initWithString:[annotation.placeStation.latitude stringValue]];
+                [loc appendString:@","];
+                [loc appendString:[annotation.placeStation.longitude stringValue]];
+                annotationID = [NSString stringWithString:loc];
+                NSLog(@"process %@", annotationID);
+                annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+                if (annotationView == nil) {
+                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:adAnnotation reuseIdentifier:annotationID];
+                    
+                    UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
+                    UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
+                    UIImage *tmp = [UIUtils placeBikes:bikes onImage:background];
+                    UIImage *stands = [UIUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
+                    UIImage *image = [UIUtils placeStands:stands onImage:tmp];
+                    annotationView.image = image;
+                    
+                    NSLog(@"create : %@/%@", annotation.placeStation.availableBikes, annotation.placeStation.availableBikeStands);
+                } else {
+                    NSLog(@"reuse (%@)", annotationView.reuseIdentifier);
+                }
             }
         }
         annotationView.canShowCallout = YES;
