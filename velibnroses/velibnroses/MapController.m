@@ -273,41 +273,40 @@
     static NSString *annotationID;
     
     if (anAnnotation != mapPanel.userLocation) {
-        ADClusterAnnotation *adAnnotation = anAnnotation;
-        if ([[adAnnotation originalAnnotations][0] isKindOfClass:[PlaceAnnotation class]]) {
-            
-            PlaceAnnotation *annotation = [adAnnotation originalAnnotations][0];
+        if ([anAnnotation isKindOfClass:[PlaceAnnotation class]]) {
+            PlaceAnnotation *annotation = anAnnotation;
+
             if (annotation.placeType == kDeparture) {
                 annotationID = @"Departure";
-                NSLog(@"process %@", annotationID);
+                //NSLog(@"process %@", annotationID);
                 annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
-                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:adAnnotation reuseIdentifier:annotationID];
+                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
-                    NSLog(@"create");
+                    //NSLog(@"create");
                 } else {
-                    NSLog(@"reuse");
+                    //NSLog(@"reuse");
                 }
             } else if (annotation.placeType == kArrival) {
                 annotationID = @"Arrival";
-                NSLog(@"process %@", annotationID);
+                //NSLog(@"process %@", annotationID);
                 annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
-                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:adAnnotation reuseIdentifier:annotationID];
+                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
-                    NSLog(@"create");
+                    //NSLog(@"create");
                 } else {
-                    NSLog(@"reuse");
+                    //NSLog(@"reuse");
                 }
             } else {
                 NSMutableString *loc = [[NSMutableString alloc] initWithString:[annotation.placeStation.latitude stringValue]];
                 [loc appendString:@","];
                 [loc appendString:[annotation.placeStation.longitude stringValue]];
                 annotationID = [NSString stringWithString:loc];
-                NSLog(@"process %@", annotationID);
+                //NSLog(@"process %@", annotationID);
                 annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
-                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:adAnnotation reuseIdentifier:annotationID];
+                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     
                     UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
                     UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
@@ -316,9 +315,9 @@
                     UIImage *image = [UIUtils placeStands:stands onImage:tmp];
                     annotationView.image = image;
                     
-                    NSLog(@"create : %@/%@", annotation.placeStation.availableBikes, annotation.placeStation.availableBikeStands);
+                    //NSLog(@"create : %@/%@", annotation.placeStation.availableBikes, annotation.placeStation.availableBikeStands);
                 } else {
-                    NSLog(@"reuse (%@)", annotationView.reuseIdentifier);
+                    //NSLog(@"reuse (%@)", annotationView.reuseIdentifier);
                 }
             }
         }
@@ -329,9 +328,8 @@
 
 - (void)mapView:(MKMapView *)aMapView didSelectAnnotationView:(MKAnnotationView *)aView {
     if (!_isSearchViewVisible && _mapViewState == MAP_VIEW_SEARCH_STATE) {
-        ADClusterAnnotation *adAnnotation = aView.annotation;
-        if ([[adAnnotation originalAnnotations][0] isKindOfClass:[PlaceAnnotation class]]) {
-            PlaceAnnotation *annotation = [adAnnotation originalAnnotations][0];
+        if ([aView.annotation isKindOfClass:[PlaceAnnotation class]]) {
+            PlaceAnnotation *annotation = aView.annotation;
             if (annotation.placeType != kDeparture && annotation.placeType != kArrival && annotation.placeLocation != kUndefined) {
                 BOOL redraw = false;
                 if (annotation.placeLocation == kNearDeparture && _departureStation != annotation.placeStation) {
@@ -614,10 +612,9 @@
 
 - (void)displayStationsAnnotations {
     NSLog(@"display stations");
-    /*for (PlaceAnnotation *annotation in _stationsAnnotations) {
+    for (PlaceAnnotation *annotation in _stationsAnnotations) {
         [mapPanel addAnnotation:annotation];
-    }*/
-    [mapPanel setAnnotations:_stationsAnnotations];
+    }
 }
 
 - (void)createStationsAnnotationsAroundDeparture {
@@ -636,10 +633,9 @@
     NSLog(@"draw search stations");
     [self createStationsAnnotationsAroundDeparture];
     [self createStationsAnnotationsAroundArrival];
-    /*for (PlaceAnnotation *annotation in _searchAnnotations) {
+    for (PlaceAnnotation *annotation in _searchAnnotations) {
         [mapPanel addAnnotation:annotation];
-    }*/
-    [mapPanel setAnnotations:_searchAnnotations];
+    }
 }
 
 - (PlaceAnnotation *)createStationAnnotation:(Station *)aStation withLocation:(PlaceAnnotationLocation) aLocation {
@@ -814,7 +810,6 @@
     } else {
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"")  message:NSLocalizedString(@"incomplete_search_result", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
         [self centerMapOnUserLocation];
-        [mapPanel setAnnotations:_searchAnnotations];
     }
 }
 
@@ -923,30 +918,6 @@
         result = @"###";
     }
     return result;
-}
-
-# pragma mark -
-# pragma mark AD
-
-- (MKAnnotationView *)mapView:(ADClusterMapView *)mapView viewForClusterAnnotation:(id<MKAnnotation>)annotation {
-    MKAnnotationView *clusterView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"PlaceAnnotationCluster"];
-    if (!clusterView) {
-        clusterView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"PlaceAnnotationCluster"];
-        clusterView.image = [UIImage imageNamed:@"Images/MapPanel/MPCluster"];
-        clusterView.canShowCallout = YES;
-    }
-    else {
-        clusterView.annotation = annotation;
-    }
-    return clusterView;
-}
-
-- (void)mapViewDidFinishClustering:(ADClusterMapView *)mapView {
-    NSLog(@"Clustering done");
-}
-
-- (NSString *)clusterTitleForMapView:(ADClusterMapView *)mapView {
-    return @"%d stations";
 }
 
 @end

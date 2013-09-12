@@ -118,10 +118,10 @@
     return color;
 }
 
-#pragma Map
+#pragma mark Map
 
-+ (NSUInteger)zoomLevel:(MKMapView *)aMapView {
-    return (21 - round(log2(aMapView.region.span.longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * aMapView.bounds.size.width))));
++ (NSUInteger)zoomLevel:(MKMapView *)mapView {
+    return (21 - round(log2(mapView.region.span.longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * mapView.bounds.size.width))));
 }
 
 @end
