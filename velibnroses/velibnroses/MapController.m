@@ -44,6 +44,7 @@
     Station *_departureStation;
     Station *_arrivalStation;
     int _jcdRequestAttemptsNumber;
+    BOOL _isLocationServiceEnabled;
     
     TRAutocompleteView *_departureAutocompleteView;
     TRAutocompleteView *_arrivalAutocompleteView;
@@ -205,6 +206,17 @@
         MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(tls, SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
         [mapPanel setRegion:viewRegion animated:YES];
         NSLog(@"centered on Toulouse (%f,%f)", tls.latitude, tls.longitude);
+        
+        _isLocationServiceEnabled = true;
+        if (![CLLocationManager locationServicesEnabled]) {
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"") message:NSLocalizedString(@"no_location_activated", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+            _isLocationServiceEnabled = false;
+        } else if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) {
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"") message:NSLocalizedString(@"no_location_allowed", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+            _isLocationServiceEnabled = false;
+        }
+        self.departureLocation.enabled = _isLocationServiceEnabled;
+        self.arrivalLocation.enabled = _isLocationServiceEnabled;
     }
 }
 
@@ -213,8 +225,8 @@
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
     if ([self isEqualToLocationZero:startUserLocation]) {
         NSLog(@"receive user location update (%f,%f)", aUserLocation.location.coordinate.latitude, aUserLocation.location.coordinate.longitude);
-        startUserLocation = aUserLocation.location.coordinate;
-        if (![self isEqualToLocationZero:startUserLocation]) {
+        if (![self isEqualToLocationZero:aUserLocation.location.coordinate]) {
+            startUserLocation = aUserLocation.location.coordinate;
             [self centerMapOnUserLocation];
             
             _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:startUserLocation]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
