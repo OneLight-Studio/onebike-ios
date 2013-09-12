@@ -7,6 +7,7 @@
 //
 
 #import "UIUtils.h"
+#import "Constants.h"
 
 @implementation UIUtils
 
@@ -115,6 +116,12 @@
     [UIColor colorWithRed:((CGFloat) ((hexInt & 0xFF0000) >> 16)) / 255 green:((CGFloat) ((hexInt & 0xFF00) >> 8)) / 255 blue:((CGFloat) (hexInt & 0xFF)) / 255 alpha:1.0];
     
     return color;
+}
+
+#pragma Map
+
++ (NSUInteger)zoomLevel:(MKMapView *)aMapView {
+    return (21 - round(log2(aMapView.region.span.longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * aMapView.bounds.size.width))));
 }
 
 @end
