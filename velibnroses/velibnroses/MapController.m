@@ -357,14 +357,14 @@
     } else if (textField == self.arrivalField) {
         [_arrivalAutocompleteView hide];
     } else if (textField == self.bikeField) {
-        if ([textField.text isEqualToString:@""]) {
+        if ([textField.text isEqualToString:@""] || [textField.text integerValue] == 0) {
             self.bikeField.text = @"1";
         } else if (textField.text.length > 2) {
             self.bikeField.text = @"99";
         }
         self.standField.text = self.bikeField.text;
     } else if (textField == self.standField) {
-        if ([textField.text isEqualToString:@""]) {
+        if ([textField.text isEqualToString:@""] || [textField.text integerValue] == 0) {
             self.standField.text = @"1";
         } else if (textField.text.length > 2) {
             self.standField.text = @"99";
