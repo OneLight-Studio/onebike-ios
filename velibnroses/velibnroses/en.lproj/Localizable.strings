@@ -16,7 +16,8 @@
 "missing_departure" = "Please enter a departure address.";
 "missing_arrival" = "Please enter an arrival address.";
 "same_location" = "Departure and arrival adresses are too close.";
-"incomplete_search_result" = "No route matches your search.";
+"incomplete_search_result" = "No ride matches your search.";
+"no_more_available_ride" = "Stations data has changed.\nFor the moment, no more stations are available for your ride.";
 "no_location_activated" = "You have deactivated location service on this device.\nOneBike is going to run in fail soft mode.\nTo take advantage of all features, please activate it into Settings > Privacy > Location Services screen.";
 "no_location_allowed" = "You have not allowed access to location services.\nOneBike is going to run in fail soft mode.\nTo take advantage of all features, please allow it into Settings > Privacy > Location Services screen.";
 

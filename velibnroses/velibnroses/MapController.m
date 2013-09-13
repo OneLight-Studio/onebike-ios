@@ -177,7 +177,6 @@
                     [self eraseRoute];
                     [self searchCloseStationsAroundDeparture:_departureLocation withBikesNumber:[self.bikeField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                     [self searchCloseStationsAroundArrival:_arrivalLocation withAvailableStandsNumber:[self.standField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
-                    [self drawSearchAnnotations];
                     if (![self isTheSameStationBetween:selectedDeparture and:_departureStation]) {
                         // user has selected another station than new one defined
                         for (Station *temp in _departureCloseStations) {
@@ -198,7 +197,13 @@
                             }
                         }
                     }
-                    [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
+                    if ([_departureCloseStations count] > 0 && [_arrivalCloseStations count] > 0 && _departureStation != nil && _arrivalStation != nil) {
+                        [self drawSearchAnnotations];
+                        [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
+                    } else {
+                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"no_more_available_ride", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+                        [self centerMapOnUserLocation];
+                    }
                 });
             }
         });
@@ -715,7 +720,16 @@
             NSLog(@"find a route");
             
             NSString *encodedPolyline = [[[[json objectForKey:@"routes"] firstObject] objectForKey:@"overview_polyline"] valueForKey:@"points"];
-            _route = [RoutePolyline routePolylineFromPolyline:[GeoUtils polylineWithEncodedString:encodedPolyline]];
+            
+            CLLocationCoordinate2D dep;
+            dep.latitude = departure.latitude.doubleValue;
+            dep.longitude = departure.longitude.doubleValue;
+            
+            CLLocationCoordinate2D arr;
+            arr.latitude = arrival.latitude.doubleValue;
+            arr.longitude = arrival.longitude.doubleValue;
+            
+            _route = [RoutePolyline routePolylineFromPolyline:[GeoUtils polylineWithEncodedString:encodedPolyline betweenDeparture:dep andArrival:arr]];
             [mapPanel addOverlay:_route];
             [mapPanel setVisibleMapRect:[self mapRectWithAllAnnotations] animated:YES];
             

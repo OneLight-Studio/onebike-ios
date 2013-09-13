@@ -17,6 +17,7 @@
 "missing_arrival" = "Veuillez renseigner l'adresse d'arrivée.";
 "same_location" = "Les adresses de départ et d'arrivée sont trop proches.";
 "incomplete_search_result" = "Aucun itinéraire ne correspond à votre recherche.";
+"no_more_available_ride" = "Les disponibilités des stations ont changé.\nA l'heure actuelle, il n'y a plus de stations permettant votre itinéraire.";
 "no_location_activated" = "Vous avez désactivé le service de localisation sur cet appareil.\nOneBike va fonctionner en mode dégradé.\nPour bénéficier de l'ensemble des fonctionnalités, merci de l'activer dans l'écran Réglages > Confidentialité > Service de localisation.";
 "no_location_allowed" = "Vous n'avez pas autorisé l'accès au service de localisation.\nOneBike va fonctionner en mode dégradé.\nPour bénéficier de l'ensemble des fonctionnalités, merci de l'autoriser dans l'écran Réglages > Confidentialité > Service de localisation.";
 
