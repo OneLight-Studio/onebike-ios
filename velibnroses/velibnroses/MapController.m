@@ -44,7 +44,7 @@
     Station *_departureStation;
     Station *_arrivalStation;
     int _jcdRequestAttemptsNumber;
-    BOOL _isLocationServiceEnabled;
+    NSNumber *_isLocationServiceEnabled;
     
     TRAutocompleteView *_departureAutocompleteView;
     TRAutocompleteView *_arrivalAutocompleteView;
@@ -207,16 +207,16 @@
         [mapPanel setRegion:viewRegion animated:YES];
         NSLog(@"centered on Toulouse (%f,%f)", tls.latitude, tls.longitude);
         
-        _isLocationServiceEnabled = true;
+        _isLocationServiceEnabled = nil;
         if (![CLLocationManager locationServicesEnabled]) {
             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"") message:NSLocalizedString(@"no_location_activated", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
-            _isLocationServiceEnabled = false;
-        } else if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) {
+            _isLocationServiceEnabled = [NSNumber numberWithBool:NO];
+        } else if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusNotDetermined && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) {
             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"") message:NSLocalizedString(@"no_location_allowed", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
-            _isLocationServiceEnabled = false;
+            _isLocationServiceEnabled = [NSNumber numberWithBool:NO];
+        } else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+            _isLocationServiceEnabled = [NSNumber numberWithBool:YES];
         }
-        self.departureLocation.enabled = _isLocationServiceEnabled;
-        self.arrivalLocation.enabled = _isLocationServiceEnabled;
     }
 }
 
@@ -784,6 +784,14 @@
         searchFrame.origin.y = 0;
         self.searchPanel.frame = searchFrame;
     }];
+    if (_isLocationServiceEnabled != nil) {
+        self.departureLocation.enabled = [_isLocationServiceEnabled boolValue];
+        self.arrivalLocation.enabled = [_isLocationServiceEnabled boolValue];
+    } else {
+        BOOL allowed = [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized;
+        self.departureLocation.enabled = allowed;
+        self.arrivalLocation.enabled = allowed;
+    }
     [self enableSearchButton];
 }
 
