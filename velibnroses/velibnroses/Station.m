@@ -53,4 +53,28 @@
     return array;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    id copy = [[[self class] alloc] init];
+    
+    if (copy) {
+        
+        // Copy NSObject subclasses
+        [copy setName:[self.name copyWithZone:zone]];
+        [copy setAddress:[self.address copyWithZone:zone]];
+        [copy setContract:[self.contract copyWithZone:zone]];
+        [copy setLatitude:[self.latitude copyWithZone:zone]];
+        [copy setLongitude:[self.longitude copyWithZone:zone]];
+        [copy setBikeStands:[self.bikeStands copyWithZone:zone]];
+        [copy setAvailableBikeStands:[self.availableBikeStands copyWithZone:zone]];
+        [copy setAvailableBikes:[self.availableBikes copyWithZone:zone]];
+        
+        // Set primitives
+        [copy setBanking:self.banking];
+        [copy setStatus:self.status];
+    }
+    
+    return copy;
+}
+
 @end

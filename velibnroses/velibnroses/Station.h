@@ -13,7 +13,7 @@ typedef enum
     kOpen, kClosed
 } StationState;
 
-@interface Station : NSObject
+@interface Station : NSObject <NSCopying>
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *address;

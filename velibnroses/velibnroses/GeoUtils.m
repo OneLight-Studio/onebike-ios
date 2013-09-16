@@ -27,7 +27,7 @@
 }
 
 // see http://stackoverflow.com/questions/9217274/how-to-decode-the-google-directions-api-polylines-field-into-lat-long-points-in
-+ (MKPolyline *)polylineWithEncodedString:(NSString *)encodedString {
++ (MKPolyline *)polylineWithEncodedString:(NSString *)encodedString betweenDeparture:(CLLocationCoordinate2D)departure andArrival:(CLLocationCoordinate2D)arrival {
     const char *bytes = [encodedString UTF8String];
     NSUInteger length = [encodedString lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
     NSUInteger idx = 0;
@@ -38,6 +38,7 @@
     
     float latitude = 0;
     float longitude = 0;
+    coords[coordIdx++] = departure;
     while (idx < length) {
         char byte = 0;
         int res = 0;
@@ -76,6 +77,11 @@
             count = newCount;
         }
     }
+    if (coordIdx == count) {
+        NSUInteger newCount = count + 1;
+        coords = realloc(coords, newCount * sizeof(CLLocationCoordinate2D));
+    }
+    coords[coordIdx++] = arrival;
     
     MKPolyline *polyline = [MKPolyline polylineWithCoordinates:coords count:coordIdx];
     free(coords);
