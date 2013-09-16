@@ -22,4 +22,5 @@
 "no_location_activated" = "Vous avez désactivé le service de localisation sur cet appareil.\nOneBike va fonctionner en mode dégradé.\nPour bénéficier de l'ensemble des fonctionnalités, merci de l'activer dans l'écran Réglages > Confidentialité > Service de localisation.";
 "no_location_allowed" = "Vous n'avez pas autorisé l'accès au service de localisation.\nOneBike va fonctionner en mode dégradé.\nPour bénéficier de l'ensemble des fonctionnalités, merci de l'autoriser dans l'écran Réglages > Confidentialité > Service de localisation.";
 
-"jcd_ws_get_data_error" = "Les informations sur les stations de vélos ne sont pas accessibles pour le moment.";
+"jcd_ws_get_data_error" = "Une erreur s'est produite lors de la récupération des données des stations de vélos.";
+"google_ws_search_ride_error" = "Une erreur s'est produite lors de la recherche de votre itinéraire.";

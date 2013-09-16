@@ -284,10 +284,10 @@
 		E931955917858121009AFCC1 = {
 			isa = PBXGroup;
 			children = (
+				E931956B17858121009AFCC1 /* Application */,
 				E931956417858121009AFCC1 /* Frameworks */,
 				E931956317858121009AFCC1 /* Products */,
 				19C9C67917CE674B00805611 /* Scripts */,
-				E931956B17858121009AFCC1 /* Application */,
 			);
 			sourceTree = "<group>";
 		};

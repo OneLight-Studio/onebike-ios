@@ -26,8 +26,8 @@
 @end
 
 @implementation MapController {
-    CLLocationCoordinate2D startUserLocation;
-    WSRequest *_wsRequest;
+    CLLocationCoordinate2D _startUserLocation;
+    WSRequest *_jcdRequest;
     NSMutableArray *_stations;
     NSMutableArray *_departureCloseStations;
     NSMutableArray *_arrivalCloseStations;
@@ -45,7 +45,7 @@
     Station *_arrivalStation;
     int _jcdRequestAttemptsNumber;
     NSNumber *_isLocationServiceEnabled;
-    UIAlertView *rideUIAlert;
+    UIAlertView *_rideUIAlert;
     
     TRAutocompleteView *_departureAutocompleteView;
     TRAutocompleteView *_arrivalAutocompleteView;
@@ -80,8 +80,8 @@
 
 - (void)resetUserLocation
 {
-    startUserLocation.latitude = 0;
-    startUserLocation.longitude = 0;
+    _startUserLocation.latitude = 0;
+    _startUserLocation.longitude = 0;
 }
 
 - (void)initView
@@ -125,7 +125,7 @@
     _stationsAnnotations = [[NSMutableArray alloc] init];
     _searchAnnotations = [[NSMutableArray alloc] init];
     
-    rideUIAlert = nil;
+    _rideUIAlert = nil;
 }
 
 - (void) startTimer {
@@ -156,9 +156,9 @@
     
     _jcdRequestAttemptsNumber = 0;
     NSLog(@"init jcd ws");
-    _wsRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:TRUE];
-    [_wsRequest appendParameterWithKey:JCD_API_KEY_PARAM_NAME andValue:KEY_JCD];
-    [_wsRequest handleResultWith:^(id json) {
+    _jcdRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:TRUE];
+    [_jcdRequest appendParameterWithKey:JCD_API_KEY_PARAM_NAME andValue:KEY_JCD];
+    [_jcdRequest handleResultWith:^(id json) {
         NSLog(@"jcd ws result");
         _jcdRequestAttemptsNumber = 0;
         _stations = (NSMutableArray *)[Station fromJSONArray:json];
@@ -207,19 +207,19 @@
                             }
                         }
                     }
-                    if (rideUIAlert != nil) {
-                        [rideUIAlert dismissWithClickedButtonIndex:0 animated:YES];
+                    if (_rideUIAlert != nil) {
+                        [_rideUIAlert dismissWithClickedButtonIndex:0 animated:YES];
                     }
                     if ([_departureCloseStations count] > 0 && [_arrivalCloseStations count] > 0 && _departureStation != nil && _arrivalStation != nil) {
                         [self drawSearchAnnotations];
                         [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
                         if (!isSameDeparture || !isSameArrival) {
-                            rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"ride_has_changed", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil];
-                            [rideUIAlert show];
+                            _rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"ride_has_changed", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                            [_rideUIAlert show];
                         }
                     } else {
-                        rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"no_more_available_ride", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil];
-                        [rideUIAlert show];
+                        _rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"no_more_available_ride", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [_rideUIAlert show];
                         [self centerMapOnUserLocation];
                     }
                 });
@@ -227,20 +227,27 @@
         });
         [self startTimer];
     }];
-    [_wsRequest handleExceptionWith:^(NSError *exception) {
+    [_jcdRequest handleExceptionWith:^(NSError *exception) {
         if (exception.code == JCD_TIMED_OUT_REQUEST_EXCEPTION_CODE) {
             NSLog(@"jcd ws exception : expired request");
             if (_jcdRequestAttemptsNumber < 2) {
-                [_wsRequest call];
+                [_jcdRequest call];
                 _jcdRequestAttemptsNumber++;
             } else {
-                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
             }
+        } else {
+            NSLog(@"JCD ws exception %@", exception.debugDescription);
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         }
+    }];
+    [_jcdRequest handleErrorWith:^(int errorCode) {
+        NSLog(@"JCD ws error %d", errorCode);
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
     
     NSLog(@"call ws");
-    [_wsRequest call];
+    [_jcdRequest call];
 }
 
 - (void)viewDidUnload
@@ -278,13 +285,13 @@
 # pragma mark Delegate
 
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
-    if ([self isEqualToLocationZero:startUserLocation]) {
+    if ([self isEqualToLocationZero:_startUserLocation]) {
         NSLog(@"receive user location update (%f,%f)", aUserLocation.location.coordinate.latitude, aUserLocation.location.coordinate.longitude);
         if (![self isEqualToLocationZero:aUserLocation.location.coordinate]) {
-            startUserLocation = aUserLocation.location.coordinate;
+            _startUserLocation = aUserLocation.location.coordinate;
             [self centerMapOnUserLocation];
             
-            _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:startUserLocation]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _departureAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:departureField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:_startUserLocation]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
             _departureAutocompleteView.topMargin = -65;
             _departureAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
             _departureAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
@@ -292,7 +299,7 @@
                 NSLog(@"Departure autocompleted with: %@", item.completionText);
             };
             
-            _arrivalAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:arrivalField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:startUserLocation]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
+            _arrivalAutocompleteView = [TRAutocompleteView autocompleteViewBindedTo:arrivalField usingSource:[[TRGoogleMapsAutocompleteItemsSource alloc] initWithMinimumCharactersToTrigger:3 withApiKey:KEY_GOOGLE_PLACES andUserLocation:_startUserLocation]cellFactory:[[TRGoogleMapsAutocompletionCellFactory alloc] initWithCellForegroundColor:[UIColor lightGrayColor] fontSize:14] presentingIn:self];
             _arrivalAutocompleteView.topMargin = -65;
             _arrivalAutocompleteView.backgroundColor = [UIUtils colorWithHexaString:@"#FFFFFF"];
             _arrivalAutocompleteView.didAutocompleteWith = ^(id<TRSuggestionItem> item)
@@ -441,7 +448,7 @@
 {
     NSLog(@"timer fired %@", [theTimer fireDate]);
     NSLog(@"call ws");
-    [_wsRequest call];
+    [_jcdRequest call];
 }
 
 - (void)didTapMap:(UITapGestureRecognizer *)sender
@@ -612,7 +619,7 @@
         if (sleepingTime > TIME_BEFORE_REFRESH_DATA_IN_SECONDS) {
             NSLog(@"have to refresh stations data");
             NSLog(@"call ws");
-            [_wsRequest call];
+            [_jcdRequest call];
         }
         [self resetUserLocation];
     }
@@ -639,9 +646,9 @@
 # pragma mark Map panel
 
 - (void)centerMapOnUserLocation {
-    MKCoordinateRegion currentRegion = MKCoordinateRegionMakeWithDistance(startUserLocation, SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
+    MKCoordinateRegion currentRegion = MKCoordinateRegionMakeWithDistance(_startUserLocation, SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
     [mapPanel setRegion:currentRegion animated:YES];
-    NSLog(@"centered on user location (%f,%f)", startUserLocation.latitude, startUserLocation.longitude);
+    NSLog(@"centered on user location (%f,%f)", _startUserLocation.latitude, _startUserLocation.longitude);
 }
 
 - (void)createStationsAnnotations {
@@ -761,11 +768,11 @@
     }];
     [googleRequest handleErrorWith:^(int errorCode) {
         NSLog(@"HTTP error %d", errorCode);
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"")  message:@"HTTP error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"google_ws_search_ride_error", @"")  message:NSLocalizedString(@"OK", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
     [googleRequest handleExceptionWith:^(NSError *exception) {
         NSLog(@"Exception %@", exception.debugDescription);
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"")  message:@"Exception" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"google_ws_search_ride_error", @"")  message:NSLocalizedString(@"OK", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
     [googleRequest call];
 }
