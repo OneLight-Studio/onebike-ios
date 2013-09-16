@@ -45,6 +45,7 @@
     Station *_arrivalStation;
     int _jcdRequestAttemptsNumber;
     NSNumber *_isLocationServiceEnabled;
+    UIAlertView *rideUIAlert;
     
     TRAutocompleteView *_departureAutocompleteView;
     TRAutocompleteView *_arrivalAutocompleteView;
@@ -123,6 +124,8 @@
     _arrivalCloseStations = [[NSMutableArray alloc] init];
     _stationsAnnotations = [[NSMutableArray alloc] init];
     _searchAnnotations = [[NSMutableArray alloc] init];
+    
+    rideUIAlert = nil;
 }
 
 - (void) startTimer {
@@ -172,36 +175,50 @@
                 dispatch_async(parent, ^(void) {
                     Station *selectedDeparture = _departureStation.copy;
                     Station *selectedArrival = _arrivalStation.copy;
+                    BOOL isSameDeparture = true;
+                    BOOL isSameArrival = true;
                     
                     [self eraseSearchAnnotations];
                     [self eraseRoute];
                     [self searchCloseStationsAroundDeparture:_departureLocation withBikesNumber:[self.bikeField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                     [self searchCloseStationsAroundArrival:_arrivalLocation withAvailableStandsNumber:[self.standField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                     if (![self isTheSameStationBetween:selectedDeparture and:_departureStation]) {
+                        isSameDeparture = false;
                         // user has selected another station than new one defined
                         for (Station *temp in _departureCloseStations) {
                             if ([self isTheSameStationBetween:selectedDeparture and:temp]) {
                                 NSLog(@"set departure station to user initial choice");
                                 _departureStation = temp;
+                                isSameDeparture = true;
                                 break;
                             }
                         }
                     }
                     if (![self isTheSameStationBetween:selectedArrival and:_arrivalStation]) {
+                        isSameArrival = false;
                         // user has selected another station than new one defined
                         for (Station *temp in _arrivalCloseStations) {
                             if ([self isTheSameStationBetween:selectedArrival and:temp]) {
                                 NSLog(@"set arrival station to user initial choice");
                                 _arrivalStation = temp;
+                               isSameArrival = true;
                                 break;
                             }
                         }
                     }
+                    if (rideUIAlert != nil) {
+                        [rideUIAlert dismissWithClickedButtonIndex:0 animated:YES];
+                    }
                     if ([_departureCloseStations count] > 0 && [_arrivalCloseStations count] > 0 && _departureStation != nil && _arrivalStation != nil) {
                         [self drawSearchAnnotations];
                         [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
+                        if (!isSameDeparture || !isSameArrival) {
+                            rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"ride_has_changed", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil];
+                            [rideUIAlert show];
+                        }
                     } else {
-                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"no_more_available_ride", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+                        rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"no_more_available_ride", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil];
+                        [rideUIAlert show];
                         [self centerMapOnUserLocation];
                     }
                 });
