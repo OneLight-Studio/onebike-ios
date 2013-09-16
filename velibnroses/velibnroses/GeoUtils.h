@@ -11,6 +11,6 @@
 @interface GeoUtils : NSObject
 
 + (double)getDistanceFromLat:(double)srcLatitude toLat:(double)destLatitude fromLong:(double)srcLongitude toLong:(double)destLongitude;
-+ (MKPolyline *)polylineWithEncodedString:(NSString *)encodedString;
++ (MKPolyline *)polylineWithEncodedString:(NSString *)encodedString betweenDeparture:(CLLocationCoordinate2D)departure andArrival:(CLLocationCoordinate2D)arrival;
 
 @end

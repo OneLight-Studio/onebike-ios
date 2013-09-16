@@ -77,21 +77,10 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7ZO-mt-kun">
-                                        <rect key="frame" x="9" y="103" width="306" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="4"/>
-                                        <state key="normal" title="Let's go !">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="searchButtonClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="6Cp-Rb-CaP"/>
-                                        </connections>
-                                    </button>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" style="whiteLarge" id="c49-wK-1go">
+                                        <rect key="frame" x="207" y="12" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vrN-9E-YNC">
                                         <rect key="frame" x="204" y="8" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -100,6 +89,7 @@
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <state key="disabled" image="Images/SearchPanel/SPMyLocation_Disabled.png"/>
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -137,6 +127,10 @@
                                             <action selector="cancelBarButtonClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="xO9-zJ-b0M"/>
                                         </connections>
                                     </button>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" style="whiteLarge" id="yCm-RZ-A0k">
+                                        <rect key="frame" x="207" y="59" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FUH-DR-DvO">
                                         <rect key="frame" x="204" y="55" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -145,6 +139,7 @@
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <state key="disabled" image="Images/SearchPanel/SPMyLocation_Disabled.png"/>
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -192,6 +187,25 @@
                                             <outlet property="delegate" destination="R2K-lh-zEE" id="cov-ak-Gl6"/>
                                         </connections>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7ZO-mt-kun">
+                                        <rect key="frame" x="9" y="103" width="306" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="4"/>
+                                        <state key="normal" title="Let's go !">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="searchButtonClicked:" destination="R2K-lh-zEE" eventType="touchUpInside" id="6Cp-Rb-CaP"/>
+                                        </connections>
+                                    </button>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" style="whiteLarge" id="SEV-HS-aUN">
+                                        <rect key="frame" x="144" y="108" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.75" colorSpace="calibratedWhite"/>
                             </view>
@@ -212,14 +226,19 @@
                     </navigationItem>
                     <connections>
                         <outlet property="arrivalField" destination="Wdw-ii-7F2" id="Edo-YR-Rhn"/>
+                        <outlet property="arrivalLocation" destination="FUH-DR-DvO" id="P3M-Ch-Wv7"/>
+                        <outlet property="arrivalSpinner" destination="yCm-RZ-A0k" id="jYy-Nk-fKv"/>
                         <outlet property="bikeField" destination="R5K-Zh-q0x" id="FoO-r3-tHr"/>
                         <outlet property="closeSearchPanelButton" destination="CKQ-mF-mOJ" id="3Zz-Vr-K8L"/>
                         <outlet property="departureField" destination="iYR-bn-zkd" id="AZx-VX-AIw"/>
+                        <outlet property="departureLocation" destination="vrN-9E-YNC" id="yzO-wr-T0V"/>
+                        <outlet property="departureSpinner" destination="c49-wK-1go" id="3t7-8h-sPk"/>
                         <outlet property="infoBarButton" destination="lbv-EE-UWT" id="yOY-yq-68u"/>
                         <outlet property="mapPanel" destination="QIt-AM-94y" id="KGF-Hb-vky"/>
                         <outlet property="searchBarButton" destination="Dwx-k2-M2a" id="MgW-nf-Ofl"/>
                         <outlet property="searchButton" destination="7ZO-mt-kun" id="4av-zB-rIX"/>
                         <outlet property="searchPanel" destination="5b7-xd-UEt" id="FVl-iF-TCs"/>
+                        <outlet property="searchSpinner" destination="SEV-HS-aUN" id="dlE-xX-XvQ"/>
                         <outlet property="standField" destination="Vmt-5T-0GU" id="XVw-BL-rPm"/>
                     </connections>
                 </viewController>
@@ -265,9 +284,13 @@
         <image name="Images/SearchPanel/SPBike.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPCloseSearch.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPMyLocation.png" width="16" height="16"/>
+        <image name="Images/SearchPanel/SPMyLocation_Disabled.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPStand.png" width="16" height="16"/>
     </resources>
     <classes>
+        <class className="ADClusterMapView" superclassName="MKMapView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ADClusterMapView.h"/>
+        </class>
         <class className="InfoController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/InfoController.h"/>
             <relationships>
@@ -288,15 +311,20 @@
                 <relationship kind="action" name="userLocationAsArrivalClicked:"/>
                 <relationship kind="action" name="userLocationAsDepartureClicked:"/>
                 <relationship kind="outlet" name="arrivalField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="arrivalLocation" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="arrivalSpinner" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="bikeField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="cancelBarButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="closeSearchPanelButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="departureLocation" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="departureSpinner" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="infoBarButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="mapPanel" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="mapPanel" candidateClass="ADClusterMapView"/>
                 <relationship kind="outlet" name="searchBarButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="searchButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="searchPanel" candidateClass="UIView"/>
+                <relationship kind="outlet" name="searchSpinner" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="standField" candidateClass="UITextField"/>
             </relationships>
         </class>
