@@ -22,5 +22,5 @@
 "no_location_activated" = "You have deactivated location service on this device.\nOneBike is going to run in fail soft mode.\nTo take advantage of all features, please activate it into Settings > Privacy > Location Services screen.";
 "no_location_allowed" = "You have not allowed access to location services.\nOneBike is going to run in fail soft mode.\nTo take advantage of all features, please allow it into Settings > Privacy > Location Services screen.";
 
-"jcd_ws_get_data_error" = "An error occured during bikes stations data getting.";
-"google_ws_search_ride_error" = "An error occured during ride search.";
+"jcd_ws_get_data_error" = "An error has occurred during bikes stations data getting.";
+"google_ws_search_ride_error" = "An error has occurred during ride search.";
