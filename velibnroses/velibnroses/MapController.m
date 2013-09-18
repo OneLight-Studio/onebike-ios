@@ -30,12 +30,13 @@
     CLLocationCoordinate2D _startUserLocation;
     WSRequest *_jcdRequest;
     NSMutableArray *_allStations;
-    NSMutableArray *_allStationsAnnotations;
+    NSMutableArray *_noClusterizedStations;
     
     NSMutableArray *_clustersAnnotationsToAdd;
     NSMutableArray *_clustersAnnotationsToRetain;
     NSMutableArray *_clustersAnnotationsToRemove;
     NSMutableArray *_stationsAnnotationsToAdd;
+    NSMutableArray *_stationsAnnotationsToRetain;
     NSMutableArray *_stationsAnnotationsToRemove;
     
     NSMutableArray *_departureCloseStations;
@@ -60,6 +61,9 @@
     int _currentZoomLevel;
     BOOL _isZoomIn;
     BOOL _isZoomOut;
+    
+    dispatch_queue_t uiQueue;
+    dispatch_queue_t oneBikeQueue;
 }
 
 @synthesize mapPanel;
@@ -132,12 +136,13 @@
                          resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
     [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
     
-    _allStationsAnnotations = [[NSMutableArray alloc] init];
+    //_allStationsAnnotations = [[NSMutableArray alloc] init];
     
     _clustersAnnotationsToAdd = [[NSMutableArray alloc] init];
     _clustersAnnotationsToRetain = [[NSMutableArray alloc] init];
     _clustersAnnotationsToRemove = [[NSMutableArray alloc] init];
     _stationsAnnotationsToAdd = [[NSMutableArray alloc] init];
+    _stationsAnnotationsToRetain = [[NSMutableArray alloc] init];
     _stationsAnnotationsToRemove = [[NSMutableArray alloc] init];
     
     _departureCloseStations = [[NSMutableArray alloc] init];
@@ -147,6 +152,9 @@
     _rideUIAlert = nil;
     _isZoomIn = false;
     _isZoomOut = false;
+    
+    uiQueue = dispatch_get_main_queue();
+    oneBikeQueue = dispatch_queue_create("com.onelightstudio.onebike", NULL);
 }
 
 - (void) startTimer {
@@ -184,50 +192,67 @@
         _jcdRequestAttemptsNumber = 0;
         _allStations = (NSMutableArray *)[Station fromJSONArray:json];
         NSLog(@"stations count %i", _allStations.count);
-        dispatch_queue_t parent = dispatch_get_main_queue();
-        dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
-        dispatch_async(child, ^(void) {
-            [self createAllStationsAnnotations];
-            if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
-                dispatch_async(parent, ^(void) {
-                    [self drawStationsAnnotations];
+        //[self drawStationsAnnotationsWithReset:true];
+        
+        NSLog(@"draw stations");
+        //dispatch_queue_t parent = dispatch_get_main_queue();
+        //dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+        if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
+            dispatch_async(oneBikeQueue, ^(void) {
+                [self filterStationsAnnotationsWithReset:true];
+                dispatch_async(uiQueue, ^(void) {
+                    [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
+                    [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
+                    [mapPanel addAnnotations:_clustersAnnotationsToAdd];
+                    [mapPanel addAnnotations:_stationsAnnotationsToAdd];
+                    [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
+                    [_stationsAnnotationsToAdd removeAllObjects];
+                    [_clustersAnnotationsToRemove removeAllObjects];
+                    [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
+                    [_clustersAnnotationsToAdd removeAllObjects];
+                    if (!_isStationsDisplayedAtLeastOnce) {
+                        _isStationsDisplayedAtLeastOnce = true;
+                    }
                 });
-            } else {
-                dispatch_async(parent, ^(void) {
-                    Station *selectedDeparture = _departureStation.copy;
-                    Station *selectedArrival = _arrivalStation.copy;
-                    BOOL isSameDeparture = true;
-                    BOOL isSameArrival = true;
-                    
-                    [self eraseSearchAnnotations];
-                    [self eraseRoute];
-                    double radius = [self getDistanceBetweenDeparture:_departureLocation andArrival:_arrivalLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
-                    [self searchCloseStationsAroundDeparture:_departureLocation withBikesNumber:[self.bikeField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
-                    [self searchCloseStationsAroundArrival:_arrivalLocation withAvailableStandsNumber:[self.standField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
-                    if (![self isTheSameStationBetween:selectedDeparture and:_departureStation]) {
-                        isSameDeparture = false;
-                        // user has selected another station than new one defined
-                        for (Station *temp in _departureCloseStations) {
-                            if ([self isTheSameStationBetween:selectedDeparture and:temp]) {
-                                NSLog(@"set departure station to user initial choice");
-                                _departureStation = temp;
-                                isSameDeparture = true;
-                                break;
-                            }
+            });
+        } else {
+            dispatch_async(uiQueue, ^(void) {
+                [self eraseSearchAnnotations];
+                [self eraseRoute];
+            });
+            dispatch_async(oneBikeQueue, ^(void) {
+                Station *selectedDeparture = _departureStation.copy;
+                Station *selectedArrival = _arrivalStation.copy;
+                BOOL isSameDeparture = true;
+                BOOL isSameArrival = true;
+                double radius = [self getDistanceBetweenDeparture:_departureLocation andArrival:_arrivalLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
+                [self searchCloseStationsAroundDeparture:_departureLocation withBikesNumber:[self.bikeField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
+                [self searchCloseStationsAroundArrival:_arrivalLocation withAvailableStandsNumber:[self.standField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
+                if (![self isTheSameStationBetween:selectedDeparture and:_departureStation]) {
+                    isSameDeparture = false;
+                    // user has selected another station than new one defined
+                    for (Station *temp in _departureCloseStations) {
+                        if ([self isTheSameStationBetween:selectedDeparture and:temp]) {
+                            NSLog(@"set departure station to user initial choice");
+                            _departureStation = temp;
+                            isSameDeparture = true;
+                            break;
                         }
                     }
-                    if (![self isTheSameStationBetween:selectedArrival and:_arrivalStation]) {
-                        isSameArrival = false;
-                        // user has selected another station than new one defined
-                        for (Station *temp in _arrivalCloseStations) {
-                            if ([self isTheSameStationBetween:selectedArrival and:temp]) {
-                                NSLog(@"set arrival station to user initial choice");
-                                _arrivalStation = temp;
-                               isSameArrival = true;
-                                break;
-                            }
+                }
+                if (![self isTheSameStationBetween:selectedArrival and:_arrivalStation]) {
+                    isSameArrival = false;
+                    // user has selected another station than new one defined
+                    for (Station *temp in _arrivalCloseStations) {
+                        if ([self isTheSameStationBetween:selectedArrival and:temp]) {
+                            NSLog(@"set arrival station to user initial choice");
+                            _arrivalStation = temp;
+                            isSameArrival = true;
+                            break;
                         }
                     }
+                }
+                dispatch_async(uiQueue, ^(void) {
                     if (_rideUIAlert != nil) {
                         [_rideUIAlert dismissWithClickedButtonIndex:0 animated:YES];
                     }
@@ -244,8 +269,65 @@
                         [self centerMapOnUserLocation];
                     }
                 });
-            }
-        });
+            });
+                           
+            /*dispatch_async(child, ^(void) {
+                //[self createAllStationsAnnotations];
+                if (_mapViewState == MAP_VIEW_SEARCH_STATE) {
+                    dispatch_async(parent, ^(void) {
+                        Station *selectedDeparture = _departureStation.copy;
+                        Station *selectedArrival = _arrivalStation.copy;
+                        BOOL isSameDeparture = true;
+                        BOOL isSameArrival = true;
+                        
+                        [self eraseSearchAnnotations];
+                        [self eraseRoute];
+                        double radius = [self getDistanceBetweenDeparture:_departureLocation andArrival:_arrivalLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
+                        [self searchCloseStationsAroundDeparture:_departureLocation withBikesNumber:[self.bikeField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
+                        [self searchCloseStationsAroundArrival:_arrivalLocation withAvailableStandsNumber:[self.standField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
+                        if (![self isTheSameStationBetween:selectedDeparture and:_departureStation]) {
+                            isSameDeparture = false;
+                            // user has selected another station than new one defined
+                            for (Station *temp in _departureCloseStations) {
+                                if ([self isTheSameStationBetween:selectedDeparture and:temp]) {
+                                    NSLog(@"set departure station to user initial choice");
+                                    _departureStation = temp;
+                                    isSameDeparture = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (![self isTheSameStationBetween:selectedArrival and:_arrivalStation]) {
+                            isSameArrival = false;
+                            // user has selected another station than new one defined
+                            for (Station *temp in _arrivalCloseStations) {
+                                if ([self isTheSameStationBetween:selectedArrival and:temp]) {
+                                    NSLog(@"set arrival station to user initial choice");
+                                    _arrivalStation = temp;
+                                    isSameArrival = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (_rideUIAlert != nil) {
+                            [_rideUIAlert dismissWithClickedButtonIndex:0 animated:YES];
+                        }
+                        if ([_departureCloseStations count] > 0 && [_arrivalCloseStations count] > 0 && _departureStation != nil && _arrivalStation != nil) {
+                            [self drawSearchAnnotations];
+                            [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
+                            if (!isSameDeparture || !isSameArrival) {
+                                _rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"ride_has_changed", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                [_rideUIAlert show];
+                            }
+                        } else {
+                            _rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"no_more_available_ride", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                            [_rideUIAlert show];
+                            [self centerMapOnUserLocation];
+                        }
+                    });
+                }
+            });*/
+        }
         [self startTimer];
     }];
     [_jcdRequest handleExceptionWith:^(NSError *exception) {
@@ -448,23 +530,42 @@
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    NSUInteger level = [UIUtils zoomLevel:mapPanel];
-    if (level < _currentZoomLevel) {
-        _currentZoomLevel = level;
-        _isZoomIn = true;
-        _isZoomOut = false;
-        NSLog(@"zoom in");
-    } else if (_currentZoomLevel < level) {
-        _currentZoomLevel = level;
-        _isZoomIn = false;
-        _isZoomOut = true;
-        NSLog(@"zoom out");
-    } else {
-        _isZoomIn = false;
-        _isZoomOut = false;
-    }
-    if (_isMapLoaded && _mapViewState == MAP_VIEW_DEFAULT_STATE && _allStationsAnnotations.count > 0 && _isStationsDisplayedAtLeastOnce) {
-        [self drawStationsAnnotations];
+    if (_isMapLoaded && _mapViewState == MAP_VIEW_DEFAULT_STATE && _isStationsDisplayedAtLeastOnce) {
+        NSUInteger level = [UIUtils zoomLevel:mapPanel];
+        if (level < _currentZoomLevel) {
+            _currentZoomLevel = level;
+            _isZoomIn = false;
+            _isZoomOut = true;
+            NSLog(@"zoom out");
+        } else if (_currentZoomLevel < level) {
+            _currentZoomLevel = level;
+            _isZoomIn = true;
+            _isZoomOut = false;
+            NSLog(@"zoom in");
+        } else {
+            _isZoomIn = false;
+            _isZoomOut = false;
+        }
+        //[self drawStationsAnnotationsWithReset:false];
+        //dispatch_queue_t parent = dispatch_get_main_queue();
+        //dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+        dispatch_async(oneBikeQueue, ^(void) {
+            [self filterStationsAnnotationsWithReset:false];
+            dispatch_async(uiQueue, ^(void) {
+                [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
+                [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
+                [mapPanel addAnnotations:_clustersAnnotationsToAdd];
+                [mapPanel addAnnotations:_stationsAnnotationsToAdd];
+                [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
+                [_stationsAnnotationsToAdd removeAllObjects];
+                [_clustersAnnotationsToRemove removeAllObjects];
+                [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
+                [_clustersAnnotationsToAdd removeAllObjects];
+                if (!_isStationsDisplayedAtLeastOnce) {
+                    _isStationsDisplayedAtLeastOnce = true;
+                }
+            });
+        });
     }
 }
 
@@ -534,13 +635,30 @@
         [self eraseRoute];
         [self centerMapOnUserLocation];
         [self eraseSearchAnnotations];
-        dispatch_queue_t parent = dispatch_get_main_queue();
-        dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
-        dispatch_async(child, ^(void) {
+        //dispatch_queue_t parent = dispatch_get_main_queue();
+        //dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+        /*dispatch_async(child, ^(void) {
             // necessary time to trigger effective zoom
             [NSThread sleepForTimeInterval:1.0f];
             dispatch_async(parent, ^(void) {
-                [self drawStationsAnnotations];
+                [self drawStationsAnnotationsWithReset:true];
+            });
+        });*/
+        dispatch_async(oneBikeQueue, ^(void) {
+            [self filterStationsAnnotationsWithReset:true];
+            dispatch_async(uiQueue, ^(void) {
+                [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
+                [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
+                [mapPanel addAnnotations:_clustersAnnotationsToAdd];
+                [mapPanel addAnnotations:_stationsAnnotationsToAdd];
+                [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
+                [_stationsAnnotationsToAdd removeAllObjects];
+                [_clustersAnnotationsToRemove removeAllObjects];
+                [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
+                [_clustersAnnotationsToAdd removeAllObjects];
+                if (!_isStationsDisplayedAtLeastOnce) {
+                    _isStationsDisplayedAtLeastOnce = true;
+                }
             });
         });
     }
@@ -708,91 +826,168 @@
     NSLog(@"centered on user location (%f,%f)", _startUserLocation.latitude, _startUserLocation.longitude);
 }
 
-- (void)filterStationsAnnotationsWithReset {
-    if (!_isStationsDisplayedAtLeastOnce) {
-        _stationsAnnotationsToAdd = [[NSMutableArray alloc] initWithArray:_allStationsAnnotations];
+- (void)filterStationsAnnotationsWithReset:(BOOL)reset {
+    if (!_isStationsDisplayedAtLeastOnce || reset) {
         [_clustersAnnotationsToRetain removeAllObjects];
         [_clustersAnnotationsToRemove removeAllObjects];
-        NSLog(@"load %d stations annotations", _stationsAnnotationsToAdd.count);
+        [_stationsAnnotationsToRetain removeAllObjects];
+        [_stationsAnnotationsToRemove removeAllObjects];
+       _noClusterizedStations = [[NSMutableArray alloc] initWithArray:_allStations];
+        
     }
+    NSLog(@"no clusterized stations : %d", _noClusterizedStations.count);
     [self generateClustersAnnotationsWithZoomChanged:(_isZoomIn || _isZoomOut)];
 }
 
-- (void)generateClustersAnnotationsWithZoomChanged:(BOOL)zoomChanged {
+- (void)generateClustersAnnotationsWithZoomChanged:(BOOL)hasZoomChanged {
     NSLog(@"generate clusters annotations, zoom level : %d", _currentZoomLevel);
-    NSMutableArray *visiblePlacesAnnotations = [[NSMutableArray alloc] init];
-    NSMutableArray *visibleClustersAnnotations = [[NSMutableArray alloc] init];
-    NSSet *visibleAnnotations = [mapPanel annotationsInMapRect:mapPanel.visibleMapRect];
-    NSLog(@"visible annotations : %d", visibleAnnotations.count);
-    for (MKPointAnnotation *anAnnotation in visibleAnnotations) {
-        if ([anAnnotation isKindOfClass:[PlaceAnnotation class]]) {
-            [visiblePlacesAnnotations addObject:anAnnotation];
-        } else if ([anAnnotation isKindOfClass:[ClusterAnnotation class]]) {
-            [visibleClustersAnnotations addObject:anAnnotation];
+    
+    NSMutableArray *visibleStations = nil;
+    NSMutableArray *drawableStations = nil;
+    if (hasZoomChanged) {
+        if (_isZoomIn) {
+            NSLog(@"isZoomIn");
+            _noClusterizedStations = [[NSMutableArray alloc] initWithArray:_allStations];
+            visibleStations = [self filterVisibleStationsFrom:_noClusterizedStations];
+            drawableStations = [[NSMutableArray alloc] initWithArray:visibleStations];
+        } else if (_isZoomOut) {
+            NSLog(@"isZoomOut");
+            visibleStations = [self filterVisibleStationsFrom:_noClusterizedStations];
+            drawableStations = [[NSMutableArray alloc] initWithArray:visibleStations];
         }
-    }
-    if (zoomChanged) {
         [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToRetain];
-        for (ClusterAnnotation *cluster in visibleClustersAnnotations) {
-            [visiblePlacesAnnotations addObjectsFromArray:cluster.children];
-        }
-        for (ClusterAnnotation *cluster in _clustersAnnotationsToRemove) {
-            [_stationsAnnotationsToAdd addObjectsFromArray:cluster.children];
-        }
         [_clustersAnnotationsToRetain removeAllObjects];
+        [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToRetain];
+        [_stationsAnnotationsToRetain removeAllObjects];
     } else {
+        NSLog(@"noHasZoomChanged");
+        visibleStations = [self filterVisibleStationsFrom:_noClusterizedStations];
+        drawableStations = [[NSMutableArray alloc] initWithArray:visibleStations];
         [_clustersAnnotationsToRetain addObjectsFromArray:_clustersAnnotationsToRemove];
         [_clustersAnnotationsToRemove removeAllObjects];
+        [_stationsAnnotationsToRetain addObjectsFromArray:_stationsAnnotationsToRemove];
+        [_stationsAnnotationsToRemove removeAllObjects];
+        NSLog(@"retained stations annotations : %d", _stationsAnnotationsToRetain.count);
+        for (PlaceAnnotation *aStationAnnotation in _stationsAnnotationsToRetain) {
+            if ([GeoUtils isLocation:aStationAnnotation.coordinate inRegion:mapPanel.region]) {
+                NSLog(@"compare @%@ (%f,%f)", aStationAnnotation.placeStation.name, aStationAnnotation.placeStation.latitude.doubleValue, aStationAnnotation.placeStation.longitude.doubleValue);
+                if ([visibleStations containsObject:aStationAnnotation.placeStation]) {
+                    NSLog(@"remove @%@", aStationAnnotation.placeStation.name);
+                    [drawableStations removeObject:aStationAnnotation.placeStation];
+                }
+            }
+        }
     }
-    NSLog(@"clusterizable stations : %d", visiblePlacesAnnotations.count);
-    
-    if (visiblePlacesAnnotations.count > 0) {
-        NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:visiblePlacesAnnotations];
+    //NSLog(@"drawable stations : %d", drawableStations.count);
+    NSMutableArray *clusterizedStations = [[NSMutableArray alloc] init];
+    if (visibleStations.count > 0) {
+        NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:visibleStations];
         double clusterSideLength = [GeoUtils getClusterSideLengthForZoomLevel:_currentZoomLevel];
         NSLog(@"clusters side length : %f m", clusterSideLength);
         //NSLog(@"clusterizable stations count : %d", clusterizablePlacesAnnotations.count);
-        NSMutableArray *clusterPlaces;
-        for (PlaceAnnotation *base in visiblePlacesAnnotations) {
-            clusterPlaces = [[NSMutableArray alloc] init];
+        NSMutableArray *clusterStations;
+        for (Station *base in visibleStations) {
+            clusterStations = [[NSMutableArray alloc] init];
             //NSLog(@"buffer count : %d", temp.count);
             if ([temp containsObject:base]) {
                 [temp removeObject:base];
                 BOOL clusterized = false;
                 for (int i = temp.count - 1; i >= 0; i--) {
-                    PlaceAnnotation *other = temp[i];
-                    double currentDistance = [self getDistanceBetween:base.placeStation and:other.placeStation];
+                    Station *other = temp[i];
+                    double currentDistance = [self getDistanceBetween:base and:other];
                     //NSLog(@"current distance : %f", currentDistance);
                     if (currentDistance < clusterSideLength) {
-                        [clusterPlaces addObject:other];
+                        [clusterStations addObject:other];
                         [temp removeObjectAtIndex:i];
                         clusterized = true;
                     }
                 }
                 if (clusterized) {
-                    [clusterPlaces addObject:base];
-                    ClusterAnnotation *generated = [self createClusterAnnotationForStationsAnnotations:clusterPlaces];
+                    [clusterStations addObject:base];
+                    ClusterAnnotation *generated = [self createClusterAnnotationForStations:clusterStations];
                     [_clustersAnnotationsToAdd addObject:generated];
                     //NSLog(@"cluster annotation generated");
-                    for (PlaceAnnotation *temp in generated.children) {
-                        if ([_stationsAnnotationsToAdd containsObject:temp]) {
-                            [_stationsAnnotationsToAdd removeObject:temp];
-                        } else {
-                            [_stationsAnnotationsToRemove addObject:temp];
-                        }
+                    for (Station *aCusterizableStation in clusterStations) {
+                        [temp removeObject:aCusterizableStation];
                     }
+                    [clusterizedStations addObjectsFromArray:clusterStations];
                     //NSLog(@"convert %d stations into cluster", generated.children.count + 1);
                 }
             }
+        }
+    }
+    NSMutableArray *stationsAnnotationsToRemove = [[NSMutableArray alloc] init];
+    NSLog(@"clusterized stations : %d", clusterizedStations.count);
+    for (Station *aCusterizedStation in clusterizedStations) {
+        if ([drawableStations containsObject:aCusterizedStation]) {
+            NSLog(@"remove station @%@", aCusterizedStation.name);
+            [drawableStations removeObject:aCusterizedStation];
+            [_noClusterizedStations removeObject:aCusterizedStation];
+        } else {
+            int i = 0;
+            for (PlaceAnnotation *aRetainedStationAnnotation in _stationsAnnotationsToRetain) {
+                if ([GeoUtils isLocation:aRetainedStationAnnotation.coordinate inRegion:mapPanel.region]) {
+                    i++;
+                    NSLog(@"searching for relative existing annotation : %d / %d", i, _stationsAnnotationsToRetain.count);
+                    //NSLog(@"compare station annotation @%@ (%f,%f)", aRetainedStationAnnotation.placeStation.name, aRetainedStationAnnotation.placeStation.latitude.doubleValue, aRetainedStationAnnotation.placeStation.longitude.doubleValue);
+                    if ([aCusterizedStation isEqual:aRetainedStationAnnotation.placeStation]) {
+                        [stationsAnnotationsToRemove addObject:aRetainedStationAnnotation];
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    if (stationsAnnotationsToRemove.count > 0) {
+        // remove clusterized retained stations
+        [_stationsAnnotationsToRemove addObjectsFromArray:stationsAnnotationsToRemove];
+        for (PlaceAnnotation *aRetainedStationAnnotationToRemove in stationsAnnotationsToRemove) {
+            NSLog(@"remove retained station annotation @%@", aRetainedStationAnnotationToRemove.placeStation.name);
+            [_stationsAnnotationsToRetain removeObject:aRetainedStationAnnotationToRemove];
+        }
+        [stationsAnnotationsToRemove removeAllObjects];
+    }
+    NSLog(@"drawable stations : %d", drawableStations.count);
+    for (Station *aDrawableStation in drawableStations) {
+        if (_clustersAnnotationsToRetain.count > 0) {
+            BOOL isCovered = false;
+            for (ClusterAnnotation *existingCluster in _clustersAnnotationsToRetain) {
+                // test if the station is already covered by an existing cluster
+                if ([GeoUtils isLocation:aDrawableStation.coordinate inRegion:existingCluster.region]) {
+                    NSLog(@"new station @%@ is already covered",aDrawableStation.name);
+                    isCovered = true;
+                    break;
+                }
+            }
+            if (!isCovered) {
+                NSLog(@"add new station @%@",aDrawableStation.name);
+                [_stationsAnnotationsToAdd addObject:[self createStationAnnotation:aDrawableStation withLocation:kUndefined]];
+            }
+        } else {
+            NSLog(@"add new station @%@",aDrawableStation.name);
+            [_stationsAnnotationsToAdd addObject:[self createStationAnnotation:aDrawableStation withLocation:kUndefined]];
         }
     }
     NSLog(@"added clusters : %d", _clustersAnnotationsToAdd.count);
     NSLog(@"retained clusters : %d", _clustersAnnotationsToRetain.count);
     NSLog(@"removed clusters : %d", _clustersAnnotationsToRemove.count);
     NSLog(@"added stations : %d", _stationsAnnotationsToAdd.count);
+    NSLog(@"retained station : %d", _stationsAnnotationsToRetain.count);
     NSLog(@"removed stations : %d", _stationsAnnotationsToRemove.count);
 }
 
-- (void)createAllStationsAnnotations {
+- (NSMutableArray *)filterVisibleStationsFrom:(NSMutableArray *)someStations {
+    NSMutableArray *filteredStations = [[NSMutableArray alloc] init];
+    for (Station *aStation in someStations) {
+        if ([GeoUtils isLocation:aStation.coordinate inRegion:mapPanel.region]) {
+            [filteredStations addObject:aStation];
+        }
+    }
+    NSLog(@"visible stations : %d", filteredStations.count);
+    return filteredStations;
+}
+
+/*- (void)createAllStationsAnnotations {
     NSLog(@"create all stations annotations");
     [self eraseAllStationsAnnotations];
     [_allStationsAnnotations removeAllObjects];
@@ -811,21 +1006,21 @@
     if (invalidStations > 0) {
         NSLog(@"invalid stations count : %i", invalidStations);
     }
-}
+}*/
 
-- (void)drawStationsAnnotations {
+/*- (void)drawStationsAnnotationsWithReset:(BOOL)reset {
     NSLog(@"draw stations");
     dispatch_queue_t parent = dispatch_get_main_queue();
     dispatch_queue_t child = dispatch_queue_create("com.onelightstudio.onebike", NULL);
     dispatch_async(child, ^(void) {
-        [self filterStationsAnnotationsWithReset];
+        [self filterStationsAnnotationsWithReset:reset];
         dispatch_async(parent, ^(void) {
             [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
             [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
             [mapPanel addAnnotations:_clustersAnnotationsToAdd];
             [mapPanel addAnnotations:_stationsAnnotationsToAdd];
+            [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
             [_stationsAnnotationsToAdd removeAllObjects];
-            [_stationsAnnotationsToRemove removeAllObjects];
             [_clustersAnnotationsToRemove removeAllObjects];
             [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
             [_clustersAnnotationsToAdd removeAllObjects];
@@ -834,7 +1029,7 @@
             }
         });
     });
-}
+}*/
 
 - (void)createStationsAnnotationsAroundDeparture {
     for (Station *station in _departureCloseStations) {
@@ -868,12 +1063,12 @@
     return marker;
 }
 
-- (ClusterAnnotation *)createClusterAnnotationForStationsAnnotations:(NSMutableArray *)someAnnotations {
+- (ClusterAnnotation *)createClusterAnnotationForStations:(NSMutableArray *)someStations {
     
     ClusterAnnotation *marker = [[ClusterAnnotation alloc] init];
-    marker.region = MKCoordinateRegionForMapRect([self generateMapRectContainingAllAnnotations:someAnnotations]);
+    marker.region = MKCoordinateRegionForMapRect([self generateMapRectContainingAllStations:someStations]);
     marker.coordinate = marker.region.center;
-    marker.children = someAnnotations;
+    //marker.children = someStations;
     return marker;
 }
 
@@ -953,12 +1148,12 @@
     }
 }
 
-- (void)eraseAllStationsAnnotations {
+/*- (void)eraseAllStationsAnnotations {
     if (_allStationsAnnotations != nil) {
         NSLog(@"erase all stations annotations");
         [mapPanel removeAnnotations:_allStationsAnnotations];
     }
-}
+}*/
 
 - (void)eraseSearchAnnotations {
     if (_searchAnnotations != nil) {
@@ -1030,7 +1225,8 @@
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
     [self eraseRoute];
     [self eraseSearchAnnotations];
-    [self eraseAllStationsAnnotations];
+    // CHECK
+    // [self eraseAllStationsAnnotations];
     [self searchCloseStationsAroundDeparture:departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
     [self searchCloseStationsAroundArrival:arrival withAvailableStandsNumber:availableStands andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
     if ([_departureCloseStations count] > 0 && [_arrivalCloseStations count] > 0 && _departureStation != nil && _arrivalStation != nil) {
@@ -1140,6 +1336,23 @@
     for (id<MKAnnotation> annotation in annotations) {
         
         MKMapPoint annotationPoint = MKMapPointForCoordinate(annotation.coordinate);
+        MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
+        
+        if (MKMapRectIsNull(mapRect)) {
+            mapRect = pointRect;
+        } else {
+            mapRect = MKMapRectUnion(mapRect, pointRect);
+        }
+    }
+    return mapRect;
+}
+
+- (MKMapRect)generateMapRectContainingAllStations:(NSMutableArray*)someStations {
+    
+    MKMapRect mapRect = MKMapRectNull;
+    for (Station *aStation in someStations) {
+        
+        MKMapPoint annotationPoint = MKMapPointForCoordinate(aStation.coordinate);
         MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
         
         if (MKMapRectIsNull(mapRect)) {

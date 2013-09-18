@@ -11,14 +11,14 @@
 @implementation ClusterAnnotation
 
 @synthesize region;
-@synthesize children;
+//@synthesize children;
 
-- (id)init {
+/*- (id)init {
     self = [super init];
     if (self) {
         self.children = [[NSMutableArray alloc] init];
     }
     return self;
-}
+}*/
 
 @end
