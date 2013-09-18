@@ -201,15 +201,19 @@
             dispatch_async(oneBikeQueue, ^(void) {
                 [self filterStationsAnnotationsWithReset:true];
                 dispatch_async(uiQueue, ^(void) {
-                    [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
                     [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
+                    [_stationsAnnotationsToRemove removeAllObjects];
+                    [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
+                    [_clustersAnnotationsToRemove removeAllObjects];
+                    
                     [mapPanel addAnnotations:_clustersAnnotationsToAdd];
+                    [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
+                    [_clustersAnnotationsToAdd removeAllObjects];
+                    
                     [mapPanel addAnnotations:_stationsAnnotationsToAdd];
                     [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
                     [_stationsAnnotationsToAdd removeAllObjects];
-                    [_clustersAnnotationsToRemove removeAllObjects];
-                    [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
-                    [_clustersAnnotationsToAdd removeAllObjects];
+                    
                     if (!_isStationsDisplayedAtLeastOnce) {
                         _isStationsDisplayedAtLeastOnce = true;
                     }
@@ -552,15 +556,19 @@
         dispatch_async(oneBikeQueue, ^(void) {
             [self filterStationsAnnotationsWithReset:false];
             dispatch_async(uiQueue, ^(void) {
-                [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
                 [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
+                [_stationsAnnotationsToRemove removeAllObjects];
+                [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
+                [_clustersAnnotationsToRemove removeAllObjects];
+                
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
+                [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
+                [_clustersAnnotationsToAdd removeAllObjects];
+                
                 [mapPanel addAnnotations:_stationsAnnotationsToAdd];
                 [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
                 [_stationsAnnotationsToAdd removeAllObjects];
-                [_clustersAnnotationsToRemove removeAllObjects];
-                [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
-                [_clustersAnnotationsToAdd removeAllObjects];
+                
                 if (!_isStationsDisplayedAtLeastOnce) {
                     _isStationsDisplayedAtLeastOnce = true;
                 }
@@ -647,15 +655,19 @@
         dispatch_async(oneBikeQueue, ^(void) {
             [self filterStationsAnnotationsWithReset:true];
             dispatch_async(uiQueue, ^(void) {
-                [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
                 [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
+                [_stationsAnnotationsToRemove removeAllObjects];
+                [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
+                [_clustersAnnotationsToRemove removeAllObjects];
+                
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
+                [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
+                [_clustersAnnotationsToAdd removeAllObjects];
+                
                 [mapPanel addAnnotations:_stationsAnnotationsToAdd];
                 [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
                 [_stationsAnnotationsToAdd removeAllObjects];
-                [_clustersAnnotationsToRemove removeAllObjects];
-                [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
-                [_clustersAnnotationsToAdd removeAllObjects];
+                
                 if (!_isStationsDisplayedAtLeastOnce) {
                     _isStationsDisplayedAtLeastOnce = true;
                 }
@@ -843,26 +855,37 @@
     NSLog(@"generate clusters annotations, zoom level : %d", _currentZoomLevel);
     
     NSMutableArray *visibleStations = nil;
-    NSMutableArray *drawableStations = nil;
+    NSMutableArray *visibleRetainedStations = nil;
+    NSMutableArray *visibleRetainedStationsAnnotations = nil;
+    NSMutableArray *visibleClustersAnnotations = [[NSMutableArray alloc] init];
+    
     if (hasZoomChanged) {
-        if (_isZoomIn) {
-            NSLog(@"isZoomIn");
-            _noClusterizedStations = [[NSMutableArray alloc] initWithArray:_allStations];
-            visibleStations = [self filterVisibleStationsFrom:_noClusterizedStations];
-            drawableStations = [[NSMutableArray alloc] initWithArray:visibleStations];
-        } else if (_isZoomOut) {
-            NSLog(@"isZoomOut");
-            visibleStations = [self filterVisibleStationsFrom:_noClusterizedStations];
-            drawableStations = [[NSMutableArray alloc] initWithArray:visibleStations];
-        }
         [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToRetain];
         [_clustersAnnotationsToRetain removeAllObjects];
         [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToRetain];
         [_stationsAnnotationsToRetain removeAllObjects];
+        if (_isZoomIn) {
+            NSLog(@"isZoomIn");
+            _noClusterizedStations = [[NSMutableArray alloc] initWithArray:_allStations];
+            visibleStations = [self filterVisibleStationsFrom:_noClusterizedStations];
+            //drawableStations = [[NSMutableArray alloc] initWithArray:visibleStations];
+        } else if (_isZoomOut) {
+            NSLog(@"isZoomOut");
+            visibleStations = [self filterVisibleStationsFrom:_noClusterizedStations];
+            //drawableStations = [[NSMutableArray alloc] initWithArray:visibleStations];
+            for (ClusterAnnotation *aCluster in _clustersAnnotationsToRemove) {
+                if ([GeoUtils isLocation:aCluster.coordinate inRegion:mapPanel.region]) {
+                    // keep visible existing clusters (before zoom out) to build regions of zoom out new clusters
+                    [visibleClustersAnnotations addObjectsFromArray:_clustersAnnotationsToRemove];
+                }
+            }
+            NSLog(@"visible clusters %d", visibleClustersAnnotations.count);
+        }
     } else {
         NSLog(@"noHasZoomChanged");
         visibleStations = [self filterVisibleStationsFrom:_noClusterizedStations];
-        drawableStations = [[NSMutableArray alloc] initWithArray:visibleStations];
+        visibleRetainedStations = [[NSMutableArray alloc] init];
+        visibleRetainedStationsAnnotations = [[NSMutableArray alloc] init];
         [_clustersAnnotationsToRetain addObjectsFromArray:_clustersAnnotationsToRemove];
         [_clustersAnnotationsToRemove removeAllObjects];
         [_stationsAnnotationsToRetain addObjectsFromArray:_stationsAnnotationsToRemove];
@@ -870,22 +893,28 @@
         NSLog(@"retained stations annotations : %d", _stationsAnnotationsToRetain.count);
         for (PlaceAnnotation *aStationAnnotation in _stationsAnnotationsToRetain) {
             if ([GeoUtils isLocation:aStationAnnotation.coordinate inRegion:mapPanel.region]) {
-                NSLog(@"compare @%@ (%f,%f)", aStationAnnotation.placeStation.name, aStationAnnotation.placeStation.latitude.doubleValue, aStationAnnotation.placeStation.longitude.doubleValue);
+                //NSLog(@"compare @%@ (%f,%f)", aStationAnnotation.placeStation.name, aStationAnnotation.placeStation.latitude.doubleValue, aStationAnnotation.placeStation.longitude.doubleValue);
                 if ([visibleStations containsObject:aStationAnnotation.placeStation]) {
-                    NSLog(@"remove @%@", aStationAnnotation.placeStation.name);
-                    [drawableStations removeObject:aStationAnnotation.placeStation];
+                    //NSLog(@"remove @%@", aStationAnnotation.placeStation.name);
+                    [visibleRetainedStations addObject:aStationAnnotation.placeStation];
+                    [visibleRetainedStationsAnnotations addObject:aStationAnnotation];
                 }
             }
         }
+        NSLog(@"retained stations : %d", visibleRetainedStations.count);
     }
     //NSLog(@"drawable stations : %d", drawableStations.count);
     NSMutableArray *clusterizedStations = [[NSMutableArray alloc] init];
+    NSMutableArray *clusterizedClusters = [[NSMutableArray alloc] init];
+    double clusterSideLength = [GeoUtils getClusterSideLengthForZoomLevel:_currentZoomLevel];
+    NSLog(@"clusters side length : %f m", clusterSideLength);
+    
     if (visibleStations.count > 0) {
+        
         NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:visibleStations];
-        double clusterSideLength = [GeoUtils getClusterSideLengthForZoomLevel:_currentZoomLevel];
-        NSLog(@"clusters side length : %f m", clusterSideLength);
-        //NSLog(@"clusterizable stations count : %d", clusterizablePlacesAnnotations.count);
         NSMutableArray *clusterStations;
+        NSMutableArray *clusterClusters;
+        
         for (Station *base in visibleStations) {
             clusterStations = [[NSMutableArray alloc] init];
             //NSLog(@"buffer count : %d", temp.count);
@@ -894,7 +923,7 @@
                 BOOL clusterized = false;
                 for (int i = temp.count - 1; i >= 0; i--) {
                     Station *other = temp[i];
-                    double currentDistance = [self getDistanceBetween:base and:other];
+                    double currentDistance = [self getStationDistanceBetween:base and:other];
                     //NSLog(@"current distance : %f", currentDistance);
                     if (currentDistance < clusterSideLength) {
                         [clusterStations addObject:other];
@@ -902,21 +931,87 @@
                         clusterized = true;
                     }
                 }
+                if (visibleClustersAnnotations.count > 0) {
+                    clusterClusters = [[NSMutableArray alloc] init];
+                    for (int i = visibleClustersAnnotations.count - 1; i >= 0; i--) {
+                        ClusterAnnotation *other = visibleClustersAnnotations[i];
+                        double currentDistance = [self getDistanceBetween:base and:other];
+                        //NSLog(@"current distance : %f", currentDistance);
+                        if (currentDistance < clusterSideLength) {
+                            [clusterClusters addObject:other];
+                            [visibleClustersAnnotations removeObjectAtIndex:i];
+                            clusterized = true;
+                        }
+                    }
+                }
                 if (clusterized) {
                     [clusterStations addObject:base];
-                    ClusterAnnotation *generated = [self createClusterAnnotationForStations:clusterStations];
-                    [_clustersAnnotationsToAdd addObject:generated];
-                    //NSLog(@"cluster annotation generated");
+                    ClusterAnnotation *generated = [self createClusterAnnotationForStations:clusterStations andClusters:clusterClusters];
+                    if (![_clustersAnnotationsToRetain containsObject:generated]) {
+                        [_clustersAnnotationsToAdd addObject:generated];
+                        NSLog(@"convert %d stations and %d clusters into new cluster", clusterStations.count, clusterClusters.count);
+                    }
                     for (Station *aCusterizableStation in clusterStations) {
                         [temp removeObject:aCusterizableStation];
                     }
                     [clusterizedStations addObjectsFromArray:clusterStations];
-                    //NSLog(@"convert %d stations into cluster", generated.children.count + 1);
                 }
             }
         }
+    } else if (visibleClustersAnnotations.count > 0) {
+        
+        NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:visibleClustersAnnotations];
+        NSMutableArray *clusterClusters;
+        int keptClusters = 0;
+        
+        for (ClusterAnnotation *base in visibleClustersAnnotations) {
+            clusterClusters = [[NSMutableArray alloc] init];
+            //NSLog(@"buffer count : %d", temp.count);
+            if ([temp containsObject:base]) {
+                [temp removeObject:base];
+                BOOL clusterized = false;
+                for (int i = temp.count - 1; i >= 0; i--) {
+                    ClusterAnnotation *other = temp[i];
+                    double currentDistance = [self getClusterDistanceBetween:base and:other];
+                    //NSLog(@"current distance : %f", currentDistance);
+                    if (currentDistance < clusterSideLength) {
+                        [clusterClusters addObject:other];
+                        [temp removeObjectAtIndex:i];
+                        clusterized = true;
+                    }
+                }
+                if (clusterized) {
+                    [clusterClusters addObject:base];
+                    ClusterAnnotation *generated = [self createClusterAnnotationForStations:nil andClusters:clusterClusters];
+                    [_clustersAnnotationsToAdd addObject:generated];
+                    for (Station *aCusterizableStation in clusterClusters) {
+                        [temp removeObject:aCusterizableStation];
+                    }
+                    [clusterizedClusters addObjectsFromArray:clusterClusters];
+                    NSLog(@"convert %d clusters into new cluster", clusterClusters.count);
+                } else {
+                    // not clusterizable cluster, keep it to current zoom out level
+                    [_clustersAnnotationsToAdd addObject:base];
+                    keptClusters++;
+                }
+            }
+        }
+        NSLog(@"kept clusters : %d", keptClusters);
     }
-    NSMutableArray *stationsAnnotationsToRemove = [[NSMutableArray alloc] init];
+    
+    NSMutableSet *drawableStations = [NSMutableSet setWithArray:visibleStations];
+    [drawableStations unionSet:[NSSet setWithArray:clusterizedStations]];
+    NSMutableSet *intersection = [NSMutableSet setWithArray:clusterizedStations];
+    [intersection intersectSet:[NSSet setWithArray:visibleStations]];
+    [drawableStations minusSet:intersection];
+    
+    for (Station *aRetainedStation in visibleRetainedStations) {
+        [drawableStations removeObject:aRetainedStation];
+    }
+    
+    NSLog(@"drawable stations : %d", drawableStations.count);
+    
+    /*NSMutableArray *stationsAnnotationsToRemove = [[NSMutableArray alloc] init];
     NSLog(@"clusterized stations : %d", clusterizedStations.count);
     for (Station *aCusterizedStation in clusterizedStations) {
         if ([drawableStations containsObject:aCusterizedStation]) {
@@ -937,6 +1032,14 @@
                 }
             }
         }
+    }*/
+    
+    NSLog(@"clusterized stations : %d", clusterizedStations.count);
+    NSMutableArray *stationsAnnotationsToRemove = [[NSMutableArray alloc] init];
+    for (PlaceAnnotation *aRetainedStationAnnotation in visibleRetainedStationsAnnotations) {
+        if ([clusterizedStations containsObject:aRetainedStationAnnotation.placeStation]) {
+            [stationsAnnotationsToRemove addObject:aRetainedStationAnnotation];
+        }
     }
     if (stationsAnnotationsToRemove.count > 0) {
         // remove clusterized retained stations
@@ -947,7 +1050,7 @@
         }
         [stationsAnnotationsToRemove removeAllObjects];
     }
-    NSLog(@"drawable stations : %d", drawableStations.count);
+    //NSLog(@"drawable stations : %d", drawableStations.count);
     for (Station *aDrawableStation in drawableStations) {
         if (_clustersAnnotationsToRetain.count > 0) {
             BOOL isCovered = false;
@@ -1063,10 +1166,10 @@
     return marker;
 }
 
-- (ClusterAnnotation *)createClusterAnnotationForStations:(NSMutableArray *)someStations {
+- (ClusterAnnotation *)createClusterAnnotationForStations:(NSMutableArray *)someStations andClusters:(NSMutableArray *)someClusters {
     
     ClusterAnnotation *marker = [[ClusterAnnotation alloc] init];
-    marker.region = MKCoordinateRegionForMapRect([self generateMapRectContainingAllStations:someStations]);
+    marker.region = MKCoordinateRegionForMapRect([self generateMapRectContainingAllStations:someStations andClusters:someClusters]);
     marker.coordinate = marker.region.center;
     //marker.children = someStations;
     return marker;
@@ -1321,8 +1424,16 @@
     return dist;
 }
 
--(double) getDistanceBetween:(Station *)first and:(Station *)second {
+-(double) getStationDistanceBetween:(Station *)first and:(Station *)second {
     return [GeoUtils getDistanceFromLat:first.latitude.doubleValue toLat:second.latitude.doubleValue fromLong:first.longitude.doubleValue toLong:second.longitude.doubleValue];
+}
+
+-(double) getDistanceBetween:(Station *)aStation and:(ClusterAnnotation *)aCluster {
+    return [GeoUtils getDistanceFromLat:aStation.latitude.doubleValue toLat:aCluster.coordinate.latitude fromLong:aStation.longitude.doubleValue toLong:aCluster.coordinate.longitude];
+}
+
+-(double) getClusterDistanceBetween:(ClusterAnnotation *)first and:(ClusterAnnotation *)second {
+    return [GeoUtils getDistanceFromLat:first.coordinate.latitude toLat:second.coordinate.latitude fromLong:first.coordinate.longitude toLong:second.coordinate.longitude];
 }
 
 - (BOOL)unlessInMeters:(double)radius from:(CLLocationCoordinate2D)origin for:(CLLocationCoordinate2D)location {
@@ -1347,18 +1458,36 @@
     return mapRect;
 }
 
-- (MKMapRect)generateMapRectContainingAllStations:(NSMutableArray*)someStations {
+- (MKMapRect)generateMapRectContainingAllStations:(NSMutableArray*)someStations andClusters:(NSMutableArray*)someClusters {
     
     MKMapRect mapRect = MKMapRectNull;
-    for (Station *aStation in someStations) {
-        
-        MKMapPoint annotationPoint = MKMapPointForCoordinate(aStation.coordinate);
-        MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
-        
-        if (MKMapRectIsNull(mapRect)) {
-            mapRect = pointRect;
-        } else {
-            mapRect = MKMapRectUnion(mapRect, pointRect);
+    MKMapPoint annotationPoint;
+    MKMapRect pointRect;
+    
+    if (someStations != nil && someStations.count > 0) {
+        for (Station *aStation in someStations) {
+            
+            annotationPoint = MKMapPointForCoordinate(aStation.coordinate);
+            pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
+            
+            if (MKMapRectIsNull(mapRect)) {
+                mapRect = pointRect;
+            } else {
+                mapRect = MKMapRectUnion(mapRect, pointRect);
+            }
+        }
+    }
+    if (someClusters != nil && someClusters.count > 0) {
+        for (ClusterAnnotation *aCluster in someClusters) {
+            
+            annotationPoint = MKMapPointForCoordinate(aCluster.coordinate);
+            pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
+            
+            if (MKMapRectIsNull(mapRect)) {
+                mapRect = pointRect;
+            } else {
+                mapRect = MKMapRectUnion(mapRect, pointRect);
+            }
         }
     }
     return mapRect;
