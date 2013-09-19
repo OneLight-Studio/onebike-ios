@@ -909,6 +909,8 @@
     double clusterSideLength = [GeoUtils getClusterSideLengthForZoomLevel:_currentZoomLevel];
     NSLog(@"clusters side length : %f m", clusterSideLength);
     
+    NSTimeInterval start;
+    
     if (visibleStations.count > 0) {
         
         NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:visibleStations];
@@ -919,6 +921,8 @@
             clusterStations = [[NSMutableArray alloc] init];
             //NSLog(@"buffer count : %d", temp.count);
             if ([temp containsObject:base]) {
+                //NSLog(@"--- stations clustering process start");
+                //start = [[NSDate date] timeIntervalSince1970];
                 [temp removeObject:base];
                 BOOL clusterized = false;
                 for (int i = temp.count - 1; i >= 0; i--) {
@@ -931,8 +935,11 @@
                         clusterized = true;
                     }
                 }
+                //NSLog(@"--- %f s", ([[NSDate date] timeIntervalSince1970] - start));
                 if (visibleClustersAnnotations.count > 0) {
                     clusterClusters = [[NSMutableArray alloc] init];
+                    //NSLog(@"--- cluster clustering process start");
+                    //start = [[NSDate date] timeIntervalSince1970];
                     for (int i = visibleClustersAnnotations.count - 1; i >= 0; i--) {
                         ClusterAnnotation *other = visibleClustersAnnotations[i];
                         double currentDistance = [self getDistanceBetween:base and:other];
@@ -943,6 +950,7 @@
                             clusterized = true;
                         }
                     }
+                    //NSLog(@"--- %f s", ([[NSDate date] timeIntervalSince1970] - start));
                 }
                 if (clusterized) {
                     [clusterStations addObject:base];
@@ -951,10 +959,16 @@
                         [_clustersAnnotationsToAdd addObject:generated];
                         NSLog(@"convert %d stations and %d clusters into new cluster", clusterStations.count, clusterClusters.count);
                     }
+                    /*NSLog(@"--- remove clusterized stations from temp start");
+                    start = [[NSDate date] timeIntervalSince1970];
                     for (Station *aCusterizableStation in clusterStations) {
                         [temp removeObject:aCusterizableStation];
                     }
+                    NSLog(@"--- %f s", ([[NSDate date] timeIntervalSince1970] - start));*/
+                    /*NSLog(@"--- add clusterized stations to clusterized stations array start");
+                    start = [[NSDate date] timeIntervalSince1970];*/
                     [clusterizedStations addObjectsFromArray:clusterStations];
+                    //NSLog(@"--- %f s", ([[NSDate date] timeIntervalSince1970] - start));
                 }
             }
         }
@@ -963,6 +977,9 @@
         NSMutableArray *temp = [[NSMutableArray alloc] initWithArray:visibleClustersAnnotations];
         NSMutableArray *clusterClusters;
         int keptClusters = 0;
+        
+        NSLog(@"--- cluster clustering process");
+        start = [[NSDate date] timeIntervalSince1970];
         
         for (ClusterAnnotation *base in visibleClustersAnnotations) {
             clusterClusters = [[NSMutableArray alloc] init];
@@ -997,17 +1014,26 @@
             }
         }
         NSLog(@"kept clusters : %d", keptClusters);
+        NSLog(@"--- %f s", ([[NSDate date] timeIntervalSince1970] - start));
     }
     
+    NSLog(@"--- xor");
+    start = [[NSDate date] timeIntervalSince1970];
+    // XOR to determine drawable stations
     NSMutableSet *drawableStations = [NSMutableSet setWithArray:visibleStations];
-    [drawableStations unionSet:[NSSet setWithArray:clusterizedStations]];
+    NSLog(@"------ load visible");
     NSMutableSet *intersection = [NSMutableSet setWithArray:clusterizedStations];
-    [intersection intersectSet:[NSSet setWithArray:visibleStations]];
+     NSLog(@"------ load clusterized");
     [drawableStations minusSet:intersection];
+    NSLog(@"------ minus %f s", ([[NSDate date] timeIntervalSince1970] - start));
     
+    /*NSLog(@"--- remove visible retained stations");
+    start = [[NSDate date] timeIntervalSince1970];*/
     for (Station *aRetainedStation in visibleRetainedStations) {
         [drawableStations removeObject:aRetainedStation];
     }
+    
+    //NSLog(@"--- %f s", ([[NSDate date] timeIntervalSince1970] - start));
     
     NSLog(@"drawable stations : %d", drawableStations.count);
     
@@ -1071,12 +1097,12 @@
             [_stationsAnnotationsToAdd addObject:[self createStationAnnotation:aDrawableStation withLocation:kUndefined]];
         }
     }
-    NSLog(@"added clusters : %d", _clustersAnnotationsToAdd.count);
-    NSLog(@"retained clusters : %d", _clustersAnnotationsToRetain.count);
-    NSLog(@"removed clusters : %d", _clustersAnnotationsToRemove.count);
-    NSLog(@"added stations : %d", _stationsAnnotationsToAdd.count);
-    NSLog(@"retained station : %d", _stationsAnnotationsToRetain.count);
     NSLog(@"removed stations : %d", _stationsAnnotationsToRemove.count);
+    NSLog(@"removed clusters : %d", _clustersAnnotationsToRemove.count);
+    NSLog(@"retained station : %d", _stationsAnnotationsToRetain.count);
+    NSLog(@"retained clusters : %d", _clustersAnnotationsToRetain.count);
+    NSLog(@"added stations : %d", _stationsAnnotationsToAdd.count);
+    NSLog(@"added clusters : %d", _clustersAnnotationsToAdd.count);
 }
 
 - (NSMutableArray *)filterVisibleStationsFrom:(NSMutableArray *)someStations {
