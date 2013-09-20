@@ -199,7 +199,7 @@
             [_stationsAnnotationsToRemove removeAllObjects];
             
             dispatch_async(oneBikeQueue, ^(void) {
-                [self filterStationsAnnotations];
+                [self generateStationsAnnotations];
                 dispatch_async(uiQueue, ^(void) {
                     [mapPanel addAnnotations:_clustersAnnotationsToAdd];
                     [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
@@ -409,8 +409,6 @@
                 annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
-                } else {
-                    //NSLog(@"reuse (%@)", annotationView.reuseIdentifier);
                 }
                 UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
                 UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
@@ -419,7 +417,11 @@
                 UIImage *image = [UIUtils placeStands:stands onImage:tmp];
                 annotationView.image = image;
             }
-            annotationView.canShowCallout = YES;
+            if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
+                annotationView.canShowCallout = YES;
+            } else {
+                annotationView.canShowCallout = NO;
+            }
         } else if ([anAnnotation isKindOfClass:[ClusterAnnotation class]]) {
             ClusterAnnotation *cluster = (ClusterAnnotation *) anAnnotation;
             annotationID = @"Cluster";
@@ -441,7 +443,7 @@
             // zoom in on cluster region
             [mapPanel setRegion:annotation.region animated:YES];
             dispatch_async(oneBikeQueue, ^(void) {
-                [self filterStationsAnnotations];
+                [self generateStationsAnnotations];
                 dispatch_async(uiQueue, ^(void) {
                     [mapPanel addAnnotations:_clustersAnnotationsToAdd];
                     [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
@@ -507,7 +509,7 @@
         [_stationsAnnotationsToRemove removeAllObjects];
         
         dispatch_async(oneBikeQueue, ^(void) {
-            [self filterStationsAnnotations];
+            [self generateStationsAnnotations];
             dispatch_async(uiQueue, ^(void) {
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
                 [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
@@ -592,7 +594,7 @@
         [self centerMapOnUserLocation];
         [self eraseSearchAnnotations];
         dispatch_async(oneBikeQueue, ^(void) {
-            [self filterStationsAnnotations];
+            [self generateStationsAnnotations];
             dispatch_async(uiQueue, ^(void) {
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
                 [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
@@ -780,16 +782,12 @@
     NSLog(@"centered on user location (%f,%f)", _startUserLocation.latitude, _startUserLocation.longitude);
 }
 
-- (void)filterStationsAnnotations {
+- (void)generateStationsAnnotations {
     if (!_isStationsDisplayedAtLeastOnce) {
         [_clustersAnnotationsToRemove removeAllObjects];
         [_stationsAnnotationsToRemove removeAllObjects];
         
     }
-    [self generateClustersAnnotations];
-}
-
-- (void)generateClustersAnnotations {
     NSLog(@"generate clusters annotations, zoom level : %d", _currentZoomLevel);
     NSMutableArray *visibleStations = [self filterVisibleStationsFrom:_allStations];
     
@@ -817,29 +815,12 @@
                 [clusterStations addObject:base];
                 ClusterAnnotation *newCluster = [self createClusterAnnotationForStations:clusterStations];
                 //if (![_clustersAnnotationsToRemove containsObject:newCluster]) {
-                    [_clustersAnnotationsToAdd addObject:newCluster];
-                    NSLog(@"convert %d stations into new cluster", clusterStations.count);
-                /*} else {
-                    [_clustersAnnotationsToRemove removeObject:newCluster];
-                    NSLog(@"cluster already exists, remove it from clusters to remove");
-                }*/
+                [_clustersAnnotationsToAdd addObject:newCluster];
+                NSLog(@"convert %d stations into new cluster", clusterStations.count);
             } else {
-                /*BOOL exist = false;
-                PlaceAnnotation *toRemove = nil;*/
                 PlaceAnnotation *newStation = [self createStationAnnotation:base withLocation:kUndefined];
-                /*for (toRemove in _stationsAnnotationsToRemove) {
-                    if ([GeoUtils isCoordinate:toRemove.coordinate equalToCoordinate:newStation.coordinate]) {
-                        exist = true;
-                        break;
-                    }
-                }
-                if (exist) {
-                    [_stationsAnnotationsToRemove removeObject:toRemove];
-                    NSLog(@"station @%@ already exists, remove it from stations to remove", newStation.placeStation.name);
-                } else {*/
-                    NSLog(@"add new station @%@", newStation.placeStation.name);
-                    [_stationsAnnotationsToAdd addObject:newStation];
-                //}
+                NSLog(@"add new station @%@", newStation.placeStation.name);
+                [_stationsAnnotationsToAdd addObject:newStation];
             }
         }
     }
