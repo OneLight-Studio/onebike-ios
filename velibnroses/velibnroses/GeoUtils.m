@@ -112,4 +112,8 @@
     return pow(2, MAX_ZOOM_LEVEL - level) * 2.5;
 }
 
++ (BOOL)isCoordinate:(CLLocationCoordinate2D)first equalToCoordinate:(CLLocationCoordinate2D)second {
+    return (first.latitude == second.latitude) < 0.001 && (first.longitude == second.longitude) < 0.001;
+}
+
 @end
