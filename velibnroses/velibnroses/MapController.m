@@ -107,6 +107,7 @@
     CGRect searchFrame = self.searchPanel.frame;
     searchFrame.origin.y = -searchFrame.size.height;
     self.searchPanel.frame = searchFrame;
+    
     self.bikeField.text = @"1";
     self.standField.text = @"1";
     self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBClose"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
@@ -388,36 +389,26 @@
 
             if (annotation.placeType == kDeparture) {
                 annotationID = @"Departure";
-                //NSLog(@"process %@", annotationID);
                 annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
-                    //NSLog(@"create");
-                } else {
-                    //NSLog(@"reuse");
                 }
             } else if (annotation.placeType == kArrival) {
                 annotationID = @"Arrival";
-                //NSLog(@"process %@", annotationID);
                 annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
-                    //NSLog(@"create");
-                } else {
-                    //NSLog(@"reuse");
                 }
             } else {
                 NSMutableString *loc = [[NSMutableString alloc] initWithString:[annotation.placeStation.latitude stringValue]];
                 [loc appendString:@","];
                 [loc appendString:[annotation.placeStation.longitude stringValue]];
                 annotationID = [NSString stringWithString:loc];
-                //NSLog(@"process %@", annotationID);
                 annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
-                    //NSLog(@"create : %@/%@", annotation.placeStation.availableBikes, annotation.placeStation.availableBikeStands);
                 } else {
                     //NSLog(@"reuse (%@)", annotationView.reuseIdentifier);
                 }
@@ -428,6 +419,7 @@
                 UIImage *image = [UIUtils placeStands:stands onImage:tmp];
                 annotationView.image = image;
             }
+            annotationView.canShowCallout = YES;
         } else if ([anAnnotation isKindOfClass:[ClusterAnnotation class]]) {
             ClusterAnnotation *cluster = (ClusterAnnotation *) anAnnotation;
             annotationID = @"Cluster";
@@ -435,18 +427,37 @@
             if (annotationView == nil) {
                 annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPCluster"];
-                //NSLog(@"create");
-            } else {
-                //NSLog(@"reuse");
             }
+            annotationView.canShowCallout = NO;
         }
-        annotationView.canShowCallout = YES;
     }
     return annotationView;
 }
 
 - (void)mapView:(MKMapView *)aMapView didSelectAnnotationView:(MKAnnotationView *)aView {
-    if (!_isSearchViewVisible && _mapViewState == MAP_VIEW_SEARCH_STATE) {
+    if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
+        if ([aView.annotation isKindOfClass:[ClusterAnnotation class]]) {
+            ClusterAnnotation *annotation = (ClusterAnnotation *) aView.annotation;
+            // zoom in on cluster region
+            [mapPanel setRegion:annotation.region animated:YES];
+            dispatch_async(oneBikeQueue, ^(void) {
+                [self filterStationsAnnotations];
+                dispatch_async(uiQueue, ^(void) {
+                    [mapPanel addAnnotations:_clustersAnnotationsToAdd];
+                    [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
+                    [_clustersAnnotationsToAdd removeAllObjects];
+                    
+                    [mapPanel addAnnotations:_stationsAnnotationsToAdd];
+                    [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
+                    [_stationsAnnotationsToAdd removeAllObjects];
+                    
+                    if (!_isStationsDisplayedAtLeastOnce) {
+                        _isStationsDisplayedAtLeastOnce = true;
+                    }
+                });
+            });
+        }
+    } else if (!_isSearchViewVisible && _mapViewState == MAP_VIEW_SEARCH_STATE) {
         if ([aView.annotation isKindOfClass:[PlaceAnnotation class]]) {
             PlaceAnnotation *annotation = (PlaceAnnotation *) aView.annotation;
             if (annotation.placeType != kDeparture && annotation.placeType != kArrival && annotation.placeLocation != kUndefined) {
@@ -866,6 +877,7 @@
     ClusterAnnotation *marker = [[ClusterAnnotation alloc] init];
     marker.region = MKCoordinateRegionForMapRect([self generateMapRectContainingAllStations:someStations]);
     marker.coordinate = marker.region.center;
+    marker.title = @"";
     return marker;
 }
 

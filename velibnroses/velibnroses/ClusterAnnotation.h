@@ -11,6 +11,5 @@
 @interface ClusterAnnotation : MKPointAnnotation
 
 @property (nonatomic, assign) MKCoordinateRegion region;
-//@property (nonatomic, strong) NSMutableArray *children;
 
 @end
