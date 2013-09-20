@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="11G63b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <deployment defaultVersion="1552" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -24,11 +25,11 @@
             <objects>
                 <viewController id="R2K-lh-zEE" customClass="MapController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Xpv-kR-8Ki">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" id="QIt-AM-94y">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="R2K-lh-zEE" id="6qq-j7-0P0"/>
@@ -251,11 +252,11 @@
             <objects>
                 <viewController id="mZx-XO-NyK" customClass="InfoController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zTG-hz-Ftm">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="dyJ-RV-8n7">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="441"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="505"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                         </subviews>
@@ -287,48 +288,6 @@
         <image name="Images/SearchPanel/SPMyLocation_Disabled.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPStand.png" width="16" height="16"/>
     </resources>
-    <classes>
-        <class className="ADClusterMapView" superclassName="MKMapView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ADClusterMapView.h"/>
-        </class>
-        <class className="InfoController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/InfoController.h"/>
-            <relationships>
-                <relationship kind="action" name="backBarButtonClicked:"/>
-                <relationship kind="outlet" name="backBarButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="contentImage" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="MapController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapController.h"/>
-            <relationships>
-                <relationship kind="action" name="backBarButtonClicked:"/>
-                <relationship kind="action" name="bikeIconClicked:"/>
-                <relationship kind="action" name="cancelBarButtonClicked:"/>
-                <relationship kind="action" name="searchBarButtonClicked:"/>
-                <relationship kind="action" name="searchButtonClicked:"/>
-                <relationship kind="action" name="standIconClicked:"/>
-                <relationship kind="action" name="userLocationAsArrivalClicked:"/>
-                <relationship kind="action" name="userLocationAsDepartureClicked:"/>
-                <relationship kind="outlet" name="arrivalField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="arrivalLocation" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="arrivalSpinner" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="bikeField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="cancelBarButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="closeSearchPanelButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="departureLocation" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="departureSpinner" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="infoBarButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="mapPanel" candidateClass="ADClusterMapView"/>
-                <relationship kind="outlet" name="searchBarButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="searchButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="searchPanel" candidateClass="UIView"/>
-                <relationship kind="outlet" name="searchSpinner" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="standField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
