@@ -89,4 +89,31 @@
     return polyline;
 }
 
++ (BOOL)isLocation:(CLLocationCoordinate2D)location inRegion:(MKCoordinateRegion)region {
+    
+    CLLocationCoordinate2D center = region.center;
+    CLLocationCoordinate2D _northWestSpanCorner, _southEastSpanCorner;
+    BOOL visible = false;
+    
+    _northWestSpanCorner.latitude  = center.latitude  - (region.span.latitudeDelta  / 2.0);
+    _northWestSpanCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
+    _southEastSpanCorner.latitude  = center.latitude  + (region.span.latitudeDelta  / 2.0);
+    _southEastSpanCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
+    
+    if (location.latitude >= _northWestSpanCorner.latitude && location.latitude <= _southEastSpanCorner.latitude
+       && location.longitude >= _northWestSpanCorner.longitude && location.longitude <= _southEastSpanCorner.longitude) {
+           visible = true;
+       }
+    
+    return visible;
+}
+
++ (double)getClusterSideLengthForZoomLevel:(int)level {
+    return pow(2, MAX_ZOOM_LEVEL - level) * 2.5;
+}
+
++ (BOOL)isCoordinate:(CLLocationCoordinate2D)first equalToCoordinate:(CLLocationCoordinate2D)second {
+    return (first.latitude == second.latitude) < 0.001 && (first.longitude == second.longitude) < 0.001;
+}
+
 @end

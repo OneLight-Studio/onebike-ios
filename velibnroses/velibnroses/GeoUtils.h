@@ -12,5 +12,8 @@
 
 + (double)getDistanceFromLat:(double)srcLatitude toLat:(double)destLatitude fromLong:(double)srcLongitude toLong:(double)destLongitude;
 + (MKPolyline *)polylineWithEncodedString:(NSString *)encodedString betweenDeparture:(CLLocationCoordinate2D)departure andArrival:(CLLocationCoordinate2D)arrival;
++ (BOOL)isLocation:(CLLocationCoordinate2D)location inRegion:(MKCoordinateRegion)region;
++ (double)getClusterSideLengthForZoomLevel:(int)level;
++ (BOOL)isCoordinate:(CLLocationCoordinate2D)first equalToCoordinate:(CLLocationCoordinate2D)second;
 
 @end

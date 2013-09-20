@@ -19,7 +19,7 @@ typedef enum
     kUndefined, kNearDeparture, kNearArrival
 } PlaceAnnotationLocation;
 
-@interface PlaceAnnotation : MKPointAnnotation
+@interface PlaceAnnotation : MKPointAnnotation <NSCopying>
 
 @property (nonatomic, assign) PlaceAnnotationType placeType;
 @property (nonatomic, assign) PlaceAnnotationLocation placeLocation;
