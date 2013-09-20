@@ -121,7 +121,9 @@
 #pragma mark Map
 
 + (NSUInteger)zoomLevel:(MKMapView *)mapView {
-    return (21 - round(log2(mapView.region.span.longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * mapView.bounds.size.width))));
+    NSUInteger level = (MAX_ZOOM_LEVEL - round(log2(mapView.region.span.longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * mapView.bounds.size.width))));
+    NSLog(@"current zoom level : %d", level);
+    return level;
 }
 
 @end

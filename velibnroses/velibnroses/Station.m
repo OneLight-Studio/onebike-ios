@@ -53,11 +53,22 @@
     return array;
 }
 
+- (CLLocationCoordinate2D) coordinate {
+    CLLocationCoordinate2D cc2d;
+    cc2d.latitude = self.latitude.doubleValue;
+    cc2d.longitude = self.longitude.doubleValue;
+    return cc2d;
+}
+
 - (id)copyWithZone:(NSZone *)zone
 {
     id copy = [[[self class] alloc] init];
     
     if (copy) {
+        
+        // Set primitives
+        [copy setBanking:self.banking];
+        [copy setStatus:self.status];
         
         // Copy NSObject subclasses
         [copy setName:[self.name copyWithZone:zone]];
@@ -68,13 +79,39 @@
         [copy setBikeStands:[self.bikeStands copyWithZone:zone]];
         [copy setAvailableBikeStands:[self.availableBikeStands copyWithZone:zone]];
         [copy setAvailableBikes:[self.availableBikes copyWithZone:zone]];
-        
-        // Set primitives
-        [copy setBanking:self.banking];
-        [copy setStatus:self.status];
     }
     
     return copy;
+}
+
+- (BOOL)isEqual:(id)object {
+    if (self == object)
+        return true;
+    if ([self class] != [object class])
+        return false;
+    Station *obj = (Station *)object;
+    if (self.latitude == nil) {
+        if (obj.latitude != nil) {
+            return false;
+        }
+    } else if (self.longitude == nil) {
+        if (obj.longitude != nil) {
+            return false;
+        }
+    } else if (![self.latitude isEqual:obj.latitude]) {
+        return false;
+    } else if (![self.longitude isEqual:obj.longitude]) {
+        return false;
+    }
+    return true;
+}
+
+- (NSUInteger)hash {
+    const NSUInteger prime = 31;
+    NSUInteger result = 1;
+    result = prime * result + [self.latitude hash];
+    result = prime * result + [self.longitude hash];
+    return result;
 }
 
 @end
