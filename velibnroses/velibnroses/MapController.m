@@ -184,20 +184,18 @@
     [_jcdRequest handleResultWith:^(id json) {
         NSLog(@"jcd ws result");
         _jcdRequestAttemptsNumber = 0;
-        _allStations = (NSMutableArray *)[Station fromJSONArray:json];
-        NSLog(@"stations count %i", _allStations.count);
+        // block concurrent access
+        dispatch_barrier_async(oneBikeQueue, ^(void) {
+            _allStations = (NSMutableArray *)[Station fromJSONArray:json];
+            NSLog(@"stations count %i", _allStations.count);
+        });
         
         NSLog(@"draw stations");
         if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
             
-            NSLog(@"removed stations : %d", _stationsAnnotationsToRemove.count);
-            NSLog(@"removed clusters : %d", _clustersAnnotationsToRemove.count);
-            [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
-            [_clustersAnnotationsToRemove removeAllObjects];
-            [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
-            [_stationsAnnotationsToRemove removeAllObjects];
+            [self eraseAnnotations];
             
-            dispatch_async(oneBikeQueue, ^(void) {
+            dispatch_sync(oneBikeQueue, ^(void) {
                 [self generateStationsAnnotations];
                 dispatch_async(uiQueue, ^(void) {
                     [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -218,7 +216,7 @@
                 [self eraseSearchAnnotations];
                 [self eraseRoute];
             });
-            dispatch_async(oneBikeQueue, ^(void) {
+            dispatch_sync(oneBikeQueue, ^(void) {
                 Station *selectedDeparture = _departureStation.copy;
                 Station *selectedArrival = _arrivalStation.copy;
                 BOOL isSameDeparture = true;
@@ -416,6 +414,7 @@
                 annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
+                    annotationView.centerOffset = CGPointMake(0.0, -15.0);
                 }
                 UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
                 UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
@@ -432,6 +431,7 @@
             if (annotationView == nil) {
                 annotationView = [[MKAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPCluster"];
+                annotationView.centerOffset = CGPointMake(0.0, -15.0);
             }
             annotationView.canShowCallout = NO;
         }
@@ -445,7 +445,7 @@
             ClusterAnnotation *annotation = (ClusterAnnotation *) aView.annotation;
             // zoom in on cluster region
             [mapPanel setRegion:annotation.region animated:YES];
-            dispatch_async(oneBikeQueue, ^(void) {
+            dispatch_sync(oneBikeQueue, ^(void) {
                 [self generateStationsAnnotations];
                 dispatch_async(uiQueue, ^(void) {
                     [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -504,14 +504,9 @@
             _isZoomOut = false;
         }
 
-        NSLog(@"removed stations : %d", _stationsAnnotationsToRemove.count);
-        NSLog(@"removed clusters : %d", _clustersAnnotationsToRemove.count);
-        [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
-        [_clustersAnnotationsToRemove removeAllObjects];
-        [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
-        [_stationsAnnotationsToRemove removeAllObjects];
+        [self eraseAnnotations];
         
-        dispatch_async(oneBikeQueue, ^(void) {
+        dispatch_sync(oneBikeQueue, ^(void) {
             [self generateStationsAnnotations];
             dispatch_async(uiQueue, ^(void) {
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -596,7 +591,7 @@
         [self eraseRoute];
         [self centerMapOnUserLocation];
         [self eraseSearchAnnotations];
-        dispatch_async(oneBikeQueue, ^(void) {
+        dispatch_sync(oneBikeQueue, ^(void) {
             [self generateStationsAnnotations];
             dispatch_async(uiQueue, ^(void) {
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -962,6 +957,16 @@
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"google_ws_search_ride_error", @"")  message:NSLocalizedString(@"OK", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
     [googleRequest call];
+}
+
+- (void)eraseAnnotations
+{
+    NSLog(@"removed stations : %d", _stationsAnnotationsToRemove.count);
+    NSLog(@"removed clusters : %d", _clustersAnnotationsToRemove.count);
+    [mapPanel removeAnnotations:_clustersAnnotationsToRemove];
+    [_clustersAnnotationsToRemove removeAllObjects];
+    [mapPanel removeAnnotations:_stationsAnnotationsToRemove];
+    [_stationsAnnotationsToRemove removeAllObjects];
 }
 
 - (void)eraseRoute {
