@@ -328,6 +328,14 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    if (!_searching) {
+        [self enableSearchButton];
+    } else {
+        [self disableSearchButton];
+    }
+}
+
 # pragma mark Delegate
 
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
@@ -617,6 +625,18 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (IBAction)departureFieldChanged:(id)sender {
+    if (departureField.text.length < 3) {
+        [_departureAutocompleteView hide];
+    }
+}
+
+- (IBAction)arrivalFieldChanged:(id)sender {
+    if (arrivalField.text.length < 3) {
+        [_arrivalAutocompleteView hide];
+    }
+}
+
 - (IBAction)bikeIconClicked:(id)sender {
     [self.bikeField becomeFirstResponder];
 }
@@ -640,6 +660,9 @@
         }
         [self.departureSpinner stopAnimating];
         [self.departureLocation setHidden:false];
+        if (![_departureAutocompleteView isHidden]) {
+            [_departureAutocompleteView hide];
+        }
     }];
 }
 
@@ -658,6 +681,9 @@
         }
         [self.arrivalSpinner stopAnimating];
         [self.arrivalLocation setHidden:false];
+        if (![_arrivalAutocompleteView isHidden]) {
+            [_arrivalAutocompleteView hide];
+        }
     }];
 }
 
@@ -672,14 +698,12 @@
         [self disableSearchButton];
         _departureLocation = nil;
         _arrivalLocation = nil;
-        _searching = YES;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         CLGeocoder *departureGeocoder = [[CLGeocoder alloc] init];
         CLGeocoder *arrivalGeocoder = [[CLGeocoder alloc] init];
         [departureGeocoder geocodeAddressString:self.departureField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
             if (_searching) {
                 if (error != nil) {
-                    _searching = NO;
                     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"departure_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                    [self enableSearchButton];
@@ -706,7 +730,6 @@
         [arrivalGeocoder geocodeAddressString:self.arrivalField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
             if (_searching) {
                 if (error != nil) {
-                    _searching = NO;
                     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"arrival_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                     [self enableSearchButton];
@@ -959,12 +982,14 @@
 # pragma mark Search panel
 
 - (void)enableSearchButton {
+     _searching = NO;
     searchButton.enabled = true;
     [searchButton setTitle:NSLocalizedString(@"7ZO-mt-kun.normalTitle", @"") forState:UIControlStateApplication];
     [searchSpinner setHidden:true];
 }
 
 - (void)disableSearchButton {
+     _searching = YES;
     searchButton.enabled = false;
     [searchButton setTitle:@"" forState:UIControlStateDisabled];
     [searchSpinner setHidden:false];
