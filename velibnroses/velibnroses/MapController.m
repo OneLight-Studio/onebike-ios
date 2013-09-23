@@ -887,11 +887,17 @@
 - (void)drawSearchAnnotations {
     
     NSLog(@"draw search annotations");
+    Station *temp = nil;
+    
     // departure annotation
     PlaceAnnotation *departureAnnotation = [[PlaceAnnotation alloc] init];
     departureAnnotation.placeType = kDeparture;
     departureAnnotation.coordinate = _departureLocation.coordinate;
     departureAnnotation.title = self.departureField.text;
+    temp = [[Station alloc] init];
+    temp.latitude = [[NSNumber alloc] initWithDouble:_departureLocation.coordinate.latitude];
+    temp.longitude = [[NSNumber alloc] initWithDouble:_departureLocation.coordinate.longitude];
+    departureAnnotation.placeStation = temp;
     
     [_searchAnnotations addObject:departureAnnotation];
     
@@ -900,6 +906,10 @@
     arrivalAnnotation.placeType = kArrival;
     arrivalAnnotation.coordinate = _arrivalLocation.coordinate;
     arrivalAnnotation.title = self.arrivalField.text;
+    temp = [[Station alloc] init];
+    temp.latitude = [[NSNumber alloc] initWithDouble:_arrivalLocation.coordinate.latitude];
+    temp.longitude = [[NSNumber alloc] initWithDouble:_arrivalLocation.coordinate.longitude];
+    arrivalAnnotation.placeStation = temp;
     
     [_searchAnnotations addObject:arrivalAnnotation];
     
