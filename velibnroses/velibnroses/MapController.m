@@ -179,14 +179,13 @@
     
     _jcdRequestAttemptsNumber = 0;
     NSLog(@"init jcd ws");
-    _jcdRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:TRUE];
+    _jcdRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:_isStationsDisplayedAtLeastOnce];
     [_jcdRequest appendParameterWithKey:JCD_API_KEY_PARAM_NAME andValue:KEY_JCD];
     [_jcdRequest handleResultWith:^(id json) {
         NSLog(@"jcd ws result");
         _jcdRequestAttemptsNumber = 0;
         _allStations = (NSMutableArray *)[Station fromJSONArray:json];
         NSLog(@"stations count %i", _allStations.count);
-        //[self drawStationsAnnotationsWithReset:true];
         
         NSLog(@"draw stations");
         if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
