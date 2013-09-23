@@ -387,7 +387,7 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)anAnnotation
 {
-    MKPinAnnotationView *annotationView;
+    MKAnnotationView *annotationView;
     static NSString *annotationID;
     
     if (anAnnotation != mapPanel.userLocation) {
@@ -396,16 +396,16 @@
 
             if (annotation.placeType == kDeparture) {
                 annotationID = @"Departure";
-                annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+                annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
-                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
+                    annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
                 }
             } else if (annotation.placeType == kArrival) {
                 annotationID = @"Arrival";
-                annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+                annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
-                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
+                    annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
                 }
             } else {
@@ -413,9 +413,9 @@
                 [loc appendString:@","];
                 [loc appendString:[annotation.placeStation.longitude stringValue]];
                 annotationID = [NSString stringWithString:loc];
-                annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+                annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
-                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
+                    annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                 }
                 UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
                 UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
@@ -424,17 +424,13 @@
                 UIImage *image = [UIUtils placeStands:stands onImage:tmp];
                 annotationView.image = image;
             }
-            if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
-                annotationView.canShowCallout = YES;
-            } else {
-                annotationView.canShowCallout = NO;
-            }
+            annotationView.canShowCallout = YES;
         } else if ([anAnnotation isKindOfClass:[ClusterAnnotation class]]) {
             ClusterAnnotation *cluster = (ClusterAnnotation *) anAnnotation;
             annotationID = @"Cluster";
-            annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+            annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
             if (annotationView == nil) {
-                annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
+                annotationView = [[MKAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPCluster"];
             }
             annotationView.canShowCallout = NO;
