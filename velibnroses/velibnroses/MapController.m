@@ -179,14 +179,13 @@
     
     _jcdRequestAttemptsNumber = 0;
     NSLog(@"init jcd ws");
-    _jcdRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:TRUE];
+    _jcdRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:_isStationsDisplayedAtLeastOnce];
     [_jcdRequest appendParameterWithKey:JCD_API_KEY_PARAM_NAME andValue:KEY_JCD];
     [_jcdRequest handleResultWith:^(id json) {
         NSLog(@"jcd ws result");
         _jcdRequestAttemptsNumber = 0;
         _allStations = (NSMutableArray *)[Station fromJSONArray:json];
         NSLog(@"stations count %i", _allStations.count);
-        //[self drawStationsAnnotationsWithReset:true];
         
         NSLog(@"draw stations");
         if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
@@ -328,6 +327,14 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    if (!_searching) {
+        [self enableSearchButton];
+    } else {
+        [self disableSearchButton];
+    }
+}
+
 # pragma mark Delegate
 
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
@@ -380,7 +387,7 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)aMapView viewForAnnotation:(id <MKAnnotation>)anAnnotation
 {
-    MKPinAnnotationView *annotationView;
+    MKAnnotationView *annotationView;
     static NSString *annotationID;
     
     if (anAnnotation != mapPanel.userLocation) {
@@ -389,16 +396,16 @@
 
             if (annotation.placeType == kDeparture) {
                 annotationID = @"Departure";
-                annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+                annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
-                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
+                    annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
                 }
             } else if (annotation.placeType == kArrival) {
                 annotationID = @"Arrival";
-                annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+                annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
-                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
+                    annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
                 }
             } else {
@@ -406,9 +413,9 @@
                 [loc appendString:@","];
                 [loc appendString:[annotation.placeStation.longitude stringValue]];
                 annotationID = [NSString stringWithString:loc];
-                annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+                annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
-                    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
+                    annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                 }
                 UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
                 UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
@@ -417,17 +424,13 @@
                 UIImage *image = [UIUtils placeStands:stands onImage:tmp];
                 annotationView.image = image;
             }
-            if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
-                annotationView.canShowCallout = YES;
-            } else {
-                annotationView.canShowCallout = NO;
-            }
+            annotationView.canShowCallout = YES;
         } else if ([anAnnotation isKindOfClass:[ClusterAnnotation class]]) {
             ClusterAnnotation *cluster = (ClusterAnnotation *) anAnnotation;
             annotationID = @"Cluster";
-            annotationView = (MKPinAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+            annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
             if (annotationView == nil) {
-                annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
+                annotationView = [[MKAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
                 annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPCluster"];
             }
             annotationView.canShowCallout = NO;
@@ -617,6 +620,18 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (IBAction)departureFieldChanged:(id)sender {
+    if (departureField.text.length < 3) {
+        [_departureAutocompleteView hide];
+    }
+}
+
+- (IBAction)arrivalFieldChanged:(id)sender {
+    if (arrivalField.text.length < 3) {
+        [_arrivalAutocompleteView hide];
+    }
+}
+
 - (IBAction)bikeIconClicked:(id)sender {
     [self.bikeField becomeFirstResponder];
 }
@@ -640,6 +655,9 @@
         }
         [self.departureSpinner stopAnimating];
         [self.departureLocation setHidden:false];
+        if (![_departureAutocompleteView isHidden]) {
+            [_departureAutocompleteView hide];
+        }
     }];
 }
 
@@ -658,6 +676,9 @@
         }
         [self.arrivalSpinner stopAnimating];
         [self.arrivalLocation setHidden:false];
+        if (![_arrivalAutocompleteView isHidden]) {
+            [_arrivalAutocompleteView hide];
+        }
     }];
 }
 
@@ -672,14 +693,12 @@
         [self disableSearchButton];
         _departureLocation = nil;
         _arrivalLocation = nil;
-        _searching = YES;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         CLGeocoder *departureGeocoder = [[CLGeocoder alloc] init];
         CLGeocoder *arrivalGeocoder = [[CLGeocoder alloc] init];
         [departureGeocoder geocodeAddressString:self.departureField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
             if (_searching) {
                 if (error != nil) {
-                    _searching = NO;
                     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"departure_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                    [self enableSearchButton];
@@ -706,7 +725,6 @@
         [arrivalGeocoder geocodeAddressString:self.arrivalField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
             if (_searching) {
                 if (error != nil) {
-                    _searching = NO;
                     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"arrival_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                     [self enableSearchButton];
@@ -865,11 +883,17 @@
 - (void)drawSearchAnnotations {
     
     NSLog(@"draw search annotations");
+    Station *temp = nil;
+    
     // departure annotation
     PlaceAnnotation *departureAnnotation = [[PlaceAnnotation alloc] init];
     departureAnnotation.placeType = kDeparture;
     departureAnnotation.coordinate = _departureLocation.coordinate;
     departureAnnotation.title = self.departureField.text;
+    temp = [[Station alloc] init];
+    temp.latitude = [[NSNumber alloc] initWithDouble:_departureLocation.coordinate.latitude];
+    temp.longitude = [[NSNumber alloc] initWithDouble:_departureLocation.coordinate.longitude];
+    departureAnnotation.placeStation = temp;
     
     [_searchAnnotations addObject:departureAnnotation];
     
@@ -878,6 +902,10 @@
     arrivalAnnotation.placeType = kArrival;
     arrivalAnnotation.coordinate = _arrivalLocation.coordinate;
     arrivalAnnotation.title = self.arrivalField.text;
+    temp = [[Station alloc] init];
+    temp.latitude = [[NSNumber alloc] initWithDouble:_arrivalLocation.coordinate.latitude];
+    temp.longitude = [[NSNumber alloc] initWithDouble:_arrivalLocation.coordinate.longitude];
+    arrivalAnnotation.placeStation = temp;
     
     [_searchAnnotations addObject:arrivalAnnotation];
     
@@ -959,12 +987,14 @@
 # pragma mark Search panel
 
 - (void)enableSearchButton {
+     _searching = NO;
     searchButton.enabled = true;
     [searchButton setTitle:NSLocalizedString(@"7ZO-mt-kun.normalTitle", @"") forState:UIControlStateApplication];
     [searchSpinner setHidden:true];
 }
 
 - (void)disableSearchButton {
+     _searching = YES;
     searchButton.enabled = false;
     [searchButton setTitle:@"" forState:UIControlStateDisabled];
     [searchSpinner setHidden:false];
