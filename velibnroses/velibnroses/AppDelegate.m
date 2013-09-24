@@ -16,8 +16,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    UIImage *navBackgroundImage = [UIImage imageNamed:@"Images/NavigationBar/NBBg"];
-    [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
+    float systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (systemVersion >= 7.0) {
+        [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:175.0 / 255.0 green:203.0 / 255.0 blue:19.0 / 255.0 alpha:1]];
+    } else {
+        [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"NBBg"] forBarMetrics:UIBarMetricsDefault];
+    }
     
     [TestFlight takeOff:KEY_TESTFLIGHT];
 

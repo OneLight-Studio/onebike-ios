@@ -174,6 +174,10 @@
 {
     [super viewDidLoad];
     
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+        self.navigationController.navigationBar.translucent = NO;
+    }
+    
     [self registerOn];
     [self initView];
     
@@ -698,7 +702,7 @@
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"departure_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                    [self enableSearchButton];
                 } else {
-                    _departureLocation = [[placemarks objectAtIndex:0] location];
+                    _departureLocation = [(CLPlacemark *)[placemarks objectAtIndex:0] location];
                     if (_departureLocation != nil && _arrivalLocation != nil) {
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         if (![self areEqualLocationsBetween:_departureLocation and:_arrivalLocation]) {
@@ -724,7 +728,7 @@
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"arrival_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                     [self enableSearchButton];
                 } else {
-                    _arrivalLocation = [[placemarks objectAtIndex:0] location];
+                    _arrivalLocation = [(CLPlacemark *)[placemarks objectAtIndex:0] location];
                     if (_departureLocation != nil && _arrivalLocation != nil) {
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         if (![self areEqualLocationsBetween:_departureLocation and:_arrivalLocation]) {
