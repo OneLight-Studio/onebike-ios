@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "Constants.h"
 #import "Keys.h"
+#import "UIUtils.h"
 
 @implementation AppDelegate {
     double _sleepingStartDate;
@@ -19,9 +20,9 @@
     float systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
     if (systemVersion >= 7.0) {
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:175.0 / 255.0 green:203.0 / 255.0 blue:19.0 / 255.0 alpha:1]];
+        [[UINavigationBar appearance] setBarTintColor:[UIUtils colorWithHexaString:@"#afcb13"]];
     } else {
-        [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"NBBg"] forBarMetrics:UIBarMetricsDefault];
+        [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"Images/NavigationBar/NBBg"] forBarMetrics:UIBarMetricsDefault];
     }
     
     [TestFlight takeOff:KEY_TESTFLIGHT];

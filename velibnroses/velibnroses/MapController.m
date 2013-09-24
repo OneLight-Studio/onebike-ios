@@ -215,14 +215,15 @@
                     }
                 });
             });
-        } else {
-            dispatch_async(uiQueue, ^(void) {
-                [self eraseSearchAnnotations];
-                [self eraseRoute];
-            });
+        } else if (_mapViewState == MAP_VIEW_SEARCH_STATE) {
+            
+            Station *selectedDeparture = _departureStation.copy;
+            Station *selectedArrival = _arrivalStation.copy;
+            
+            [self eraseSearchAnnotations];
+            [self eraseRoute];
+            
             dispatch_sync(oneBikeQueue, ^(void) {
-                Station *selectedDeparture = _departureStation.copy;
-                Station *selectedArrival = _arrivalStation.copy;
                 BOOL isSameDeparture = true;
                 BOOL isSameArrival = true;
                 double radius = [self getDistanceBetweenDeparture:_departureLocation andArrival:_arrivalLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
