@@ -59,6 +59,9 @@
 /* Begin PBXFileReference section */
 		190776FF1796F3BE00180530 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
 		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
+		1927E4C317F5E0FC00D8061D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/MainStoryboard.strings; sourceTree = "<group>"; };
+		1927E4C417F5E0FC00D8061D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1927E4C517F5E0FC00D8061D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		19688CC517B90770005ACA64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		19688CD617B91FE4005ACA64 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
 		19688CDC17B92850005ACA64 /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Logo.png; path = ../Logo.png; sourceTree = "<group>"; };
@@ -400,6 +403,7 @@
 				en,
 				Base,
 				fr,
+				es,
 			);
 			mainGroup = E931955917858121009AFCC1;
 			productRefGroup = E931956317858121009AFCC1 /* Products */;
@@ -491,6 +495,7 @@
 			children = (
 				19688CC517B90770005ACA64 /* Base */,
 				19F3F49C17B250B900DCCC47 /* fr */,
+				1927E4C317F5E0FC00D8061D /* es */,
 			);
 			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";
@@ -500,6 +505,7 @@
 			children = (
 				E931956F17858121009AFCC1 /* en */,
 				19F3F49E17B250B900DCCC47 /* fr */,
+				1927E4C417F5E0FC00D8061D /* es */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -509,6 +515,7 @@
 			children = (
 				E9D1F73E1793FA690051D13B /* en */,
 				19F3F49D17B250B900DCCC47 /* fr */,
+				1927E4C517F5E0FC00D8061D /* es */,
 			);
 			name = Localizable.strings;
 			path = ..;

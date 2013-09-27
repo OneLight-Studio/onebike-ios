@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  Velib N' Roses
+
+  Created by Sébastien BALARD on 15/07/13.
+  Copyright (c) 2013 OneLight Studio. All rights reserved.
+*/
+
+"dialog_error_title" = "Error";
+"dialog_warning_title" = "Alerta";
+"dialog_info_title" = "Info";
+
+"departure_not_found" = "La dirección de inicio, no se encuentra.";
+"arrival_not_found" = "La dirección de destino, no se encuentra.";
+"error" = "Oops, se produjo un error.";
+"missing_departure" = "Por favor, llene la dirección de inicio.";
+"missing_arrival" = "Por favor, llene la dirección de destino";
+"same_location" = "Inicio y destino están demasiado cerca";
+"incomplete_search_result" = "Ninguna ruta coincide con su búsqueda.";
+"ride_has_changed" = "La disponibilidad de las estaciones ha cambiado.\nOneBike ha seleccionado automáticamente una nueva ruta";
+"no_more_available_ride" = "La disponibilidad de las estaciones ha cambiado.\nA No hay estaciones que coinciden con su búsqueda.";
+"no_location_activated" = "Para disfrutar de todas las funciones de la aplicación, gracias para permitir la localización en el menú \"Settings\"";
+"no_location_allowed" = "Para disfrutar de todas las funciones de la aplicación, gracias para permitir la localización en el menú \"Settings\"";
+
+"jcd_ws_get_data_warning" = "Por favor espere, datos de la estación se descargan o procesan.";
+"jcd_ws_get_data_error" = "Se ha producido un error al recuperar datos de las estaciones.";
+"google_ws_search_ride_error" = "Se produjo un error en la búsqueda de su itinerario.";
