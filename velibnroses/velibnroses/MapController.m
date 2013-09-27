@@ -61,6 +61,8 @@
     
     dispatch_queue_t uiQueue;
     dispatch_queue_t oneBikeQueue;
+    
+    BOOL _redraw;
 }
 
 @synthesize mapPanel;
@@ -468,20 +470,21 @@
             });
         }
     } else if (!_isSearchViewVisible && _mapViewState == MAP_VIEW_SEARCH_STATE) {
-        if ([aView.annotation isKindOfClass:[PlaceAnnotation class]]) {
+        if ([aView.annotation isKindOfClass:[PlaceAnnotation class]] && !_redraw) {
             PlaceAnnotation *annotation = (PlaceAnnotation *) aView.annotation;
             if (annotation.placeType != kDeparture && annotation.placeType != kArrival && annotation.placeLocation != kUndefined) {
-                BOOL redraw = false;
                 if (annotation.placeLocation == kNearDeparture && _departureStation != annotation.placeStation) {
                     NSLog(@"change departure");
                     _departureStation = annotation.placeStation;
-                    redraw = true;
+                    _redraw = true;
                 } else if (annotation.placeLocation == kNearArrival && _arrivalStation != annotation.placeStation) {
                     NSLog(@"change arrival");
                     _arrivalStation = annotation.placeStation;
-                    redraw = true;
+                    _redraw = true;
+                } else {
+                    _redraw = false;
                 }
-                if (redraw) {
+                if (_redraw) {
                     [self eraseRoute];
                     [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
                 }
@@ -832,7 +835,6 @@
             if (clusterized) {
                 [clusterStations addObject:base];
                 ClusterAnnotation *newCluster = [self createClusterAnnotationForStations:clusterStations];
-                //if (![_clustersAnnotationsToRemove containsObject:newCluster]) {
                 [_clustersAnnotationsToAdd addObject:newCluster];
                 NSLog(@"convert %d stations into new cluster", clusterStations.count);
             } else {
@@ -946,6 +948,7 @@
             _route = [RoutePolyline routePolylineFromPolyline:[GeoUtils polylineWithEncodedString:encodedPolyline betweenDeparture:dep andArrival:arr]];
             [mapPanel addOverlay:_route];
             [mapPanel setVisibleMapRect:[self generateMapRectContainingAllAnnotations:_searchAnnotations] animated:YES];
+            _redraw = false;
             
         } else {
             NSLog(@"Google Maps API error %@", status);
