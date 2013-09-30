@@ -110,6 +110,10 @@
     searchFrame.origin.y = -searchFrame.size.height;
     self.searchPanel.frame = searchFrame;
     
+    UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeUpInvoked:)];
+    [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
+    [self.searchPanel addGestureRecognizer:swipeUpGestureRecognizer];
+    
     self.bikeField.text = @"1";
     self.standField.text = @"1";
     self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBClose"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
@@ -754,6 +758,14 @@
     }
 }
 
+- (void)swipeUpInvoked:(UITapGestureRecognizer *)recognizer {
+    if (_isSearchViewVisible) {
+        _isSearchViewVisible = false;
+        [self closeSearchPanel];
+    }
+    [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
+}
+
 # pragma mark Notification(s)
 
 - (void) didEnterBackgroundNotificationReceived:(NSNotification *)notification
@@ -1055,6 +1067,7 @@
     NSLog(@"%f,%f -> %f,%f (%d / %d)", departure.coordinate.latitude, departure.coordinate.longitude, arrival.coordinate.latitude, arrival.coordinate.longitude, bikes, availableStands);
     _mapViewState = MAP_VIEW_SEARCH_STATE;
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
+    [self eraseAnnotations];
     [self eraseRoute];
     [self eraseSearchAnnotations];
     [self searchCloseStationsAroundDeparture:departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
