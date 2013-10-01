@@ -45,6 +45,7 @@
 		19F1D6AE17D10B2900BA53AF /* TRGoogleMapsSuggestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 19F1D6A617D10B2900BA53AF /* TRGoogleMapsSuggestion.m */; };
 		19F1D6AF17D10B2900BA53AF /* TRStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 19F1D6A817D10B2900BA53AF /* TRStringExtensions.m */; };
 		19F1D6B017D10B2900BA53AF /* TRTextFieldExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 19F1D6AA17D10B2900BA53AF /* TRTextFieldExtensions.m */; };
+		19F3F96C17FAFD4A00A7627E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 19F3F96A17FAFD4A00A7627E /* Localizable.strings */; };
 		19FD1B5F179591BE00309FD0 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FD1B5E179591BE00309FD0 /* Station.m */; };
 		E931956617858121009AFCC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956517858121009AFCC1 /* UIKit.framework */; };
 		E931956817858121009AFCC1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956717858121009AFCC1 /* Foundation.framework */; };
@@ -53,7 +54,6 @@
 		E931957217858121009AFCC1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E931957117858121009AFCC1 /* main.m */; };
 		E931957617858121009AFCC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E931957517858121009AFCC1 /* AppDelegate.m */; };
 		E931958217858121009AFCC1 /* MapController.m in Sources */ = {isa = PBXBuildFile; fileRef = E931958117858121009AFCC1 /* MapController.m */; };
-		E9D1F73F1793FA690051D13B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9D1F73D1793FA690051D13B /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,7 +61,6 @@
 		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
 		1927E4C317F5E0FC00D8061D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/MainStoryboard.strings; sourceTree = "<group>"; };
 		1927E4C417F5E0FC00D8061D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1927E4C517F5E0FC00D8061D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		19688CC517B90770005ACA64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		19688CD617B91FE4005ACA64 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
 		19688CDC17B92850005ACA64 /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Logo.png; path = ../Logo.png; sourceTree = "<group>"; };
@@ -126,8 +125,10 @@
 		19F1D6A917D10B2900BA53AF /* TRTextFieldExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTextFieldExtensions.h; sourceTree = "<group>"; };
 		19F1D6AA17D10B2900BA53AF /* TRTextFieldExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRTextFieldExtensions.m; sourceTree = "<group>"; };
 		19F3F49C17B250B900DCCC47 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainStoryboard.strings; sourceTree = "<group>"; };
-		19F3F49D17B250B900DCCC47 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = velibnroses/fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		19F3F49E17B250B900DCCC47 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		19F3F96B17FAFD4A00A7627E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		19F3F96D17FAFD5400A7627E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		19F3F96E17FAFD5F00A7627E /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		19FD1B5817958E4B00309FD0 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		19FD1B5D179591BE00309FD0 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Station.h; sourceTree = "<group>"; };
 		19FD1B5E179591BE00309FD0 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Station.m; sourceTree = "<group>"; };
@@ -144,7 +145,6 @@
 		E931958017858121009AFCC1 /* MapController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapController.h; sourceTree = "<group>"; };
 		E931958117858121009AFCC1 /* MapController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapController.m; sourceTree = "<group>"; };
 		E931958917858122009AFCC1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		E9D1F73E1793FA690051D13B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = velibnroses/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E9D1F7411793FDEC0051D13B /* WSRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WSRequest.h; sourceTree = "<group>"; };
 		E9D1F7421793FDEC0051D13B /* WSRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WSRequest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -347,8 +347,8 @@
 		E931956C17858121009AFCC1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				19F3F96A17FAFD4A00A7627E /* Localizable.strings */,
 				E931956E17858121009AFCC1 /* InfoPlist.strings */,
-				E9D1F73D1793FA690051D13B /* Localizable.strings */,
 				E931957117858121009AFCC1 /* main.m */,
 				E931956D17858121009AFCC1 /* OneBike-Info.plist */,
 				E931957317858121009AFCC1 /* OneBike-Prefix.pch */,
@@ -392,7 +392,7 @@
 		E931955A17858121009AFCC1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "OneLight Studio";
 			};
 			buildConfigurationList = E931955D17858121009AFCC1 /* Build configuration list for PBXProject "OneBike" */;
@@ -421,8 +421,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E931957017858121009AFCC1 /* InfoPlist.strings in Resources */,
-				E9D1F73F1793FA690051D13B /* Localizable.strings in Resources */,
 				19688CC617B90770005ACA64 /* MainStoryboard.storyboard in Resources */,
+				19F3F96C17FAFD4A00A7627E /* Localizable.strings in Resources */,
 				19688CD717B91FE4005ACA64 /* Images in Resources */,
 				19688CDD17B92850005ACA64 /* Logo.png in Resources */,
 				19688CDF17B9285D005ACA64 /* Logo@2x.png in Resources */,
@@ -500,6 +500,16 @@
 			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
+		19F3F96A17FAFD4A00A7627E /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				19F3F96B17FAFD4A00A7627E /* en */,
+				19F3F96D17FAFD5400A7627E /* fr */,
+				19F3F96E17FAFD5F00A7627E /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		E931956E17858121009AFCC1 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -508,17 +518,6 @@
 				1927E4C417F5E0FC00D8061D /* es */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		E9D1F73D1793FA690051D13B /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E9D1F73E1793FA690051D13B /* en */,
-				19F3F49D17B250B900DCCC47 /* fr */,
-				1927E4C517F5E0FC00D8061D /* es */,
-			);
-			name = Localizable.strings;
-			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -551,7 +550,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos7.0;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -575,7 +574,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				SDKROOT = iphoneos7.0;
+				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

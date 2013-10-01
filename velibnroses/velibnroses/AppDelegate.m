@@ -21,6 +21,7 @@
     if (systemVersion >= 7.0) {
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UINavigationBar appearance] setBarTintColor:[UIUtils colorWithHexaString:@"#afcb13"]];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     } else {
         [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"Images/NavigationBar/NBBg"] forBarMetrics:UIBarMetricsDefault];
     }

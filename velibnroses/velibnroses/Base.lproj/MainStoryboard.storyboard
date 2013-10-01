@@ -290,47 +290,6 @@
         <image name="Images/SearchPanel/SPMyLocation_Disabled.png" width="16" height="16"/>
         <image name="Images/SearchPanel/SPStand.png" width="16" height="16"/>
     </resources>
-    <classes>
-        <class className="InfoController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/InfoController.h"/>
-            <relationships>
-                <relationship kind="action" name="backBarButtonClicked:"/>
-                <relationship kind="outlet" name="backBarButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="contentImage" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="MapController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapController.h"/>
-            <relationships>
-                <relationship kind="action" name="arrivalFieldChanged:"/>
-                <relationship kind="action" name="backBarButtonClicked:"/>
-                <relationship kind="action" name="bikeIconClicked:"/>
-                <relationship kind="action" name="cancelBarButtonClicked:"/>
-                <relationship kind="action" name="departureFieldChanged:"/>
-                <relationship kind="action" name="searchBarButtonClicked:"/>
-                <relationship kind="action" name="searchButtonClicked:"/>
-                <relationship kind="action" name="standIconClicked:"/>
-                <relationship kind="action" name="userLocationAsArrivalClicked:"/>
-                <relationship kind="action" name="userLocationAsDepartureClicked:"/>
-                <relationship kind="outlet" name="arrivalField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="arrivalLocation" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="arrivalSpinner" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="bikeField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="cancelBarButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="closeSearchPanelButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="departureField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="departureLocation" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="departureSpinner" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="infoBarButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="mapPanel" candidateClass="MKMapView"/>
-                <relationship kind="outlet" name="searchBarButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="searchButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="searchPanel" candidateClass="UIView"/>
-                <relationship kind="outlet" name="searchSpinner" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="standField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

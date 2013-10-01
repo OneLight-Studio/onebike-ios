@@ -1,4 +1,3 @@
-
 /* Class = "IBUIButton"; normalTitle = "Let's go !"; ObjectID = "7ZO-mt-kun"; */
 "7ZO-mt-kun.normalTitle" = "Buscar";
 
@@ -7,3 +6,4 @@
 
 /* Class = "IBUITextField"; placeholder = "Departure"; ObjectID = "iYR-bn-zkd"; */
 "iYR-bn-zkd.placeholder" = "Inicio";
+
