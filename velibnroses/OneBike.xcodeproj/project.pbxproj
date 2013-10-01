@@ -46,6 +46,10 @@
 		19F1D6AF17D10B2900BA53AF /* TRStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 19F1D6A817D10B2900BA53AF /* TRStringExtensions.m */; };
 		19F1D6B017D10B2900BA53AF /* TRTextFieldExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 19F1D6AA17D10B2900BA53AF /* TRTextFieldExtensions.m */; };
 		19F3F96C17FAFD4A00A7627E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 19F3F96A17FAFD4A00A7627E /* Localizable.strings */; };
+		19F3F98317FB355F00A7627E /* Logo29.png in Resources */ = {isa = PBXBuildFile; fileRef = 19F3F97F17FB355F00A7627E /* Logo29.png */; };
+		19F3F98417FB355F00A7627E /* Logo58.png in Resources */ = {isa = PBXBuildFile; fileRef = 19F3F98017FB355F00A7627E /* Logo58.png */; };
+		19F3F98517FB355F00A7627E /* Logo80.png in Resources */ = {isa = PBXBuildFile; fileRef = 19F3F98117FB355F00A7627E /* Logo80.png */; };
+		19F3F98617FB355F00A7627E /* Logo120.png in Resources */ = {isa = PBXBuildFile; fileRef = 19F3F98217FB355F00A7627E /* Logo120.png */; };
 		19FD1B5F179591BE00309FD0 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = 19FD1B5E179591BE00309FD0 /* Station.m */; };
 		E931956617858121009AFCC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956517858121009AFCC1 /* UIKit.framework */; };
 		E931956817858121009AFCC1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E931956717858121009AFCC1 /* Foundation.framework */; };
@@ -129,6 +133,10 @@
 		19F3F96B17FAFD4A00A7627E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		19F3F96D17FAFD5400A7627E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		19F3F96E17FAFD5F00A7627E /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		19F3F97F17FB355F00A7627E /* Logo29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo29.png; sourceTree = "<group>"; };
+		19F3F98017FB355F00A7627E /* Logo58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo58.png; sourceTree = "<group>"; };
+		19F3F98117FB355F00A7627E /* Logo80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo80.png; sourceTree = "<group>"; };
+		19F3F98217FB355F00A7627E /* Logo120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo120.png; sourceTree = "<group>"; };
 		19FD1B5817958E4B00309FD0 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		19FD1B5D179591BE00309FD0 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Station.h; sourceTree = "<group>"; };
 		19FD1B5E179591BE00309FD0 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Station.m; sourceTree = "<group>"; };
@@ -173,6 +181,10 @@
 		19688CD517B91F5E005ACA64 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				19F3F97F17FB355F00A7627E /* Logo29.png */,
+				19F3F98017FB355F00A7627E /* Logo58.png */,
+				19F3F98117FB355F00A7627E /* Logo80.png */,
+				19F3F98217FB355F00A7627E /* Logo120.png */,
 				19688CE617B92980005ACA64 /* toulouse.gpx */,
 				19688CE417B9288B005ACA64 /* Default-568h@2x.png */,
 				19688CE217B92880005ACA64 /* Default@2x.png */,
@@ -421,6 +433,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E931957017858121009AFCC1 /* InfoPlist.strings in Resources */,
+				19F3F98317FB355F00A7627E /* Logo29.png in Resources */,
 				19688CC617B90770005ACA64 /* MainStoryboard.storyboard in Resources */,
 				19F3F96C17FAFD4A00A7627E /* Localizable.strings in Resources */,
 				19688CD717B91FE4005ACA64 /* Images in Resources */,
@@ -429,7 +442,10 @@
 				19688CE117B92872005ACA64 /* Default.png in Resources */,
 				19688CE317B92880005ACA64 /* Default@2x.png in Resources */,
 				19688CE517B9288B005ACA64 /* Default-568h@2x.png in Resources */,
+				19F3F98517FB355F00A7627E /* Logo80.png in Resources */,
+				19F3F98417FB355F00A7627E /* Logo58.png in Resources */,
 				19688CE717B92980005ACA64 /* toulouse.gpx in Resources */,
+				19F3F98617FB355F00A7627E /* Logo120.png in Resources */,
 				19C9C67817CE674600805611 /* update_storyboard_strings.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -582,6 +598,7 @@
 		E931959B17858122009AFCC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pierre-Yves ROGER (A5K4D4KBS9)";
 				COPY_PHASE_STRIP = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "velibnroses/OneBike-Prefix.pch";
@@ -592,6 +609,7 @@
 					"\"$(SRCROOT)/velibnroses/TestFlightSDK2.0.0\"",
 				);
 				PRODUCT_NAME = OneBike;
+				PROVISIONING_PROFILE = "52AB74E7-0ADC-423F-B4F0-01FDFBAA9723";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -612,8 +630,8 @@
 					"\"$(SRCROOT)/velibnroses/TestFlightSDK2.0.0\"",
 				);
 				PRODUCT_NAME = OneBike;
-				PROVISIONING_PROFILE = "56F6B2E9-25A7-42D9-8A2B-0E194193F926";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "56F6B2E9-25A7-42D9-8A2B-0E194193F926";
+				PROVISIONING_PROFILE = "B8E394A3-5406-44B7-908D-893CE195B1AA";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B8E394A3-5406-44B7-908D-893CE195B1AA";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
