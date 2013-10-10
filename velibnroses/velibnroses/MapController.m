@@ -1061,6 +1061,8 @@
         searchFrame.origin.y = -searchFrame.size.height;
         self.searchPanel.frame = searchFrame;
     }];
+    [_departureAutocompleteView hide];
+    [_arrivalAutocompleteView hide];
 }
 
 - (void)searchWithDeparture:(CLLocation *)departure andArrival:(CLLocation *)arrival withBikes:(int)bikes andAvailableStands:(int)availableStands inARadiusOf:(int)radius {
