@@ -7,12 +7,27 @@
 //
 
 #import "AppDelegate.h"
+#import "Constants.h"
+#import "Keys.h"
+#import "UIUtils.h"
 
-@implementation AppDelegate
+@implementation AppDelegate {
+    double _sleepingStartDate;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    float systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (systemVersion >= 7.0) {
+        [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+        [[UINavigationBar appearance] setBarTintColor:[UIUtils colorWithHexaString:@"#afcb13"]];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    } else {
+        [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"Images/NavigationBar/NBBg"] forBarMetrics:UIBarMetricsDefault];
+    }
+    
+    [TestFlight takeOff:KEY_TESTFLIGHT];
+
     return YES;
 }
 							
@@ -24,13 +39,19 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    _sleepingStartDate = [[NSDate date] timeIntervalSince1970];
+    NSLog(@"applicationDidEnterBackground");
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DID_ENTER_BACKGROUND object:nil userInfo:nil];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    NSLog(@"applicationWillEnterForeground");
+    double now = [[NSDate date] timeIntervalSince1970];
+    double sleepingTime = now - _sleepingStartDate;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WILL_ENTER_FOREGROUND object:[NSNumber numberWithDouble:sleepingTime] userInfo:nil];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
