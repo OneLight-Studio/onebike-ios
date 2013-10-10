@@ -10,8 +10,8 @@
 "dialog_warning_title" = "Alerta";
 "dialog_info_title" = "Info";
 
-"departure_not_found" = "La dirección de inicio, no se encuentra.";
-"arrival_not_found" = "La dirección de destino, no se encuentra.";
+"departure_not_found" = "No hemos encontrado su dirección de inicio.";
+"arrival_not_found" = "No hemos encontrado su dirección de destino.";
 "error" = "Oops, se produjo un error.";
 "missing_departure" = "Por favor, llene la dirección de inicio.";
 "missing_arrival" = "Por favor, llene la dirección de destino";
