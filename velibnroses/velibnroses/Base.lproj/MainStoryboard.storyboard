@@ -260,6 +260,7 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="dyJ-RV-8n7">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="505"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                             </imageView>
                         </subviews>
                     </view>
