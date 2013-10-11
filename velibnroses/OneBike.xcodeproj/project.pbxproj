@@ -22,9 +22,11 @@
 		19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D1F7421793FDEC0051D13B /* WSRequest.m */; };
 		19BAAF7917E7398A00F0C092 /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 19BAAF7817E7398A00F0C092 /* ClusterAnnotation.m */; };
 		19C9C67817CE674600805611 /* update_storyboard_strings.sh in Resources */ = {isa = PBXBuildFile; fileRef = 19C9C67717CE674600805611 /* update_storyboard_strings.sh */; };
-		19CA3C7717D4E1CF00366535 /* InfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CA3C7617D4E1CF00366535 /* InfoController.m */; };
+		19CA3C7717D4E1CF00366535 /* HelpController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CA3C7617D4E1CF00366535 /* HelpController.m */; };
 		19CC9CAA17D0B0B700119925 /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CC9CA917D0B0B700119925 /* UIUtils.m */; };
 		19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CED9FF17AAA4120069ECDC /* RoutePolyline.m */; };
+		19D69FA81807F2130099D2BE /* InfoPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19D69FA71807F2130099D2BE /* InfoPageViewController.m */; };
+		19D69FAB180803800099D2BE /* AboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19D69FAA180803800099D2BE /* AboutController.m */; };
 		19E4E14517D8E775001A47DF /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19E4E13F17D8E775001A47DF /* libTestFlight.a */; };
 		19E4E14917D8E813001A47DF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 19E4E14817D8E813001A47DF /* libz.dylib */; };
 		19F1D67A17D0E81400BA53AF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F1D67917D0E81400BA53AF /* SystemConfiguration.framework */; };
@@ -80,12 +82,16 @@
 		19BAAF7717E7398A00F0C092 /* ClusterAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterAnnotation.h; sourceTree = "<group>"; };
 		19BAAF7817E7398A00F0C092 /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
 		19C9C67717CE674600805611 /* update_storyboard_strings.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update_storyboard_strings.sh; sourceTree = "<group>"; };
-		19CA3C7517D4E1CF00366535 /* InfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoController.h; sourceTree = "<group>"; };
-		19CA3C7617D4E1CF00366535 /* InfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoController.m; sourceTree = "<group>"; };
+		19CA3C7517D4E1CF00366535 /* HelpController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpController.h; sourceTree = "<group>"; };
+		19CA3C7617D4E1CF00366535 /* HelpController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpController.m; sourceTree = "<group>"; };
 		19CC9CA817D0B0B700119925 /* UIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIUtils.h; sourceTree = "<group>"; };
 		19CC9CA917D0B0B700119925 /* UIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIUtils.m; sourceTree = "<group>"; };
 		19CED9FE17AAA4120069ECDC /* RoutePolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoutePolyline.h; sourceTree = "<group>"; };
 		19CED9FF17AAA4120069ECDC /* RoutePolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoutePolyline.m; sourceTree = "<group>"; };
+		19D69FA61807F2130099D2BE /* InfoPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPageViewController.h; sourceTree = "<group>"; };
+		19D69FA71807F2130099D2BE /* InfoPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPageViewController.m; sourceTree = "<group>"; };
+		19D69FA9180803800099D2BE /* AboutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutController.h; sourceTree = "<group>"; };
+		19D69FAA180803800099D2BE /* AboutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutController.m; sourceTree = "<group>"; };
 		19DBB0C817F9A2FA005B3637 /* Keys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keys.h; sourceTree = "<group>"; };
 		19E4E13F17D8E775001A47DF /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		19E4E14217D8E775001A47DF /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
@@ -217,6 +223,19 @@
 			name = Scripts;
 			sourceTree = "<group>";
 		};
+		19D69FA51807F0E00099D2BE /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				19D69FA61807F2130099D2BE /* InfoPageViewController.h */,
+				19D69FA71807F2130099D2BE /* InfoPageViewController.m */,
+				19D69FA9180803800099D2BE /* AboutController.h */,
+				19D69FAA180803800099D2BE /* AboutController.m */,
+				19CA3C7517D4E1CF00366535 /* HelpController.h */,
+				19CA3C7617D4E1CF00366535 /* HelpController.m */,
+			);
+			name = Info;
+			sourceTree = "<group>";
+		};
 		19E4E13E17D8E775001A47DF /* TestFlightSDK2.0.0 */ = {
 			isa = PBXGroup;
 			children = (
@@ -338,10 +357,9 @@
 		E931956B17858121009AFCC1 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				19D69FA51807F0E00099D2BE /* Info */,
 				E931957417858121009AFCC1 /* AppDelegate.h */,
 				E931957517858121009AFCC1 /* AppDelegate.m */,
-				19CA3C7517D4E1CF00366535 /* InfoController.h */,
-				19CA3C7617D4E1CF00366535 /* InfoController.m */,
 				E931958017858121009AFCC1 /* MapController.h */,
 				E931958117858121009AFCC1 /* MapController.m */,
 				19FD1B5C1795916600309FD0 /* Domain */,
@@ -387,7 +405,6 @@
 				E931955E17858121009AFCC1 /* Sources */,
 				E931955F17858121009AFCC1 /* Frameworks */,
 				E931956017858121009AFCC1 /* Resources */,
-				19C9C67A17CE692D00805611 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -452,23 +469,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		19C9C67A17CE692D00805611 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${PROJECT_DIR}/update_storyboard_strings.sh";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		E931955E17858121009AFCC1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -494,12 +494,14 @@
 				19F1D69B17D10B0000BA53AF /* UIImageView+AFNetworking.m in Sources */,
 				19F1D6AB17D10B2900BA53AF /* TRAutocompleteView.m in Sources */,
 				19F1D6AC17D10B2900BA53AF /* TRGoogleMapsAutocompleteItemsSource.m in Sources */,
+				19D69FA81807F2130099D2BE /* InfoPageViewController.m in Sources */,
 				19F1D6AD17D10B2900BA53AF /* TRGoogleMapsAutocompletionCellFactory.m in Sources */,
 				19F1D6AE17D10B2900BA53AF /* TRGoogleMapsSuggestion.m in Sources */,
 				19F1D6AF17D10B2900BA53AF /* TRStringExtensions.m in Sources */,
 				19F1D6B017D10B2900BA53AF /* TRTextFieldExtensions.m in Sources */,
-				19CA3C7717D4E1CF00366535 /* InfoController.m in Sources */,
+				19CA3C7717D4E1CF00366535 /* HelpController.m in Sources */,
 				19BAAF7917E7398A00F0C092 /* ClusterAnnotation.m in Sources */,
+				19D69FAB180803800099D2BE /* AboutController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
