@@ -21,6 +21,8 @@
 "no_more_available_ride" = "Les disponibilités des stations ont changé.\nIl n'y a plus de station correspondant à votre recherche.";
 "no_location_activated" = "Pour bénéficier de l'ensemble des fonctionnalités, merci d'activer la localisation dans l'écran \"Réglages\"";
 "no_location_allowed" = "Pour bénéficier de l'ensemble des fonctionnalités, merci d'autoriser la localisation dans l'écran \"Réglages\"";
+"no_email_account_defined" = "Veuillez définir un compte email dans l'application Mail.";
+"email_title" = "[OneBike][iPhone] Commentaire utilisateur";
 
 "jcd_ws_get_data_warning" = "Veuillez patienter quelques instants, les données des stations de vélos sont en train d'être téléchargées ou traitées.";
 "jcd_ws_get_data_error" = "Une erreur s'est produite lors de la récupération des données des stations de vélos.";

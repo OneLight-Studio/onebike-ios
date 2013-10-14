@@ -259,6 +259,11 @@
                                 <action selector="backBarButtonClicked:" destination="HOZ-74-3NR" id="azx-XH-LB1"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Feedback" id="Tin-JL-JdR">
+                            <connections>
+                                <action selector="feedbackBarButtonClicked:" destination="HOZ-74-3NR" id="78P-oS-0IX"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="backBarButton" destination="JJ6-Qb-bal" id="VCQ-MI-BdT"/>

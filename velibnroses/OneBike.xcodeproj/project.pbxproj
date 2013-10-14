@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
+		1953476B180C07F9005998DB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1953476A180C07F9005998DB /* MessageUI.framework */; };
 		19688CC617B90770005ACA64 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19688CC417B90770005ACA64 /* MainStoryboard.storyboard */; };
 		19688CD717B91FE4005ACA64 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 19688CD617B91FE4005ACA64 /* Images */; };
 		19688CDD17B92850005ACA64 /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 19688CDC17B92850005ACA64 /* Logo.png */; };
@@ -67,6 +68,9 @@
 		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
 		1927E4C317F5E0FC00D8061D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/MainStoryboard.strings; sourceTree = "<group>"; };
 		1927E4C417F5E0FC00D8061D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		19534766180BF5BC005998DB /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		19534768180BF7B6005998DB /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		1953476A180C07F9005998DB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		19688CC517B90770005ACA64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		19688CD617B91FE4005ACA64 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
 		19688CDC17B92850005ACA64 /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Logo.png; path = ../Logo.png; sourceTree = "<group>"; };
@@ -168,6 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1953476B180C07F9005998DB /* MessageUI.framework in Frameworks */,
 				19E4E14917D8E813001A47DF /* libz.dylib in Frameworks */,
 				19F1D67E17D0E9C500BA53AF /* Security.framework in Frameworks */,
 				19F1D67C17D0E81C00BA53AF /* MobileCoreServices.framework in Frameworks */,
@@ -341,6 +346,9 @@
 		E931956417858121009AFCC1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1953476A180C07F9005998DB /* MessageUI.framework */,
+				19534768180BF7B6005998DB /* AddressBookUI.framework */,
+				19534766180BF5BC005998DB /* AddressBook.framework */,
 				19F1D67D17D0E9C500BA53AF /* Security.framework */,
 				19F1D67B17D0E81C00BA53AF /* MobileCoreServices.framework */,
 				19F1D67917D0E81400BA53AF /* SystemConfiguration.framework */,

@@ -21,6 +21,8 @@
 "no_more_available_ride" = "Stations data has changed.\nFor the moment, there is no more station matching your search.";
 "no_location_activated" = "To take advantage of all features, please activate location into \"Settings\"";
 "no_location_allowed" = "To take advantage of all features, please allow location into \"Settings\"";
+"no_email_account_defined" = "Please, configure an email account in Mail app.";
+"email_title" = "[OneBike][iPhone] User feedback";
 
 "jcd_ws_get_data_warning" = "Please wait for a moment, bikes stations data are being received or processed.";
 "jcd_ws_get_data_error" = "An error has occurred during bikes stations data getting.";
