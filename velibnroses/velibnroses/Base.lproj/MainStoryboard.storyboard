@@ -212,6 +212,39 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.75" colorSpace="calibratedWhite"/>
                             </view>
+                            <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" id="B8j-9X-DmC">
+                                <rect key="frame" x="0.0" y="430" width="320" height="50"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Images/MapScreen/MPDistance.png" id="cyf-lu-IbR">
+                                        <rect key="frame" x="45" y="5" width="40" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Images/MapScreen/MPSeparator" id="CFR-pE-OpU">
+                                        <rect key="frame" x="160" y="5" width="1" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" image="Images/MapScreen/MPDuration" id="5Is-pm-MpG">
+                                        <rect key="frame" x="160" y="5" width="40" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="fCz-fA-jZB">
+                                        <rect key="frame" x="195" y="10" width="90" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" id="10T-RF-E1x">
+                                        <rect key="frame" x="80" y="10" width="70" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.75" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -237,6 +270,9 @@
                         <outlet property="departureLocation" destination="vrN-9E-YNC" id="yzO-wr-T0V"/>
                         <outlet property="departureSpinner" destination="c49-wK-1go" id="3t7-8h-sPk"/>
                         <outlet property="infoBarButton" destination="lbv-EE-UWT" id="yOY-yq-68u"/>
+                        <outlet property="infoDistanceTextField" destination="10T-RF-E1x" id="noM-LA-9Pb"/>
+                        <outlet property="infoDurationTextField" destination="fCz-fA-jZB" id="9u5-qh-aQv"/>
+                        <outlet property="infoPanel" destination="B8j-9X-DmC" id="Gdf-VG-tKF"/>
                         <outlet property="mapPanel" destination="QIt-AM-94y" id="KGF-Hb-vky"/>
                         <outlet property="searchBarButton" destination="Dwx-k2-M2a" id="MgW-nf-Ofl"/>
                         <outlet property="searchButton" destination="7ZO-mt-kun" id="4av-zB-rIX"/>
@@ -325,6 +361,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Images/MapScreen/MPDistance.png" width="16" height="16"/>
+        <image name="Images/MapScreen/MPDuration" width="16" height="16"/>
+        <image name="Images/MapScreen/MPSeparator" width="16" height="16"/>
         <image name="Images/NavigationBar/NBBack.png" width="16" height="16"/>
         <image name="Images/NavigationBar/NBInfo.png" width="16" height="16"/>
         <image name="Images/NavigationBar/NBSearch.png" width="16" height="16"/>

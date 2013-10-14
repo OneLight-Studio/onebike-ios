@@ -80,6 +80,9 @@
 @synthesize arrivalLocation;
 @synthesize arrivalSpinner;
 @synthesize searchSpinner;
+@synthesize infoPanel;
+@synthesize infoDistanceTextField;
+@synthesize infoDurationTextField;
 
 # pragma mark -
 
@@ -619,6 +622,7 @@
                 }
             });
         });
+        [infoPanel setHidden:true];
     }
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
 }
@@ -948,6 +952,31 @@
             NSLog(@"find a route");
             
             NSString *encodedPolyline = [[[[json objectForKey:@"routes"] firstObject] objectForKey:@"overview_polyline"] valueForKey:@"points"];
+            
+            NSString *distanceLabel = [[[[[[json objectForKey:@"routes"] firstObject] objectForKey:@"legs"] firstObject] objectForKey:@"distance"] objectForKey:@"text"];
+            NSInteger duration = ((NSString *)[[[[[[json objectForKey:@"routes"] firstObject] objectForKey:@"legs"] firstObject] objectForKey:@"duration"] objectForKey:@"value"]).integerValue / 2;
+            NSMutableString *durationLabel = nil;
+            NSLog(@"duration : %i s", duration);
+            NSLog(@"distance label : %@", distanceLabel);
+            if (duration <= 3540) {
+                int minutes = (int)round(duration / 60);
+                NSLog(@"process minutes : %i", minutes);
+                durationLabel = [NSMutableString stringWithFormat:@"%i min", minutes];
+            } else {
+                durationLabel = [[NSMutableString alloc] init];
+                int hour = (int)floor(duration / 3600);
+                NSLog(@"process hour : %i", hour);
+                durationLabel = [NSMutableString stringWithFormat:@"%i h ", hour];
+                int minutes = (int)round(duration % 3600 / 60);
+                NSLog(@"process minutes : %i", minutes);
+                if (minutes > 0) {
+                    [durationLabel appendFormat:@"%i min", minutes];
+                }
+            }
+            NSLog(@"duration label : %@", durationLabel);
+            [infoPanel setHidden:false];
+            [infoDistanceTextField setText:distanceLabel];
+            [infoDurationTextField setText:durationLabel];
             
             CLLocationCoordinate2D dep;
             dep.latitude = departure.latitude.doubleValue;
