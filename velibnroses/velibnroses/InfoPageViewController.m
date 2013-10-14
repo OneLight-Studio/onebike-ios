@@ -17,6 +17,7 @@
 @implementation InfoPageViewController
 
 @synthesize backBarButton;
+@synthesize feedbackBarButton;
 @synthesize helpScreen;
 @synthesize aboutScreen;
 
@@ -30,6 +31,7 @@
     self.view.backgroundColor = [UIColor blackColor];
     self.navigationItem.hidesBackButton = YES;
 	[self.backBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [self.feedbackBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     helpScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"helpScreen"];
     aboutScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"aboutScreen"];
     [self setViewControllers:@[helpScreen] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
@@ -49,10 +51,14 @@
         
         MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
         mailController.mailComposeDelegate = self;
-        [[mailController navigationBar] setTintColor:[UIColor whiteColor]];
         [[mailController navigationBar] setTitleTextAttributes:@{UITextAttributeTextColor:[UIColor whiteColor]}];
         [mailController setSubject:emailTitle];
         [mailController setToRecipients:toRecipents];
+        
+        float systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if (systemVersion >= 7.0) {
+            [[mailController navigationBar] setTintColor:[UIColor whiteColor]];
+        }
         
         [self presentViewController:mailController animated:YES completion:NULL];
     } else {

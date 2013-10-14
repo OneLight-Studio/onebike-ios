@@ -267,6 +267,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="backBarButton" destination="JJ6-Qb-bal" id="VCQ-MI-BdT"/>
+                        <outlet property="feedbackBarButton" destination="Tin-JL-JdR" id="JrB-r3-BwG"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Etb-Cc-qFK" userLabel="First Responder" sceneMemberID="firstResponder"/>
