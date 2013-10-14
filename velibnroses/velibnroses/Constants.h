@@ -46,3 +46,6 @@
 #define MAP_VIEW_DEFAULT_STATE 0
 #define MAP_VIEW_SEARCH_STATE 1
 #define SEARCH_RESULT_MAX_STATIONS_NUMBER 3
+
+// email
+#define EMAIL_RECIPIENT @"support@onelight-studio.com"
