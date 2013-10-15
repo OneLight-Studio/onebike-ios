@@ -158,6 +158,11 @@
     
     uiQueue = dispatch_get_main_queue();
     oneBikeQueue = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+    
+    infoDistanceTextField.adjustsFontSizeToFitWidth = YES;
+    infoDistanceTextField.minimumFontSize = 5.0;
+    infoDurationTextField.adjustsFontSizeToFitWidth = YES;
+    infoDurationTextField.minimumFontSize = 5.0;
 }
 
 - (void) startTimer {
