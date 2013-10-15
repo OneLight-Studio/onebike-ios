@@ -933,6 +933,11 @@
 }
 
 - (void)drawRouteFromStationDeparture:(Station *)departure toStationArrival:(Station *)arrival {
+    if (departure == arrival) {
+        [mapPanel setVisibleMapRect:[self generateMapRectContainingAllAnnotations:_searchAnnotations] animated:YES];
+        [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"same_station", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+    }
     
     NSLog(@"searching for a route");
     WSRequest *googleRequest = [[WSRequest alloc] initWithResource:GOOGLE_MAPS_WS_ENTRY_POINT_PARAM_VALUE inBackground:NO];

@@ -16,6 +16,7 @@
 "missing_departure" = "Veuillez renseigner l'adresse de départ.";
 "missing_arrival" = "Veuillez renseigner l'adresse d'arrivée.";
 "same_location" = "Les adresses de départ et d'arrivée sont trop proches.";
+"same_station" = "Vous feriez mieux d'y aller à pied ;)";
 "incomplete_search_result" = "Aucun itinéraire ne correspond à votre recherche.";
 "ride_has_changed" = "Les disponibilités des stations ont changé.\nOneBike vous a automatiquement sélectionné un nouvel itinéraire.";
 "no_more_available_ride" = "Les disponibilités des stations ont changé.\nIl n'y a plus de station correspondant à votre recherche.";
