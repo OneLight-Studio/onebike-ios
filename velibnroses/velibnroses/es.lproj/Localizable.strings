@@ -16,7 +16,7 @@
 "missing_departure" = "Por favor, llene la dirección de inicio.";
 "missing_arrival" = "Por favor, llene la dirección de destino";
 "same_location" = "Inicio y destino están demasiado cerca";
-"same_station" = "Debería ir andando;)";
+"same_station" = "Debería ir andando ;)";
 "incomplete_search_result" = "Ninguna ruta coincide con su búsqueda.";
 "ride_has_changed" = "La disponibilidad de las estaciones ha cambiado.\nOneBike ha seleccionado automáticamente una nueva ruta";
 "no_more_available_ride" = "La disponibilidad de las estaciones ha cambiado.\nA No hay estaciones que coinciden con su búsqueda.";
