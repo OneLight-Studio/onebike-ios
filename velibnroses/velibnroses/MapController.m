@@ -208,7 +208,7 @@
             
             [self eraseAnnotations];
             
-            dispatch_sync(oneBikeQueue, ^(void) {
+            dispatch_async(oneBikeQueue, ^(void) {
                 [self generateStationsAnnotations];
                 dispatch_async(uiQueue, ^(void) {
                     [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -232,7 +232,7 @@
             [self eraseSearchAnnotations];
             [self eraseRoute];
             
-            dispatch_sync(oneBikeQueue, ^(void) {
+            dispatch_async(oneBikeQueue, ^(void) {
                 BOOL isSameDeparture = true;
                 BOOL isSameArrival = true;
                 double radius = [self getDistanceBetweenDeparture:_departureLocation andArrival:_arrivalLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
@@ -459,7 +459,7 @@
             ClusterAnnotation *annotation = (ClusterAnnotation *) aView.annotation;
             // zoom in on cluster region
             [mapPanel setRegion:annotation.region animated:YES];
-            dispatch_sync(oneBikeQueue, ^(void) {
+            dispatch_async(oneBikeQueue, ^(void) {
                 [self generateStationsAnnotations];
                 dispatch_async(uiQueue, ^(void) {
                     [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -521,7 +521,7 @@
 
         [self eraseAnnotations];
         
-        dispatch_sync(oneBikeQueue, ^(void) {
+        dispatch_async(oneBikeQueue, ^(void) {
             [self generateStationsAnnotations];
             dispatch_async(uiQueue, ^(void) {
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -604,9 +604,11 @@
         _mapViewState = MAP_VIEW_DEFAULT_STATE;
         [self resetSearchViewFields];
         [self eraseRoute];
-        [self centerMapOnUserLocation];
         [self eraseSearchAnnotations];
-        dispatch_sync(oneBikeQueue, ^(void) {
+        [self centerMapOnUserLocation];
+        dispatch_async(oneBikeQueue, ^(void) {
+            // necessary time to trigger effective zoom (and avoid to consider too many visible stations in map region)
+            [NSThread sleepForTimeInterval:1.5f];
             [self generateStationsAnnotations];
             dispatch_async(uiQueue, ^(void) {
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
