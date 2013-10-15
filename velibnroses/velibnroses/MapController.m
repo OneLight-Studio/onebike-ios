@@ -899,7 +899,7 @@
 - (ClusterAnnotation *)createClusterAnnotationForStations:(NSMutableArray *)someStations {
     
     ClusterAnnotation *marker = [[ClusterAnnotation alloc] init];
-    marker.region = MKCoordinateRegionForMapRect([self generateMapRectContainingAllStations:someStations]);
+    marker.region = [self generateRegionForDefaultMode:someStations];
     marker.coordinate = marker.region.center;
     marker.title = @"";
     return marker;
@@ -995,7 +995,7 @@
             
             _route = [RoutePolyline routePolylineFromPolyline:[GeoUtils polylineWithEncodedString:encodedPolyline betweenDeparture:dep andArrival:arr]];
             [mapPanel addOverlay:_route];
-            [mapPanel setVisibleMapRect:[self generateMapRectContainingAllAnnotations:_searchAnnotations] animated:YES];
+            [mapPanel setRegion:[self generateRegionForSearchMode:_searchAnnotations] animated:YES];
             _redraw = false;
             
         } else {
@@ -1219,13 +1219,15 @@
     return dist <= radius;
 }
 
-- (MKMapRect)generateMapRectContainingAllAnnotations:(NSMutableArray*)annotations {
+- (MKCoordinateRegion)generateRegionForSearchMode:(NSMutableArray*)annotations {
     
     MKMapRect mapRect = MKMapRectNull;
+    MKMapPoint annotationPoint;
+    MKMapRect pointRect;
     for (id<MKAnnotation> annotation in annotations) {
         
-        MKMapPoint annotationPoint = MKMapPointForCoordinate(annotation.coordinate);
-        MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
+        annotationPoint = MKMapPointForCoordinate(annotation.coordinate);
+        pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
         
         if (MKMapRectIsNull(mapRect)) {
             mapRect = pointRect;
@@ -1233,10 +1235,14 @@
             mapRect = MKMapRectUnion(mapRect, pointRect);
         }
     }
-    return mapRect;
+    MKCoordinateRegion region = MKCoordinateRegionForMapRect(mapRect);
+    // add a padding to map
+    region.span.latitudeDelta  *= MAP_PADDING_FACTOR;
+    region.span.longitudeDelta *= MAP_PADDING_FACTOR;
+    return region;
 }
 
-- (MKMapRect)generateMapRectContainingAllStations:(NSMutableArray*)someStations {
+- (MKCoordinateRegion)generateRegionForDefaultMode:(NSMutableArray*)someStations {
     
     MKMapRect mapRect = MKMapRectNull;
     MKMapPoint annotationPoint;
@@ -1255,7 +1261,7 @@
             }
         }
     }
-    return mapRect;
+    return MKCoordinateRegionForMapRect(mapRect);
 }
 
 - (BOOL)isEqualToLocationZero:(CLLocationCoordinate2D)newLocation {
