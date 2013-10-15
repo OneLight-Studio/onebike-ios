@@ -10,9 +10,19 @@
 #import "Constants.h"
 #import "Keys.h"
 #import "UIUtils.h"
+#import "iRate.h"
 
 @implementation AppDelegate {
     double _sleepingStartDate;
+}
+
++ (void)initialize
+{
+    //configure iRate
+    [iRate sharedInstance].usesUntilPrompt = 10;
+    [iRate sharedInstance].daysUntilPrompt = 15;
+    [iRate sharedInstance].remindPeriod = 15;
+    [iRate sharedInstance].promptAgainForEachNewVersion = YES;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
