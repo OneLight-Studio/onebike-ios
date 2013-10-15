@@ -408,14 +408,14 @@
                 annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
-                    annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPDeparture"];
+                    annotationView.image =  [UIImage imageNamed:@"Images/MapScreen/MPDeparture"];
                 }
             } else if (annotation.placeType == kArrival) {
                 annotationID = @"Arrival";
                 annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
-                    annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPArrival"];
+                    annotationView.image =  [UIImage imageNamed:@"Images/MapScreen/MPArrival"];
                 }
             } else {
                 NSMutableString *loc = [[NSMutableString alloc] initWithString:[annotation.placeStation.latitude stringValue]];
@@ -427,7 +427,7 @@
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.centerOffset = CGPointMake(0.0, -15.0);
                 }
-                UIImage *background = [UIImage imageNamed:@"Images/MapPanel/MPStation"];
+                UIImage *background = [UIImage imageNamed:@"Images/MapScreen/MPStation"];
                 UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
                 UIImage *tmp = [UIUtils placeBikes:bikes onImage:background];
                 UIImage *stands = [UIUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
@@ -441,7 +441,7 @@
             annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
             if (annotationView == nil) {
                 annotationView = [[MKAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
-                annotationView.image =  [UIImage imageNamed:@"Images/MapPanel/MPCluster"];
+                annotationView.image =  [UIImage imageNamed:@"Images/MapScreen/MPCluster"];
                 annotationView.centerOffset = CGPointMake(0.0, -15.0);
             }
             annotationView.canShowCallout = NO;
@@ -933,6 +933,11 @@
 }
 
 - (void)drawRouteFromStationDeparture:(Station *)departure toStationArrival:(Station *)arrival {
+    if (departure == arrival) {
+        [mapPanel setVisibleMapRect:[self generateMapRectContainingAllAnnotations:_searchAnnotations] animated:YES];
+        [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"same_station", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+    }
     
     NSLog(@"searching for a route");
     WSRequest *googleRequest = [[WSRequest alloc] initWithResource:GOOGLE_MAPS_WS_ENTRY_POINT_PARAM_VALUE inBackground:NO];
