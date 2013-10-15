@@ -12,6 +12,8 @@
 
 @synthesize name, address, contract, latitude, longitude, banking, status, bikeStands, availableBikeStands, availableBikes;
 
+NSString *const StationTestName = @"TEST EDOS";
+
 + (Station *)fromJSON:(id)json {
     if (json == (id)[NSNull null]) {
         return nil;
@@ -46,7 +48,8 @@
     NSMutableArray *array = [NSMutableArray array];
     for (id jsonObject in json) {
         Station *station = [self fromJSON:jsonObject];
-        if (station != nil) {
+        // don't add test stations or station with latlng = (0,0)
+        if (station != nil && (station.latitude.doubleValue != 0 || station.longitude.doubleValue != 0) && ![station.name isEqualToString:StationTestName]) {
             [array addObject:station];
         }
     }
