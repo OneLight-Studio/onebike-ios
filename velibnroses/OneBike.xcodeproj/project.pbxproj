@@ -61,6 +61,8 @@
 		E931957217858121009AFCC1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E931957117858121009AFCC1 /* main.m */; };
 		E931957617858121009AFCC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E931957517858121009AFCC1 /* AppDelegate.m */; };
 		E931958217858121009AFCC1 /* MapController.m in Sources */ = {isa = PBXBuildFile; fileRef = E931958117858121009AFCC1 /* MapController.m */; };
+		E9DB0210180D64400019DAA9 /* iRate.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E9DB020D180D64400019DAA9 /* iRate.bundle */; };
+		E9DB0211180D64400019DAA9 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = E9DB020F180D64400019DAA9 /* iRate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -165,6 +167,9 @@
 		E931958917858122009AFCC1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		E9D1F7411793FDEC0051D13B /* WSRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WSRequest.h; sourceTree = "<group>"; };
 		E9D1F7421793FDEC0051D13B /* WSRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WSRequest.m; sourceTree = "<group>"; };
+		E9DB020D180D64400019DAA9 /* iRate.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = iRate.bundle; sourceTree = "<group>"; };
+		E9DB020E180D64400019DAA9 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
+		E9DB020F180D64400019DAA9 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +260,7 @@
 		19F1D65B17D0E4A900BA53AF /* External APIs */ = {
 			isa = PBXGroup;
 			children = (
+				E9DB020C180D64310019DAA9 /* iRate */,
 				19E4E14817D8E813001A47DF /* libz.dylib */,
 				19E4E13E17D8E775001A47DF /* TestFlightSDK2.0.0 */,
 				19F1D67F17D10B0000BA53AF /* AFNetworking */,
@@ -403,6 +409,16 @@
 			name = "Web Services";
 			sourceTree = "<group>";
 		};
+		E9DB020C180D64310019DAA9 /* iRate */ = {
+			isa = PBXGroup;
+			children = (
+				E9DB020D180D64400019DAA9 /* iRate.bundle */,
+				E9DB020E180D64400019DAA9 /* iRate.h */,
+				E9DB020F180D64400019DAA9 /* iRate.m */,
+			);
+			name = iRate;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -466,6 +482,7 @@
 				19688CDF17B9285D005ACA64 /* Logo@2x.png in Resources */,
 				19688CE117B92872005ACA64 /* Default.png in Resources */,
 				19688CE317B92880005ACA64 /* Default@2x.png in Resources */,
+				E9DB0210180D64400019DAA9 /* iRate.bundle in Resources */,
 				19688CE517B9288B005ACA64 /* Default-568h@2x.png in Resources */,
 				19F3F98517FB355F00A7627E /* Logo80.png in Resources */,
 				19F3F98417FB355F00A7627E /* Logo58.png in Resources */,
@@ -494,6 +511,7 @@
 				19F1D69317D10B0000BA53AF /* AFHTTPClient.m in Sources */,
 				19F1D69417D10B0000BA53AF /* AFHTTPRequestOperation.m in Sources */,
 				19F1D69517D10B0000BA53AF /* AFImageRequestOperation.m in Sources */,
+				E9DB0211180D64400019DAA9 /* iRate.m in Sources */,
 				19F1D69617D10B0000BA53AF /* AFJSONRequestOperation.m in Sources */,
 				19F1D69717D10B0000BA53AF /* AFNetworkActivityIndicatorManager.m in Sources */,
 				19F1D69817D10B0000BA53AF /* AFPropertyListRequestOperation.m in Sources */,
