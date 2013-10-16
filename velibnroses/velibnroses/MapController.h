@@ -26,6 +26,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *arrivalLocation;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *arrivalSpinner;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *searchSpinner;
+@property (weak, nonatomic) IBOutlet UIView *infoPanel;
+@property (weak, nonatomic) IBOutlet UITextField *infoDistanceTextField;
+@property (weak, nonatomic) IBOutlet UITextField *infoDurationTextField;
 
 - (IBAction)searchBarButtonClicked:(id)sender;
 - (IBAction)userLocationAsDepartureClicked:(id)sender;

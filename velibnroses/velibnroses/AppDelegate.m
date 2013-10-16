@@ -33,7 +33,7 @@
         [[UINavigationBar appearance] setBarTintColor:[UIUtils colorWithHexaString:@"#afcb13"]];
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     } else {
-        [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"Images/NavigationBar/NBBg"] forBarMetrics:UIBarMetricsDefault];
+        [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"NBBg.png"] forBarMetrics:UIBarMetricsDefault];
     }
     
     [TestFlight takeOff:KEY_TESTFLIGHT];

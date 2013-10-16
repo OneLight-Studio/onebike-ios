@@ -1,9 +1,0 @@
-
-/* Class = "IBUIButton"; normalTitle = "Let's go !"; ObjectID = "7ZO-mt-kun"; */
-"7ZO-mt-kun.normalTitle" = "Let's go !";
-
-/* Class = "IBUITextField"; placeholder = "Arrival"; ObjectID = "Wdw-ii-7F2"; */
-"Wdw-ii-7F2.placeholder" = "Arrival";
-
-/* Class = "IBUITextField"; placeholder = "Departure"; ObjectID = "iYR-bn-zkd"; */
-"iYR-bn-zkd.placeholder" = "Departure";
