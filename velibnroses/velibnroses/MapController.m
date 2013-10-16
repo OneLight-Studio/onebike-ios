@@ -945,7 +945,7 @@
 
 - (void)drawRouteFromStationDeparture:(Station *)departure toStationArrival:(Station *)arrival {
     if (departure == arrival) {
-        [mapPanel setVisibleMapRect:[self generateMapRectContainingAllAnnotations:_searchAnnotations] animated:YES];
+        [mapPanel setRegion:[self generateRegionForSearchMode:_searchAnnotations] animated:YES];
         [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"same_station", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         return;
     }
