@@ -1,3 +1,18 @@
+/* Class = "IBUILabel"; attributedText = "OneBike is an app by OneLight Studio, a Prometil company's trademark."; ObjectID = "dsh-vW-bi6"; */
+"dsh-vW-bi6.text" = "OneBike est une application de OneLight Studio, marque déposée de la société Prometil.";
+
+/* Class = "IBUILabel"; attributedText = "For any information or suggestion don't hesitate, click up there. Don't be shy, we love to hear you!"; ObjectID = "9Ox-rF-zAm"; */
+"9Ox-rF-zAm.text" = "Pour toute information ou suggestion n'hésitez pas, cliquez là-haut. Ne soyez pas timide, on adore vous écouter !";
+
+/* Class = "IBUILabel"; attributedText = "OneBike uses data from the JCDecaux and CityBikes real time APIs."; ObjectID = "JTv-wB-d5Y"; */
+"JTv-wB-d5Y.text" = "OneBike utilise les données des APIs temps réel JCDecaux & CitiBikes.";
+
+/* Class = "IBUILabel"; attributedText = "No more pain with overloaded bike stands when you arrive, OneBike keeps you informed in real time."; ObjectID = "CBG-5q-93G"; */
+"CBG-5q-93G.text" = "Fini la galère des stations surchargées à votre arrivée, OneBike vous informe en temps réel.";
+
+/* Class = "IBUILabel"; attributedText = "OneBike is the app that makes your bike rides easier all around the world!"; ObjectID = "1tf-bd-Ao5"; */
+"1tf-bd-Ao5.text" = "OneBike est l'application qui facilite vos trajets en vélo libre service partout dans le monde !";
+
 /* Class = "IBUIBarButtonItem"; title = "Feedback"; ObjectID = "Tin-JL-JdR"; */
 "Tin-JL-JdR.title" = "Commentaire";
 

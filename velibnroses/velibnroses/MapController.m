@@ -80,6 +80,9 @@
 @synthesize arrivalLocation;
 @synthesize arrivalSpinner;
 @synthesize searchSpinner;
+@synthesize infoPanel;
+@synthesize infoDistanceTextField;
+@synthesize infoDurationTextField;
 
 # pragma mark -
 
@@ -104,7 +107,7 @@
     self.mapPanel.showsUserLocation = YES;
     [self.mapPanel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapMap:)]];
     
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBLogo"]];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"NBLogo.png"]];
     
     CGRect searchFrame = self.searchPanel.frame;
     searchFrame.origin.y = -searchFrame.size.height;
@@ -116,7 +119,7 @@
     
     self.bikeField.text = @"1";
     self.standField.text = @"1";
-    self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBClose"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
+    self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"NBClose.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
     
     departureSpinner.hidesWhenStopped = YES;
     [departureSpinner setColor:[UIUtils colorWithHexaString:@"#b2ca04"]];
@@ -136,7 +139,7 @@
     [self.searchBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.cancelBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
-    UIImage *buttonBg = [[UIImage imageNamed:@"Images/SearchPanel/SPButtonBg"]
+    UIImage *buttonBg = [[UIImage imageNamed:@"SPButtonBg.png"]
                          resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
     [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
     
@@ -155,6 +158,11 @@
     
     uiQueue = dispatch_get_main_queue();
     oneBikeQueue = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+    
+    infoDistanceTextField.adjustsFontSizeToFitWidth = YES;
+    infoDistanceTextField.minimumFontSize = 5.0;
+    infoDurationTextField.adjustsFontSizeToFitWidth = YES;
+    infoDurationTextField.minimumFontSize = 5.0;
 }
 
 - (void) startTimer {
@@ -205,7 +213,7 @@
             
             [self eraseAnnotations];
             
-            dispatch_sync(oneBikeQueue, ^(void) {
+            dispatch_async(oneBikeQueue, ^(void) {
                 [self generateStationsAnnotations];
                 dispatch_async(uiQueue, ^(void) {
                     [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -229,7 +237,7 @@
             [self eraseSearchAnnotations];
             [self eraseRoute];
             
-            dispatch_sync(oneBikeQueue, ^(void) {
+            dispatch_async(oneBikeQueue, ^(void) {
                 BOOL isSameDeparture = true;
                 BOOL isSameArrival = true;
                 double radius = [self getDistanceBetweenDeparture:_departureLocation andArrival:_arrivalLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
@@ -408,14 +416,14 @@
                 annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
-                    annotationView.image =  [UIImage imageNamed:@"Images/MapScreen/MPDeparture"];
+                    annotationView.image =  [UIImage imageNamed:@"MPDeparture.png"];
                 }
             } else if (annotation.placeType == kArrival) {
                 annotationID = @"Arrival";
                 annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
-                    annotationView.image =  [UIImage imageNamed:@"Images/MapScreen/MPArrival"];
+                    annotationView.image =  [UIImage imageNamed:@"MPArrival.png"];
                 }
             } else {
                 NSMutableString *loc = [[NSMutableString alloc] initWithString:[annotation.placeStation.latitude stringValue]];
@@ -427,7 +435,7 @@
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.centerOffset = CGPointMake(0.0, -15.0);
                 }
-                UIImage *background = [UIImage imageNamed:@"Images/MapScreen/MPStation"];
+                UIImage *background = [UIImage imageNamed:@"MPStation.png"];
                 UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
                 UIImage *tmp = [UIUtils placeBikes:bikes onImage:background];
                 UIImage *stands = [UIUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
@@ -441,7 +449,7 @@
             annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
             if (annotationView == nil) {
                 annotationView = [[MKAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
-                annotationView.image =  [UIImage imageNamed:@"Images/MapScreen/MPCluster"];
+                annotationView.image =  [UIImage imageNamed:@"MPCluster.png"];
                 annotationView.centerOffset = CGPointMake(0.0, -15.0);
             }
             annotationView.canShowCallout = NO;
@@ -456,7 +464,7 @@
             ClusterAnnotation *annotation = (ClusterAnnotation *) aView.annotation;
             // zoom in on cluster region
             [mapPanel setRegion:annotation.region animated:YES];
-            dispatch_sync(oneBikeQueue, ^(void) {
+            dispatch_async(oneBikeQueue, ^(void) {
                 [self generateStationsAnnotations];
                 dispatch_async(uiQueue, ^(void) {
                     [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -518,7 +526,7 @@
 
         [self eraseAnnotations];
         
-        dispatch_sync(oneBikeQueue, ^(void) {
+        dispatch_async(oneBikeQueue, ^(void) {
             [self generateStationsAnnotations];
             dispatch_async(uiQueue, ^(void) {
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -601,9 +609,11 @@
         _mapViewState = MAP_VIEW_DEFAULT_STATE;
         [self resetSearchViewFields];
         [self eraseRoute];
-        [self centerMapOnUserLocation];
         [self eraseSearchAnnotations];
-        dispatch_sync(oneBikeQueue, ^(void) {
+        [self centerMapOnUserLocation];
+        dispatch_async(oneBikeQueue, ^(void) {
+            // necessary time to trigger effective zoom (and avoid to consider too many visible stations in map region)
+            [NSThread sleepForTimeInterval:1.5f];
             [self generateStationsAnnotations];
             dispatch_async(uiQueue, ^(void) {
                 [mapPanel addAnnotations:_clustersAnnotationsToAdd];
@@ -619,6 +629,7 @@
                 }
             });
         });
+        [infoPanel setHidden:true];
     }
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:_mapViewState == MAP_VIEW_SEARCH_STATE];
 }
@@ -888,7 +899,7 @@
 - (ClusterAnnotation *)createClusterAnnotationForStations:(NSMutableArray *)someStations {
     
     ClusterAnnotation *marker = [[ClusterAnnotation alloc] init];
-    marker.region = MKCoordinateRegionForMapRect([self generateMapRectContainingAllStations:someStations]);
+    marker.region = [self generateRegionForDefaultMode:someStations];
     marker.coordinate = marker.region.center;
     marker.title = @"";
     return marker;
@@ -934,7 +945,7 @@
 
 - (void)drawRouteFromStationDeparture:(Station *)departure toStationArrival:(Station *)arrival {
     if (departure == arrival) {
-        [mapPanel setVisibleMapRect:[self generateMapRectContainingAllAnnotations:_searchAnnotations] animated:YES];
+        [mapPanel setRegion:[self generateRegionForSearchMode:_searchAnnotations] animated:YES];
         [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"same_station", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         return;
     }
@@ -954,6 +965,31 @@
             
             NSString *encodedPolyline = [[[[json objectForKey:@"routes"] firstObject] objectForKey:@"overview_polyline"] valueForKey:@"points"];
             
+            NSString *distanceLabel = [[[[[[json objectForKey:@"routes"] firstObject] objectForKey:@"legs"] firstObject] objectForKey:@"distance"] objectForKey:@"text"];
+            NSInteger duration = ((NSString *)[[[[[[json objectForKey:@"routes"] firstObject] objectForKey:@"legs"] firstObject] objectForKey:@"duration"] objectForKey:@"value"]).integerValue / 2;
+            NSMutableString *durationLabel = nil;
+            NSLog(@"duration : %i s", duration);
+            NSLog(@"distance label : %@", distanceLabel);
+            if (duration <= 3540) {
+                int minutes = (int)round(duration / 60);
+                NSLog(@"process minutes : %i", minutes);
+                durationLabel = [NSMutableString stringWithFormat:@"%i min", minutes];
+            } else {
+                durationLabel = [[NSMutableString alloc] init];
+                int hour = (int)floor(duration / 3600);
+                NSLog(@"process hour : %i", hour);
+                durationLabel = [NSMutableString stringWithFormat:@"%i h ", hour];
+                int minutes = (int)round(duration % 3600 / 60);
+                NSLog(@"process minutes : %i", minutes);
+                if (minutes > 0) {
+                    [durationLabel appendFormat:@"%i min", minutes];
+                }
+            }
+            NSLog(@"duration label : %@", durationLabel);
+            [infoPanel setHidden:false];
+            [infoDistanceTextField setText:distanceLabel];
+            [infoDurationTextField setText:durationLabel];
+            
             CLLocationCoordinate2D dep;
             dep.latitude = departure.latitude.doubleValue;
             dep.longitude = departure.longitude.doubleValue;
@@ -964,7 +1000,7 @@
             
             _route = [RoutePolyline routePolylineFromPolyline:[GeoUtils polylineWithEncodedString:encodedPolyline betweenDeparture:dep andArrival:arr]];
             [mapPanel addOverlay:_route];
-            [mapPanel setVisibleMapRect:[self generateMapRectContainingAllAnnotations:_searchAnnotations] animated:YES];
+            [mapPanel setRegion:[self generateRegionForSearchMode:_searchAnnotations] animated:YES];
             _redraw = false;
             
         } else {
@@ -1188,13 +1224,15 @@
     return dist <= radius;
 }
 
-- (MKMapRect)generateMapRectContainingAllAnnotations:(NSMutableArray*)annotations {
+- (MKCoordinateRegion)generateRegionForSearchMode:(NSMutableArray*)annotations {
     
     MKMapRect mapRect = MKMapRectNull;
+    MKMapPoint annotationPoint;
+    MKMapRect pointRect;
     for (id<MKAnnotation> annotation in annotations) {
         
-        MKMapPoint annotationPoint = MKMapPointForCoordinate(annotation.coordinate);
-        MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
+        annotationPoint = MKMapPointForCoordinate(annotation.coordinate);
+        pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0, 0);
         
         if (MKMapRectIsNull(mapRect)) {
             mapRect = pointRect;
@@ -1202,10 +1240,14 @@
             mapRect = MKMapRectUnion(mapRect, pointRect);
         }
     }
-    return mapRect;
+    MKCoordinateRegion region = MKCoordinateRegionForMapRect(mapRect);
+    // add a padding to map
+    region.span.latitudeDelta  *= MAP_PADDING_FACTOR;
+    region.span.longitudeDelta *= MAP_PADDING_FACTOR;
+    return region;
 }
 
-- (MKMapRect)generateMapRectContainingAllStations:(NSMutableArray*)someStations {
+- (MKCoordinateRegion)generateRegionForDefaultMode:(NSMutableArray*)someStations {
     
     MKMapRect mapRect = MKMapRectNull;
     MKMapPoint annotationPoint;
@@ -1224,7 +1266,7 @@
             }
         }
     }
-    return mapRect;
+    return MKCoordinateRegionForMapRect(mapRect);
 }
 
 - (BOOL)isEqualToLocationZero:(CLLocationCoordinate2D)newLocation {
