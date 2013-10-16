@@ -14,6 +14,8 @@
 "dialog_warning_title" = "Alerte";
 "dialog_info_title" = "Info";
 
+"ip_content_img_name" = "IPContent_fr.png";
+
 "departure_not_found" = "L'adresse de départ est introuvable.";
 "arrival_not_found" = "L'adresse d'arrivée est introuvable.";
 "error" = "Oops, uen erreur s'est produite.";

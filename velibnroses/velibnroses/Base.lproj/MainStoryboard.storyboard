@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
@@ -88,11 +87,11 @@
                                         <rect key="frame" x="204" y="8" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPMyLocation.png">
+                                        <state key="normal" image="SPMyLocation.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="disabled" image="Images/SearchPanel/SPMyLocation_Disabled.png"/>
+                                        <state key="disabled" image="SPMyLocation_Disabled.png"/>
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -104,7 +103,7 @@
                                         <rect key="frame" x="246" y="8" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPBike.png">
+                                        <state key="normal" image="SPBike.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -119,7 +118,7 @@
                                         <rect key="frame" x="130" y="156" width="62" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPCloseSearch.png">
+                                        <state key="normal" image="SPCloseSearch.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -138,11 +137,11 @@
                                         <rect key="frame" x="204" y="55" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPMyLocation.png">
+                                        <state key="normal" image="SPMyLocation.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="disabled" image="Images/SearchPanel/SPMyLocation_Disabled.png"/>
+                                        <state key="disabled" image="SPMyLocation_Disabled.png"/>
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -170,7 +169,7 @@
                                         <rect key="frame" x="246" y="55" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPStand.png">
+                                        <state key="normal" image="SPStand.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -230,15 +229,15 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Images/MapScreen/MPDistance.png" id="cyf-lu-IbR">
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MPDistance.png" id="cyf-lu-IbR">
                                         <rect key="frame" x="35" y="0.0" width="40" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Images/MapScreen/MPSeparator" id="CFR-pE-OpU">
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MPSeparator.png" id="CFR-pE-OpU">
                                         <rect key="frame" x="160" y="0.0" width="1" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" image="Images/MapScreen/MPDuration" id="5Is-pm-MpG">
+                                    <imageView userInteractionEnabled="NO" contentMode="center" image="MPDuration.png" id="5Is-pm-MpG">
                                         <rect key="frame" x="160" y="0.0" width="40" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
@@ -249,12 +248,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="hmS-dC-JVN">
-                        <barButtonItem key="leftBarButtonItem" image="Images/NavigationBar/NBInfo.png" id="lbv-EE-UWT">
+                        <barButtonItem key="leftBarButtonItem" image="NBInfo.png" id="lbv-EE-UWT">
                             <connections>
                                 <segue destination="HOZ-74-3NR" kind="push" id="kfB-L6-xIl"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="Images/NavigationBar/NBSearch.png" id="Dwx-k2-M2a">
+                        <barButtonItem key="rightBarButtonItem" image="NBSearch.png" id="Dwx-k2-M2a">
                             <connections>
                                 <action selector="searchBarButtonClicked:" destination="R2K-lh-zEE" id="lUh-a4-YUx"/>
                             </connections>
@@ -290,7 +289,7 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" pageSpacing="2" navigationOrientation="horizontal" spineLocation="none" id="HOZ-74-3NR" customClass="InfoPageViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="yjh-qs-KBW">
-                        <barButtonItem key="leftBarButtonItem" image="Images/NavigationBar/NBBack.png" id="JJ6-Qb-bal">
+                        <barButtonItem key="leftBarButtonItem" image="NBBack.png" id="JJ6-Qb-bal">
                             <connections>
                                 <action selector="backBarButtonClicked:" destination="HOZ-74-3NR" id="azx-XH-LB1"/>
                             </connections>
@@ -325,9 +324,7 @@
                             </imageView>
                         </subviews>
                     </view>
-                    <navigationItem key="navigationItem" id="PnZ-q7-OJc">
-                        <barButtonItem key="leftBarButtonItem" image="Images/NavigationBar/NBBack.png" id="K2C-dy-2tc"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="PnZ-q7-OJc"/>
                     <connections>
                         <outlet property="contentImage" destination="dyJ-RV-8n7" id="paI-Un-ucJ"/>
                     </connections>
@@ -344,7 +341,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Images/LogoText" id="fT3-ng-uRx">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoText.png" id="fT3-ng-uRx">
                                 <rect key="frame" x="72" y="17" width="176" height="58"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                             </imageView>
@@ -383,7 +380,7 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Images/LogoOnelight" id="RWs-gL-w6j">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoOnelight.png" id="RWs-gL-w6j">
                                 <rect key="frame" x="10" y="315" width="60" height="65"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -391,6 +388,7 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="zbW-K2-cfz"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4vh-Cg-Fqd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -398,19 +396,19 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Images/LogoOnelight" width="16" height="16"/>
-        <image name="Images/LogoText" width="16" height="16"/>
-        <image name="Images/MapScreen/MPDistance.png" width="16" height="16"/>
-        <image name="Images/MapScreen/MPDuration" width="16" height="16"/>
-        <image name="Images/MapScreen/MPSeparator" width="16" height="16"/>
-        <image name="Images/NavigationBar/NBBack.png" width="16" height="16"/>
-        <image name="Images/NavigationBar/NBInfo.png" width="16" height="16"/>
-        <image name="Images/NavigationBar/NBSearch.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPBike.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPCloseSearch.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPMyLocation.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPMyLocation_Disabled.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPStand.png" width="16" height="16"/>
+        <image name="LogoOnelight.png" width="49" height="50"/>
+        <image name="LogoText.png" width="176" height="58"/>
+        <image name="MPDistance.png" width="15" height="19"/>
+        <image name="MPDuration.png" width="19" height="19"/>
+        <image name="MPSeparator.png" width="1" height="24"/>
+        <image name="NBBack.png" width="20" height="20"/>
+        <image name="NBInfo.png" width="20" height="20"/>
+        <image name="NBSearch.png" width="20" height="20"/>
+        <image name="SPBike.png" width="21" height="21"/>
+        <image name="SPCloseSearch.png" width="14" height="10"/>
+        <image name="SPMyLocation.png" width="22" height="22"/>
+        <image name="SPMyLocation_Disabled.png" width="22" height="22"/>
+        <image name="SPStand.png" width="21" height="21"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

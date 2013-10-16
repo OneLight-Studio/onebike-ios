@@ -107,7 +107,7 @@
     self.mapPanel.showsUserLocation = YES;
     [self.mapPanel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapMap:)]];
     
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBLogo"]];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"NBLogo.png"]];
     
     CGRect searchFrame = self.searchPanel.frame;
     searchFrame.origin.y = -searchFrame.size.height;
@@ -119,7 +119,7 @@
     
     self.bikeField.text = @"1";
     self.standField.text = @"1";
-    self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Images/NavigationBar/NBClose"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
+    self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"NBClose.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
     
     departureSpinner.hidesWhenStopped = YES;
     [departureSpinner setColor:[UIUtils colorWithHexaString:@"#b2ca04"]];
@@ -139,7 +139,7 @@
     [self.searchBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.cancelBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
-    UIImage *buttonBg = [[UIImage imageNamed:@"Images/SearchPanel/SPButtonBg"]
+    UIImage *buttonBg = [[UIImage imageNamed:@"SPButtonBg.png"]
                          resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
     [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
     
@@ -416,14 +416,14 @@
                 annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
-                    annotationView.image =  [UIImage imageNamed:@"Images/MapScreen/MPDeparture"];
+                    annotationView.image =  [UIImage imageNamed:@"MPDeparture.png"];
                 }
             } else if (annotation.placeType == kArrival) {
                 annotationID = @"Arrival";
                 annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
                 if (annotationView == nil) {
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
-                    annotationView.image =  [UIImage imageNamed:@"Images/MapScreen/MPArrival"];
+                    annotationView.image =  [UIImage imageNamed:@"MPArrival.png"];
                 }
             } else {
                 NSMutableString *loc = [[NSMutableString alloc] initWithString:[annotation.placeStation.latitude stringValue]];
@@ -435,7 +435,7 @@
                     annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationID];
                     annotationView.centerOffset = CGPointMake(0.0, -15.0);
                 }
-                UIImage *background = [UIImage imageNamed:@"Images/MapScreen/MPStation"];
+                UIImage *background = [UIImage imageNamed:@"MPStation.png"];
                 UIImage *bikes = [UIUtils drawBikesText:[annotation.placeStation.availableBikes stringValue]];
                 UIImage *tmp = [UIUtils placeBikes:bikes onImage:background];
                 UIImage *stands = [UIUtils drawStandsText:[annotation.placeStation.availableBikeStands stringValue]];
@@ -449,7 +449,7 @@
             annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
             if (annotationView == nil) {
                 annotationView = [[MKAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
-                annotationView.image =  [UIImage imageNamed:@"Images/MapScreen/MPCluster"];
+                annotationView.image =  [UIImage imageNamed:@"MPCluster.png"];
                 annotationView.centerOffset = CGPointMake(0.0, -15.0);
             }
             annotationView.canShowCallout = NO;

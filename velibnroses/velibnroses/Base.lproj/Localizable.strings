@@ -14,6 +14,8 @@
 "dialog_warning_title" = "Warning";
 "dialog_info_title" = "Info";
 
+"ip_content_img_name" = "IPContentBase.png";
+
 "departure_not_found" = "Could not locate departure address.";
 "arrival_not_found" = "Could not locate arrival address.";
 "error" = "Oops, an error occurred.";
