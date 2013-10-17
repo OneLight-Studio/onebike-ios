@@ -17,7 +17,6 @@ typedef enum
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *address;
-@property (nonatomic, strong) NSString *contract;
 @property (nonatomic, strong) NSNumber *latitude;
 @property (nonatomic, strong) NSNumber *longitude;
 @property (nonatomic, assign) BOOL banking;

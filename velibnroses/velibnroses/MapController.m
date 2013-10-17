@@ -27,9 +27,12 @@
 @end
 
 @implementation MapController {
+    
     CLLocationCoordinate2D _startUserLocation;
     WSRequest *_jcdRequest;
+    
     NSMutableArray *_allStations;
+    NSMutableDictionary *_cache;
     
     NSMutableArray *_clustersAnnotationsToAdd;
     NSMutableArray *_clustersAnnotationsToRemove;
@@ -143,6 +146,7 @@
                          resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
     [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
     
+    _cache = [[NSMutableDictionary alloc] init];
     _clustersAnnotationsToAdd = [[NSMutableArray alloc] init];
     _clustersAnnotationsToRemove = [[NSMutableArray alloc] init];
     _stationsAnnotationsToAdd = [[NSMutableArray alloc] init];

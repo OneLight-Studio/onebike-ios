@@ -1,0 +1,202 @@
+﻿[
+    {
+        "name": "Rouen",
+        "radius": 20000,
+        "lng": 1.099971,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Rouen",
+        "lat": 49.44323199999999,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Paris",
+        "radius": 20000,
+        "lng": 2.3522219,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Paris",
+        "lat": 48.856614,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Toulouse",
+        "radius": 20000,
+        "lng": 1.444209,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Toulouse",
+        "lat": 43.604652,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Luxembourg",
+        "radius": 20000,
+        "lng": 6.1319346,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Luxembourg",
+        "lat": 49.61162100000001,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Valence",
+        "radius": 20000,
+        "lng": -0.3762881,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Valence",
+        "lat": 39.4699075,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Stockholm",
+        "radius": 20000,
+        "lng": 18.06491,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Stockholm",
+        "lat": 59.32893000000001,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Goteborg",
+        "radius": 20000,
+        "lng": 11.97456,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Goteborg",
+        "lat": 57.70887,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Santander",
+        "radius": 20000,
+        "lng": -3.8099803,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Santander",
+        "lat": 43.46230569999999,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Amiens",
+        "radius": 20000,
+        "lng": 2.295753,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Amiens",
+        "lat": 49.894067,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Lillestrom",
+        "radius": 20000,
+        "lng": 11.0503785,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Lillestrom",
+        "lat": 59.9559696,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Mulhouse",
+        "radius": 20000,
+        "lng": 7.335888,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Mulhouse",
+        "lat": 47.750839,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Lyon",
+        "radius": 20000,
+        "lng": 4.835659,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Lyon",
+        "lat": 45.764043,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Ljubljana",
+        "radius": 20000,
+        "lng": 14.5080702,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Ljubljana",
+        "lat": 46.05645089999999,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Seville",
+        "radius": 20000,
+        "lng": -5.9823299,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Seville",
+        "lat": 37.3880961,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Namur",
+        "radius": 20000,
+        "lng": 4.867665,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Namur",
+        "lat": 50.465328,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Nancy",
+        "radius": 20000,
+        "lng": 6.184417,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Nancy",
+        "lat": 48.692054,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Creteil",
+        "radius": 20000,
+        "lng": 2.455572,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Creteil",
+        "lat": 48.790367,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Bruxelles-Capitale",
+        "radius": 20000,
+        "lng": 4.3517103,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Bruxelles-Capitale",
+        "lat": 50.8503396,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Cergy-Pontoise",
+        "radius": 20000,
+        "lng": 2.095255,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Cergy-Pontoise",
+        "lat": 49.04666,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Vilnius",
+        "radius": 20000,
+        "lng": 25.2796514,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Vilnius",
+        "lat": 54.6871555,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Toyama",
+        "radius": 20000,
+        "lng": 137.2136768,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Toyama",
+        "lat": 36.6959518,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Kazan",
+        "radius": 20000,
+        "lng": 49.1055556,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Kazan",
+        "lat": 55.8005556,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Marseille",
+        "radius": 20000,
+        "lng": 5.36978,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Marseille",
+        "lat": 43.296482,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Nantes",
+        "radius": 20000,
+        "lng": -1.553621,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Nantes",
+        "lat": 47.218371,
+        "provider": "JCDecaux"
+    },
+    {
+        "name": "Besancon",
+        "radius": 20000,
+        "lng": 6.024053899999999,
+        "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Besancon",
+        "lat": 47.237829,
+        "provider": "JCDecaux"
+    }
+]

@@ -10,9 +10,9 @@
 
 @implementation Station
 
-@synthesize name, address, contract, latitude, longitude, banking, status, bikeStands, availableBikeStands, availableBikes;
+@synthesize name, address, latitude, longitude, banking, status, bikeStands, availableBikeStands, availableBikes;
 
-NSString *const StationTestName = @"TEST EDOS";
+//NSString *const StationTestName = @"TEST EDOS";
 
 + (Station *)fromJSON:(id)json {
     if (json == (id)[NSNull null]) {
@@ -22,7 +22,6 @@ NSString *const StationTestName = @"TEST EDOS";
     Station *station = [[Station alloc] init];
     station.name = [json valueForKey:@"name"];
     station.address = [json valueForKey:@"address"];
-    station.contract = [json valueForKey:@"contract"];
     id lat = [[json objectForKey:@"position"] valueForKey:@"lat"];
     if (lat != (id)[NSNull null]) {
         station.latitude = [NSNumber numberWithDouble:[lat doubleValue]];
@@ -48,8 +47,8 @@ NSString *const StationTestName = @"TEST EDOS";
     NSMutableArray *array = [NSMutableArray array];
     for (id jsonObject in json) {
         Station *station = [self fromJSON:jsonObject];
-        // don't add test stations or station with latlng = (0,0)
-        if (station != nil && (station.latitude.doubleValue != 0 || station.longitude.doubleValue != 0) && ![station.name isEqualToString:StationTestName]) {
+        // don't add test stations or station with latlng = (0,0), TODO remove: unuseful now because we think in contract term now
+        if (station != nil/* && (station.latitude.doubleValue != 0 || station.longitude.doubleValue != 0) && ![station.name isEqualToString:StationTestName]*/) {
             [array addObject:station];
         }
     }
@@ -66,9 +65,7 @@ NSString *const StationTestName = @"TEST EDOS";
 - (id)copyWithZone:(NSZone *)zone
 {
     id copy = [[[self class] alloc] init];
-    
     if (copy) {
-        
         // Set primitives
         [copy setBanking:self.banking];
         [copy setStatus:self.status];
@@ -76,7 +73,6 @@ NSString *const StationTestName = @"TEST EDOS";
         // Copy NSObject subclasses
         [copy setName:[self.name copyWithZone:zone]];
         [copy setAddress:[self.address copyWithZone:zone]];
-        [copy setContract:[self.contract copyWithZone:zone]];
         [copy setLatitude:[self.latitude copyWithZone:zone]];
         [copy setLongitude:[self.longitude copyWithZone:zone]];
         [copy setBikeStands:[self.bikeStands copyWithZone:zone]];
@@ -92,18 +88,18 @@ NSString *const StationTestName = @"TEST EDOS";
         return true;
     if ([self class] != [object class])
         return false;
-    Station *obj = (Station *)object;
-    if (self.latitude == nil) {
-        if (obj.latitude != nil) {
+    Station *other = (Station *)object;
+    if (latitude == nil) {
+        if (other.latitude != nil) {
             return false;
         }
-    } else if (self.longitude == nil) {
-        if (obj.longitude != nil) {
+    } else if (longitude == nil) {
+        if (other.longitude != nil) {
             return false;
         }
-    } else if (![self.latitude isEqual:obj.latitude]) {
+    } else if (![latitude isEqual:other.latitude]) {
         return false;
-    } else if (![self.longitude isEqual:obj.longitude]) {
+    } else if (![longitude isEqual:other.longitude]) {
         return false;
     }
     return true;
@@ -112,8 +108,8 @@ NSString *const StationTestName = @"TEST EDOS";
 - (NSUInteger)hash {
     const NSUInteger prime = 31;
     NSUInteger result = 1;
-    result = prime * result + [self.latitude hash];
-    result = prime * result + [self.longitude hash];
+    result = prime * result + [latitude hash];
+    result = prime * result + [longitude hash];
     return result;
 }
 
