@@ -970,16 +970,17 @@
             NSMutableString *durationLabel = nil;
             NSLog(@"duration : %i s", duration);
             NSLog(@"distance label : %@", distanceLabel);
-            if (duration <= 3540) {
-                int minutes = (int)round(duration / 60);
+            if (duration <= 3569) {
+                int minutes = (int)round(((float) duration) / 60);
                 NSLog(@"process minutes : %i", minutes);
                 durationLabel = [NSMutableString stringWithFormat:@"%i min", minutes];
             } else {
                 durationLabel = [[NSMutableString alloc] init];
-                int hour = (int)floor(duration / 3600);
+                int hour = (int)floor(((float) duration) / 3600);
                 NSLog(@"process hour : %i", hour);
                 durationLabel = [NSMutableString stringWithFormat:@"%i h ", hour];
-                int minutes = (int)round(duration % 3600 / 60);
+                float modulo = (float) (duration % 3600);
+                int minutes = (int)round(modulo / 60);
                 NSLog(@"process minutes : %i", minutes);
                 if (minutes > 0) {
                     [durationLabel appendFormat:@"%i min", minutes];
