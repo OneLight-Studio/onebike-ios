@@ -21,6 +21,7 @@
 #import "TRGoogleMapsAutocompletionCellFactory.h"
 #import "Keys.h"
 #import "ClusterAnnotation.h"
+#import "Contract.h"
 
 @interface MapController ()
     
@@ -32,6 +33,8 @@
     WSRequest *_jcdRequest;
     
     NSMutableArray *_allStations;
+    
+    NSMutableArray *_allContracts;
     NSMutableDictionary *_cache;
     
     NSMutableArray *_clustersAnnotationsToAdd;
@@ -186,6 +189,26 @@
     }
 }
 
+- (void)loadContracts {
+    NSError *error;
+    NSError *exception;
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"contracts" ofType:@"json"];
+    NSLog(@"load contracts from @%@", path);
+    NSString *content = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+    if (error == nil) {
+        id json = [NSJSONSerialization JSONObjectWithData:[content dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&exception];
+        if (exception == nil) {
+            _allContracts = (NSMutableArray *)[Contract fromJSONArray:json];
+            NSLog(@"contracts found : %i", _allContracts.count);
+        } else {
+            NSLog(@"exception occured during json contracts data processing  : %@", exception.debugDescription);
+        }
+    } else {
+        NSLog(@"error occured during contracts json file loading  : %@", error.debugDescription);
+    }
+    
+}
+
 # pragma mark View lifecycle
 
 - (void)viewDidLoad
@@ -197,6 +220,7 @@
     }
     
     [self registerOn];
+    [self loadContracts];
     [self initView];
     
     _jcdRequestAttemptsNumber = 0;

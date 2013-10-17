@@ -41,7 +41,10 @@
 + (NSArray *)fromJSONArray:(id)json {
     NSMutableArray *array = [NSMutableArray array];
     for (id jsonObject in json) {
-        [array addObject:[self fromJSON:jsonObject]];
+        Contract *contract = [self fromJSON:jsonObject];
+        if (contract != nil) {
+            [array addObject:contract];
+        }
     }
     return array;
 }
