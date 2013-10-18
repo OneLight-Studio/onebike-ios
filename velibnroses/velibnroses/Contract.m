@@ -21,7 +21,7 @@
     contract.name = [json valueForKey:@"name"];
     contract.latitude = [NSNumber numberWithDouble:[[json valueForKey:@"lat"] doubleValue]];
     contract.longitude = [NSNumber numberWithDouble:[[json valueForKey:@"lng"] doubleValue]];
-    switch ([Contract getContractProviderForName:[json valueForKey:@"provider"]]) {
+    switch ([Contract getContractProviderFromProviderName:[json valueForKey:@"provider"]]) {
         case kJCDecaux:
             contract.provider = kJCDecaux;
             break;
@@ -49,7 +49,7 @@
     return array;
 }
 
-+ (NSString *)getNameForContractProvider:(ContractProvider)provider {
++ (NSString *)getProviderNameFromContractProvider:(ContractProvider)provider {
     NSString *result = nil;
     switch (provider) {
         case kJCDecaux:
@@ -65,7 +65,7 @@
     return result;
 }
 
-+ (ContractProvider)getContractProviderForName:(NSString *)name {
++ (ContractProvider)getContractProviderFromProviderName:(NSString *)name {
     ContractProvider result = kUnknownProvider;
     if ([name isEqualToString:@"JCDecaux"]) {
         result = kJCDecaux;
@@ -75,11 +75,15 @@
     return result;
 }
 
-- (CLLocationCoordinate2D) coordinate {
+- (CLLocationCoordinate2D)center {
     CLLocationCoordinate2D cc2d;
     cc2d.latitude = latitude.doubleValue;
     cc2d.longitude = longitude.doubleValue;
     return cc2d;
+}
+
+- (MKCoordinateRegion)region {
+    return MKCoordinateRegionMakeWithDistance([self center], radius.doubleValue * 2, radius.doubleValue * 2);
 }
 
 - (id)copyWithZone:(NSZone *)zone

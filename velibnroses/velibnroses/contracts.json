@@ -17,7 +17,7 @@
     },
     {
         "name": "Toulouse",
-        "radius": 20000,
+        "radius": 10000,
         "lng": 1.444209,
         "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Toulouse",
         "lat": 43.604652,

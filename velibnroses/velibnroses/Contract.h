@@ -21,11 +21,12 @@ typedef enum
 @property (nonatomic, assign) ContractProvider provider;
 @property (nonatomic, strong) NSNumber *radius;
 @property (nonatomic, strong) NSString *url;
-@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
+@property (nonatomic, readonly) CLLocationCoordinate2D center;
+@property (nonatomic, readonly) MKCoordinateRegion region;
 
 + (Contract *)fromJSON:(id)json;
 + (NSArray *)fromJSONArray:(id)json;
-+ (NSString *)getNameForContractProvider:(ContractProvider)provider;
-+ (ContractProvider)getContractProviderForName:(NSString *)name;
++ (NSString *)getProviderNameFromContractProvider:(ContractProvider)provider;
++ (ContractProvider)getContractProviderFromProviderName:(NSString *)name;
 
 @end

@@ -22,7 +22,6 @@
 #import "Keys.h"
 #import "ClusterAnnotation.h"
 #import "Contract.h"
-#import "ContractAnnotation.h"
 
 @interface MapController ()
     
@@ -31,7 +30,7 @@
 @implementation MapController {
     
     CLLocationCoordinate2D _startUserLocation;
-    WSRequest *_jcdRequest;
+    WSRequest *_providerWSRequest;
     
     NSMutableArray *_allStations;
     
@@ -49,12 +48,13 @@
     NSMutableArray *_contractsAnnotations;
     
     BOOL _isMapLoaded;
-    BOOL _isStationsDisplayedAtLeastOnce;
+    //BOOL _isStationsDisplayedAtLeastOnce;
     BOOL _searching;
     CLLocation *_departureLocation;
     CLLocation *_arrivalLocation;
     NSTimer *_timer;
     RoutePolyline *_route;
+    Contract *_currentContract;
     int _mapViewState;
     BOOL _isSearchViewVisible;
     Station *_departureStation;
@@ -140,7 +140,7 @@
     [searchSpinner setHidden:true];
     
     _isMapLoaded = false;
-    _isStationsDisplayedAtLeastOnce = false;
+    //_isStationsDisplayedAtLeastOnce = false;
     [self resetUserLocation];
     _mapViewState = MAP_VIEW_DEFAULT_STATE;
     _isSearchViewVisible = false;
@@ -177,6 +177,7 @@
     infoDurationTextField.minimumFontSize = 5.0;
     
     _isContractsDrawn = NO;
+    _currentContract = nil;
 }
 
 - (void) startTimer {
@@ -196,7 +197,7 @@
     }
 }
 
-- (void)configureJCDWebServices {
+/*- (void)configureJCDWebServices {
     _jcdRequestAttemptsNumber = 0;
     NSLog(@"init jcd ws");
     _jcdRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:_isStationsDisplayedAtLeastOnce];
@@ -308,7 +309,7 @@
         NSLog(@"JCD ws error %d", errorCode);
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
-}
+}*/
 
 - (void)loadContracts {
     NSError *error, *exception;
@@ -421,7 +422,6 @@
         NSLog(@"map is loaded");
         _isMapLoaded = true;
         //_isStationsDisplayedAtLeastOnce = false;
-        _isStationsDisplayedAtLeastOnce = YES;
     }
 }
 
@@ -490,16 +490,6 @@
                 annotationView.centerOffset = CGPointMake(0.0, -15.0);
             }
             annotationView.canShowCallout = NO;
-        } else if ([anAnnotation isKindOfClass:[ContractAnnotation class]]) {
-            ContractAnnotation *contract = (ContractAnnotation *) anAnnotation;
-            annotationID = @"Contract";
-            annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
-            if (annotationView == nil) {
-                annotationView = [[MKAnnotationView alloc] initWithAnnotation:contract reuseIdentifier:annotationID];
-                annotationView.image =  [UIImage imageNamed:@"MPCluster.png"];
-                annotationView.centerOffset = CGPointMake(0.0, -15.0);
-            }
-            annotationView.canShowCallout = NO;
         }
     }
     return annotationView;
@@ -522,9 +512,9 @@
                     [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
                     [_stationsAnnotationsToAdd removeAllObjects];
                     
-                    if (!_isStationsDisplayedAtLeastOnce) {
+                    /*if (!_isStationsDisplayedAtLeastOnce) {
                         _isStationsDisplayedAtLeastOnce = true;
-                    }
+                    }*/
                 });
             });
         }
@@ -554,7 +544,7 @@
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    if (_isMapLoaded && _mapViewState == MAP_VIEW_DEFAULT_STATE && _isStationsDisplayedAtLeastOnce) {
+    if (_isMapLoaded && _mapViewState == MAP_VIEW_DEFAULT_STATE/* && _isStationsDisplayedAtLeastOnce*/) {
         NSUInteger level = [UIUtils zoomLevel:mapPanel];
         if (level < _currentZoomLevel) {
             _currentZoomLevel = level;
@@ -579,23 +569,54 @@
             [self drawContractsAnnotations];
         } else {
             [self eraseContractsAnnotations];
-            /*[self eraseAnnotations];
-            dispatch_async(oneBikeQueue, ^(void) {
-                [self generateStationsAnnotations];
-                dispatch_async(uiQueue, ^(void) {
-                    [mapPanel addAnnotations:_clustersAnnotationsToAdd];
-                    [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
-                    [_clustersAnnotationsToAdd removeAllObjects];
-                    
-                    [mapPanel addAnnotations:_stationsAnnotationsToAdd];
-                    [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
-                    [_stationsAnnotationsToAdd removeAllObjects];
-                    
-                    if (!_isStationsDisplayedAtLeastOnce) {
-                        _isStationsDisplayedAtLeastOnce = true;
+            [self eraseAnnotations];
+            [self setCurrentContract];
+            if (_currentContract != nil) {
+                if (![[_cache allKeys] containsObject:_currentContract.name]) {
+                    switch (_currentContract.provider) {
+                        case kJCDecaux:
+                            {
+                                _jcdRequestAttemptsNumber = 0;
+                                NSLog(@"call JCD ws for contract : %@", _currentContract.name);
+                                _providerWSRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:NO];
+                                [_providerWSRequest appendParameterWithKey:JCD_CONTRACT_KEY_PARAM_NAME andValue:_currentContract.name];
+                                [_providerWSRequest appendParameterWithKey:JCD_API_KEY_PARAM_NAME andValue:KEY_JCD];
+                                [_providerWSRequest handleResultWith:^(id json) {
+                                    NSLog(@"JCD ws result");
+                                    NSMutableArray *contractStations = (NSMutableArray *)[Station fromJSONArray:json];
+                                    NSLog(@"%@ has %i stations", _currentContract.name, contractStations.count);
+                                    [_cache setObject:contractStations forKey:_currentContract.name];
+                                    [self drawAnnotations];
+                                }];
+                                [_providerWSRequest handleExceptionWith:^(NSError *exception) {
+                                    if (exception.code == JCD_TIMED_OUT_REQUEST_EXCEPTION_CODE) {
+                                        NSLog(@"jcd ws exception : expired request");
+                                        if (_jcdRequestAttemptsNumber < 2) {
+                                            [_providerWSRequest call];
+                                            _jcdRequestAttemptsNumber++;
+                                        } else {
+                                            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                        }
+                                    } else {
+                                        NSLog(@"JCD ws exception %@", exception.debugDescription);
+                                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                    }
+                                }];
+                                [_providerWSRequest handleErrorWith:^(int errorCode) {
+                                    NSLog(@"JCD ws error %d", errorCode);
+                                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                }];
+                                [_providerWSRequest call];
+                            }
+                            break;
+                        case kCityBikes:
+                        default:
+                            break;
                     }
-                });
-            });*/
+                } else {
+                    [self drawAnnotations];
+                }
+            }
         }
     }
 }
@@ -637,7 +658,7 @@
 {
     NSLog(@"timer fired %@", [theTimer fireDate]);
     NSLog(@"call ws");
-    [_jcdRequest call];
+    [_providerWSRequest call];
 }
 
 - (void)didTapMap:(UITapGestureRecognizer *)sender
@@ -679,9 +700,9 @@
                 [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
                 [_stationsAnnotationsToAdd removeAllObjects];
                 
-                if (!_isStationsDisplayedAtLeastOnce) {
+                /*if (!_isStationsDisplayedAtLeastOnce) {
                     _isStationsDisplayedAtLeastOnce = true;
-                }
+                }*/
             });
         });
         [infoPanel setHidden:true];
@@ -849,7 +870,7 @@
         if (sleepingTime > TIME_BEFORE_REFRESH_DATA_IN_SECONDS) {
             NSLog(@"have to refresh stations data");
             NSLog(@"call ws");
-            [_jcdRequest call];
+            [_providerWSRequest call];
         }
         [self resetUserLocation];
     }
@@ -890,13 +911,13 @@
 }
 
 - (void)generateStationsAnnotations {
-    if (!_isStationsDisplayedAtLeastOnce) {
+    /*if (!_isStationsDisplayedAtLeastOnce) {
         [_clustersAnnotationsToRemove removeAllObjects];
         [_stationsAnnotationsToRemove removeAllObjects];
         
-    }
+    }*/
     NSLog(@"generate clusters annotations, zoom level : %d", _currentZoomLevel);
-    NSMutableArray *visibleStations = [self filterVisibleStationsFrom:_allStations];
+    NSMutableArray *visibleStations = [self filterVisibleStationsFrom:[_cache objectForKey:_currentContract.name]];
     
     double clusterSideLength = [GeoUtils getClusterSideLengthForZoomLevel:_currentZoomLevel];
     NSLog(@"clusters side length : %f m", clusterSideLength);
@@ -945,9 +966,9 @@
     return filteredStations;
 }
 
-- (ContractAnnotation *)createContractAnnotation:(Contract *)aContract {
-    ContractAnnotation *marker = [[ContractAnnotation alloc] init];
-    marker.region = MKCoordinateRegionMakeWithDistance(aContract.coordinate, aContract.radius.doubleValue , aContract.radius.doubleValue);
+- (ClusterAnnotation *)createContractAnnotation:(Contract *)aContract {
+    ClusterAnnotation *marker = [[ClusterAnnotation alloc] init];
+    marker.region = aContract.region;
     marker.coordinate = marker.region.center;
     marker.title = @"";
     return marker;
@@ -984,6 +1005,25 @@
         NSLog(@"added contracts : %d", _contractsAnnotations.count);
         _isContractsDrawn = YES;
     }
+}
+
+-(void)drawAnnotations {
+    dispatch_async(oneBikeQueue, ^(void) {
+        [self generateStationsAnnotations];
+        dispatch_async(uiQueue, ^(void) {
+            [mapPanel addAnnotations:_clustersAnnotationsToAdd];
+            [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
+            [_clustersAnnotationsToAdd removeAllObjects];
+            
+            [mapPanel addAnnotations:_stationsAnnotationsToAdd];
+            [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
+            [_stationsAnnotationsToAdd removeAllObjects];
+            
+            /*if (!_isStationsDisplayedAtLeastOnce) {
+                _isStationsDisplayedAtLeastOnce = true;
+            }*/
+        });
+    });
 }
 
 - (void)drawSearchAnnotations {
@@ -1281,6 +1321,29 @@
 
 # pragma mark -
 # pragma mark Misc
+
+-(void)setCurrentContract {
+    BOOL invalidateCurrentContract = NO;
+    if (_currentContract != nil) {
+        if (![GeoUtils isLocation:mapPanel.region.center inRegion:_currentContract.region]) {
+            invalidateCurrentContract = YES;
+            _currentContract = nil;
+        }
+    }
+    if (_currentContract == nil || invalidateCurrentContract) {
+        for (Contract *aContract in _allContracts) {
+            if ([GeoUtils isLocation:mapPanel.region.center inRegion:aContract.region]) {
+                _currentContract = aContract;
+                break;
+            }
+        }
+    }
+    if (_currentContract != nil) {
+        NSLog(@"current contract : %@ (%@)", _currentContract.name, [Contract getProviderNameFromContractProvider:_currentContract.provider]);
+    } else {
+        NSLog(@"out of contract cover");
+    }
+}
 
 -(double) getDistanceBetweenDeparture:(CLLocation *)departure andArrival:(CLLocation *)arrival withMin:(double)minRadius withMax:(double)maxRadius {
     double dist = [GeoUtils getDistanceFromLat:departure.coordinate.latitude toLat:arrival.coordinate.latitude fromLong:departure.coordinate.longitude toLong:arrival.coordinate.longitude];
