@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
+		190C83D31811281000D5D56B /* ContractAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 190C83D21811281000D5D56B /* ContractAnnotation.m */; };
 		19145C76180FE03600911481 /* Contract.m in Sources */ = {isa = PBXBuildFile; fileRef = 19145C75180FE03600911481 /* Contract.m */; };
 		19145C7818101F9800911481 /* contracts.json in Resources */ = {isa = PBXBuildFile; fileRef = 19145C7718101F9800911481 /* contracts.json */; };
 		19295E01180EDD2E0089ABD1 /* IPContent.png in Resources */ = {isa = PBXBuildFile; fileRef = 19295DFD180EDD2E0089ABD1 /* IPContent.png */; };
@@ -112,6 +113,8 @@
 /* Begin PBXFileReference section */
 		190776FF1796F3BE00180530 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
 		190777001796F3BE00180530 /* GeoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoUtils.m; sourceTree = "<group>"; };
+		190C83D11811281000D5D56B /* ContractAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContractAnnotation.h; sourceTree = "<group>"; };
+		190C83D21811281000D5D56B /* ContractAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContractAnnotation.m; sourceTree = "<group>"; };
 		19145C74180FE03600911481 /* Contract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contract.h; sourceTree = "<group>"; };
 		19145C75180FE03600911481 /* Contract.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contract.m; sourceTree = "<group>"; };
 		19145C7718101F9800911481 /* contracts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = contracts.json; sourceTree = "<group>"; };
@@ -286,6 +289,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		190C83D41811291600D5D56B /* Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				190C83D11811281000D5D56B /* ContractAnnotation.h */,
+				190C83D21811281000D5D56B /* ContractAnnotation.m */,
+				19BAAF7717E7398A00F0C092 /* ClusterAnnotation.h */,
+				19BAAF7817E7398A00F0C092 /* ClusterAnnotation.m */,
+				19688CE817B945B9005ACA64 /* PlaceAnnotation.h */,
+				19688CE917B945B9005ACA64 /* PlaceAnnotation.m */,
+			);
+			name = Annotation;
+			sourceTree = "<group>";
+		};
 		194AD95D180EB9AD000AD1F1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -519,16 +535,13 @@
 		19FD1B5C1795916600309FD0 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				190C83D41811291600D5D56B /* Annotation */,
 				19145C74180FE03600911481 /* Contract.h */,
 				19145C75180FE03600911481 /* Contract.m */,
-				19BAAF7717E7398A00F0C092 /* ClusterAnnotation.h */,
-				19BAAF7817E7398A00F0C092 /* ClusterAnnotation.m */,
 				19FD1B5D179591BE00309FD0 /* Station.h */,
 				19FD1B5E179591BE00309FD0 /* Station.m */,
 				19CED9FE17AAA4120069ECDC /* RoutePolyline.h */,
 				19CED9FF17AAA4120069ECDC /* RoutePolyline.m */,
-				19688CE817B945B9005ACA64 /* PlaceAnnotation.h */,
-				19688CE917B945B9005ACA64 /* PlaceAnnotation.m */,
 			);
 			name = Domain;
 			sourceTree = "<group>";
@@ -771,6 +784,7 @@
 				19F1D6AE17D10B2900BA53AF /* TRGoogleMapsSuggestion.m in Sources */,
 				19F1D6AF17D10B2900BA53AF /* TRStringExtensions.m in Sources */,
 				19F1D6B017D10B2900BA53AF /* TRTextFieldExtensions.m in Sources */,
+				190C83D31811281000D5D56B /* ContractAnnotation.m in Sources */,
 				19CA3C7717D4E1CF00366535 /* HelpController.m in Sources */,
 				19BAAF7917E7398A00F0C092 /* ClusterAnnotation.m in Sources */,
 				19D69FAB180803800099D2BE /* AboutController.m in Sources */,

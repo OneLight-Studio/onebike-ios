@@ -22,6 +22,7 @@
 #import "Keys.h"
 #import "ClusterAnnotation.h"
 #import "Contract.h"
+#import "ContractAnnotation.h"
 
 @interface MapController ()
     
@@ -45,6 +46,8 @@
     NSMutableArray *_departureCloseStations;
     NSMutableArray *_arrivalCloseStations;
     NSMutableArray *_searchAnnotations;
+    NSMutableArray *_contractsAnnotations;
+    
     BOOL _isMapLoaded;
     BOOL _isStationsDisplayedAtLeastOnce;
     BOOL _searching;
@@ -69,6 +72,7 @@
     dispatch_queue_t oneBikeQueue;
     
     BOOL _redraw;
+    BOOL _isContractsDrawn;
 }
 
 @synthesize mapPanel;
@@ -158,6 +162,7 @@
     _departureCloseStations = [[NSMutableArray alloc] init];
     _arrivalCloseStations = [[NSMutableArray alloc] init];
     _searchAnnotations = [[NSMutableArray alloc] init];
+    _contractsAnnotations = [[NSMutableArray alloc] init];
     
     _rideUIAlert = nil;
     _isZoomIn = false;
@@ -170,6 +175,8 @@
     infoDistanceTextField.minimumFontSize = 5.0;
     infoDurationTextField.adjustsFontSizeToFitWidth = YES;
     infoDurationTextField.minimumFontSize = 5.0;
+    
+    _isContractsDrawn = NO;
 }
 
 - (void) startTimer {
@@ -189,40 +196,7 @@
     }
 }
 
-- (void)loadContracts {
-    NSError *error;
-    NSError *exception;
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"contracts" ofType:@"json"];
-    NSLog(@"load contracts from @%@", path);
-    NSString *content = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-    if (error == nil) {
-        id json = [NSJSONSerialization JSONObjectWithData:[content dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&exception];
-        if (exception == nil) {
-            _allContracts = (NSMutableArray *)[Contract fromJSONArray:json];
-            NSLog(@"contracts found : %i", _allContracts.count);
-        } else {
-            NSLog(@"exception occured during json contracts data processing  : %@", exception.debugDescription);
-        }
-    } else {
-        NSLog(@"error occured during contracts json file loading  : %@", error.debugDescription);
-    }
-    
-}
-
-# pragma mark View lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-        self.navigationController.navigationBar.translucent = NO;
-    }
-    
-    [self registerOn];
-    [self loadContracts];
-    [self initView];
-    
+- (void)configureJCDWebServices {
     _jcdRequestAttemptsNumber = 0;
     NSLog(@"init jcd ws");
     _jcdRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:_isStationsDisplayedAtLeastOnce];
@@ -334,9 +308,43 @@
         NSLog(@"JCD ws error %d", errorCode);
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
+}
+
+- (void)loadContracts {
+    NSError *error, *exception;
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"contracts" ofType:@"json"];
+    NSLog(@"load contracts from @%@", path);
+    NSString *content = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+    if (error == nil) {
+        id json = [NSJSONSerialization JSONObjectWithData:[content dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&exception];
+        if (exception == nil) {
+            _allContracts = (NSMutableArray *)[Contract fromJSONArray:json];
+            NSLog(@"contracts found : %i", _allContracts.count);
+        } else {
+            NSLog(@"exception occured during json contracts data processing  : %@", exception.debugDescription);
+        }
+    } else {
+        NSLog(@"error occured during contracts json file loading  : %@", error.debugDescription);
+    }
     
+}
+
+# pragma mark View lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+        self.navigationController.navigationBar.translucent = NO;
+    }
+    
+    [self registerOn];
+    [self loadContracts];
+    [self initView];
+    /*[self configureJCDWebServices];
     NSLog(@"call ws");
-    [_jcdRequest call];
+    [_jcdRequest call];*/
 }
 
 - (void)viewDidUnload
@@ -412,7 +420,8 @@
     if (!_isMapLoaded) {
         NSLog(@"map is loaded");
         _isMapLoaded = true;
-        _isStationsDisplayedAtLeastOnce = false;
+        //_isStationsDisplayedAtLeastOnce = false;
+        _isStationsDisplayedAtLeastOnce = YES;
     }
 }
 
@@ -477,6 +486,16 @@
             annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
             if (annotationView == nil) {
                 annotationView = [[MKAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
+                annotationView.image =  [UIImage imageNamed:@"MPCluster.png"];
+                annotationView.centerOffset = CGPointMake(0.0, -15.0);
+            }
+            annotationView.canShowCallout = NO;
+        } else if ([anAnnotation isKindOfClass:[ContractAnnotation class]]) {
+            ContractAnnotation *contract = (ContractAnnotation *) anAnnotation;
+            annotationID = @"Contract";
+            annotationView = (MKAnnotationView *)[aMapView dequeueReusableAnnotationViewWithIdentifier:annotationID];
+            if (annotationView == nil) {
+                annotationView = [[MKAnnotationView alloc] initWithAnnotation:contract reuseIdentifier:annotationID];
                 annotationView.image =  [UIImage imageNamed:@"MPCluster.png"];
                 annotationView.centerOffset = CGPointMake(0.0, -15.0);
             }
@@ -552,24 +571,32 @@
             _isZoomOut = false;
         }
 
-        [self eraseAnnotations];
-        
-        dispatch_async(oneBikeQueue, ^(void) {
-            [self generateStationsAnnotations];
-            dispatch_async(uiQueue, ^(void) {
-                [mapPanel addAnnotations:_clustersAnnotationsToAdd];
-                [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
-                [_clustersAnnotationsToAdd removeAllObjects];
-                
-                [mapPanel addAnnotations:_stationsAnnotationsToAdd];
-                [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
-                [_stationsAnnotationsToAdd removeAllObjects];
-                
-                if (!_isStationsDisplayedAtLeastOnce) {
-                    _isStationsDisplayedAtLeastOnce = true;
-                }
-            });
-        });
+        if (_currentZoomLevel < 10) {
+            // use contracts data
+            if (_contractsAnnotations.count == 0) {
+                [self generateContractsAnnotations];
+            }
+            [self drawContractsAnnotations];
+        } else {
+            [self eraseContractsAnnotations];
+            /*[self eraseAnnotations];
+            dispatch_async(oneBikeQueue, ^(void) {
+                [self generateStationsAnnotations];
+                dispatch_async(uiQueue, ^(void) {
+                    [mapPanel addAnnotations:_clustersAnnotationsToAdd];
+                    [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
+                    [_clustersAnnotationsToAdd removeAllObjects];
+                    
+                    [mapPanel addAnnotations:_stationsAnnotationsToAdd];
+                    [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
+                    [_stationsAnnotationsToAdd removeAllObjects];
+                    
+                    if (!_isStationsDisplayedAtLeastOnce) {
+                        _isStationsDisplayedAtLeastOnce = true;
+                    }
+                });
+            });*/
+        }
     }
 }
 
@@ -854,6 +881,14 @@
     NSLog(@"centered on user location (%f,%f)", _startUserLocation.latitude, _startUserLocation.longitude);
 }
 
+- (void)generateContractsAnnotations {
+    NSLog(@"generate contracts annotations");
+    for (Contract *contract in _allContracts) {
+        [_contractsAnnotations addObject:[self createContractAnnotation:contract]];
+    }
+    NSLog(@"generated contracts : %d", _contractsAnnotations.count);
+}
+
 - (void)generateStationsAnnotations {
     if (!_isStationsDisplayedAtLeastOnce) {
         [_clustersAnnotationsToRemove removeAllObjects];
@@ -910,6 +945,14 @@
     return filteredStations;
 }
 
+- (ContractAnnotation *)createContractAnnotation:(Contract *)aContract {
+    ContractAnnotation *marker = [[ContractAnnotation alloc] init];
+    marker.region = MKCoordinateRegionMakeWithDistance(aContract.coordinate, aContract.radius.doubleValue , aContract.radius.doubleValue);
+    marker.coordinate = marker.region.center;
+    marker.title = @"";
+    return marker;
+}
+
 - (PlaceAnnotation *)createStationAnnotation:(Station *)aStation withLocation:(PlaceAnnotationLocation)aLocation {
     
     CLLocationCoordinate2D stationCoordinate;
@@ -931,6 +974,16 @@
     marker.coordinate = marker.region.center;
     marker.title = @"";
     return marker;
+}
+
+- (void)drawContractsAnnotations {
+    if (!_isContractsDrawn) {
+        [self eraseAnnotations];
+        NSLog(@"draw contracts annotations");
+        [mapPanel addAnnotations:_contractsAnnotations];
+        NSLog(@"added contracts : %d", _contractsAnnotations.count);
+        _isContractsDrawn = YES;
+    }
 }
 
 - (void)drawSearchAnnotations {
@@ -1047,6 +1100,11 @@
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"google_ws_search_ride_error", @"")  message:NSLocalizedString(@"OK", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
     [googleRequest call];
+}
+
+- (void)eraseContractsAnnotations {
+    [mapPanel removeAnnotations:_contractsAnnotations];
+    _isContractsDrawn = NO;
 }
 
 - (void)eraseAnnotations
