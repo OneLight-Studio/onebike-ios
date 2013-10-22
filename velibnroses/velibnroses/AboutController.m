@@ -8,10 +8,6 @@
 
 #import "AboutController.h"
 
-@interface AboutController ()
-
-@end
-
 @implementation AboutController
 
 - (void)viewDidLoad

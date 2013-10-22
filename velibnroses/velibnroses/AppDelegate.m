@@ -12,9 +12,13 @@
 #import "UIUtils.h"
 #import "iRate.h"
 
-@implementation AppDelegate {
-    double _sleepingStartDate;
-}
+@interface AppDelegate ()
+
+@property (assign,readwrite) double sleepingStartDate;
+
+@end
+
+@implementation AppDelegate
 
 + (void)initialize
 {
@@ -49,7 +53,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    _sleepingStartDate = [[NSDate date] timeIntervalSince1970];
+    self.sleepingStartDate = [[NSDate date] timeIntervalSince1970];
     NSLog(@"applicationDidEnterBackground");
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DID_ENTER_BACKGROUND object:nil userInfo:nil];
@@ -59,7 +63,7 @@
 {
     NSLog(@"applicationWillEnterForeground");
     double now = [[NSDate date] timeIntervalSince1970];
-    double sleepingTime = now - _sleepingStartDate;
+    double sleepingTime = now - self.sleepingStartDate;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WILL_ENTER_FOREGROUND object:[NSNumber numberWithDouble:sleepingTime] userInfo:nil];
 }

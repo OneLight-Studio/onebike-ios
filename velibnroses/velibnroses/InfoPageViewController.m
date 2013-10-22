@@ -11,15 +11,13 @@
 #import "Constants.h"
 
 @interface InfoPageViewController ()
-    
+
+@property (strong,readwrite) HelpController *helpScreen;
+@property (strong,readwrite) AboutController *aboutScreen;
+
 @end
 
 @implementation InfoPageViewController
-
-@synthesize backBarButton;
-@synthesize feedbackBarButton;
-@synthesize helpScreen;
-@synthesize aboutScreen;
 
 # pragma mark -
 
@@ -32,9 +30,9 @@
     self.navigationItem.hidesBackButton = YES;
 	[self.backBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.feedbackBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    helpScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"helpScreen"];
-    aboutScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"aboutScreen"];
-    [self setViewControllers:@[helpScreen] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+    self.helpScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"helpScreen"];
+    self.aboutScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"aboutScreen"];
+    [self setViewControllers:@[self.helpScreen] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
 }
 
 # pragma mark Event(s)
@@ -70,8 +68,8 @@
     
     UIViewController *next = nil;
     
-    if (viewController == helpScreen) {
-        next = aboutScreen;
+    if (viewController == self.helpScreen) {
+        next = self.aboutScreen;
     }
     
     return next;
@@ -81,8 +79,8 @@
     
     UIViewController *previous = nil;
     
-    if (viewController == aboutScreen) {
-        previous = helpScreen;
+    if (viewController == self.aboutScreen) {
+        previous = self.helpScreen;
     }
     
     return previous;

@@ -398,8 +398,8 @@
     <resources>
         <image name="LogoOnelight.png" width="49" height="50"/>
         <image name="LogoText.png" width="176" height="58"/>
-        <image name="MPDistance.png" width="15" height="19"/>
-        <image name="MPDuration.png" width="19" height="19"/>
+        <image name="MPDistance.png" width="20" height="20"/>
+        <image name="MPDuration.png" width="20" height="20"/>
         <image name="MPSeparator.png" width="1" height="24"/>
         <image name="NBBack.png" width="20" height="20"/>
         <image name="NBInfo.png" width="20" height="20"/>

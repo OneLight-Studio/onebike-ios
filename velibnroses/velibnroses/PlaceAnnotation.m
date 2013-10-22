@@ -48,12 +48,12 @@
         return true;
     if ([self class] != [object class])
         return false;
-    PlaceAnnotation *obj = (PlaceAnnotation *)object;
+    PlaceAnnotation *other = (PlaceAnnotation *)object;
     if (self.placeStation == nil) {
-        if (obj.placeStation != nil) {
+        if (other.placeStation != nil) {
             return false;
         }
-    } else if (![self.placeStation isEqual:obj.placeStation]) {
+    } else if (![self.placeStation isEqual:other.placeStation]) {
         return false;
     }
     return true;

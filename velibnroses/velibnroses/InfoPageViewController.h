@@ -13,10 +13,8 @@
 
 @interface InfoPageViewController : UIPageViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate, MFMailComposeViewControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *backBarButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *feedbackBarButton;
-@property (nonatomic, retain) HelpController *helpScreen;
-@property (nonatomic, retain) AboutController *aboutScreen;
+@property (weak,readwrite) IBOutlet UIBarButtonItem *backBarButton;
+@property (weak,readwrite) IBOutlet UIBarButtonItem *feedbackBarButton;
 
 - (IBAction)backBarButtonClicked:(id)sender;
 - (IBAction)feedbackBarButtonClicked:(id)sender;

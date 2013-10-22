@@ -10,19 +10,19 @@
 
 typedef enum
 {
-    kUnknownProvider, kJCDecaux, kCityBikes
+    kUnknownProvider,kJCDecaux,kCityBikes
 } ContractProvider;
 
 @interface Contract : NSObject <NSCopying>
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSNumber *latitude;
-@property (nonatomic, strong) NSNumber *longitude;
-@property (nonatomic, assign) ContractProvider provider;
-@property (nonatomic, strong) NSNumber *radius;
-@property (nonatomic, strong) NSString *url;
-@property (nonatomic, readonly) CLLocationCoordinate2D center;
-@property (nonatomic, readonly) MKCoordinateRegion region;
+@property (strong,readwrite) NSString *name;
+@property (strong,readwrite) NSNumber *latitude;
+@property (strong,readwrite) NSNumber *longitude;
+@property (assign,readwrite) ContractProvider provider;
+@property (strong,readwrite) NSNumber *radius;
+@property (strong,readwrite) NSString *url;
+@property (assign,readonly) CLLocationCoordinate2D center;
+@property (assign,readonly) MKCoordinateRegion region;
 
 + (Contract *)fromJSON:(id)json;
 + (NSArray *)fromJSONArray:(id)json;

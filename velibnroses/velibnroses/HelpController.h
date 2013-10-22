@@ -10,6 +10,6 @@
 
 @interface HelpController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIImageView *contentImage;
+@property (weak,readwrite) IBOutlet UIImageView *contentImage;
 
 @end

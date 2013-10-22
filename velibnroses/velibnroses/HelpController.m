@@ -8,13 +8,7 @@
 
 #import "HelpController.h"
 
-@interface HelpController ()
-
-@end
-
 @implementation HelpController
-
-@synthesize contentImage;
 
 - (void)viewDidLoad
 {

@@ -10,6 +10,6 @@
 
 @interface ClusterAnnotation : MKPointAnnotation
 
-@property (nonatomic, assign) MKCoordinateRegion region;
+@property (assign,readwrite) MKCoordinateRegion region;
 
 @end
