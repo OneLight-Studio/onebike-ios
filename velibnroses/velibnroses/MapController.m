@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 OneLight Studio. All rights reserved.
 //
 
-#import "MapController.h"
 #import <CoreLocation/CoreLocation.h>
+#import "MapController.h"
 #import "Constants.h"
 #import "WSRequest.h"
 #import "Station.h"
@@ -24,18 +24,6 @@
 #import "Contract.h"
 
 @interface MapController ()
-    
-@property (strong,readwrite) NSMutableArray *allContracts;
-@property (strong,readwrite) NSMutableDictionary *cache;
-
-@property (strong,readwrite) NSMutableArray *clustersAnnotationsToAdd;
-@property (strong,readwrite) NSMutableArray *clustersAnnotationsToRemove;
-@property (strong,readwrite) NSMutableArray *stationsAnnotationsToAdd;
-@property (strong,readwrite) NSMutableArray *stationsAnnotationsToRemove;
-@property (strong,readwrite) NSMutableArray *departureCloseStations;
-@property (strong,readwrite) NSMutableArray *arrivalCloseStations;
-@property (strong,readwrite) NSMutableArray *searchAnnotations;
-@property (strong,readwrite) NSMutableArray *contractsAnnotations;
 
 @property (strong,readwrite) TRAutocompleteView *departureAutocompleteView;
 @property (strong,readwrite) TRAutocompleteView *arrivalAutocompleteView;
@@ -50,6 +38,19 @@
 @property (strong,readwrite) Contract *currentContract;
 @property (strong,readwrite) NSNumber *isLocationServiceEnabled;
 @property (strong,readwrite) NSTimer *timer;
+@property (strong,readwrite) dispatch_queue_t uiQueue;
+@property (strong,readwrite) dispatch_queue_t oneBikeQueue;
+
+@property (strong,readwrite) NSMutableArray *allContracts;
+@property (strong,readwrite) NSMutableDictionary *cache;
+@property (strong,readwrite) NSMutableArray *clustersAnnotationsToAdd;
+@property (strong,readwrite) NSMutableArray *clustersAnnotationsToRemove;
+@property (strong,readwrite) NSMutableArray *stationsAnnotationsToAdd;
+@property (strong,readwrite) NSMutableArray *stationsAnnotationsToRemove;
+@property (strong,readwrite) NSMutableArray *departureCloseStations;
+@property (strong,readwrite) NSMutableArray *arrivalCloseStations;
+@property (strong,readwrite) NSMutableArray *searchAnnotations;
+@property (strong,readwrite) NSMutableArray *contractsAnnotations;
 
 @property (assign,readwrite) int mapViewState;
 @property (assign,readwrite) int jcdRequestAttemptsNumber;
@@ -68,9 +69,6 @@
 @implementation MapController {
     
     NSMutableArray *_allStations;
-    
-    dispatch_queue_t uiQueue;
-    dispatch_queue_t oneBikeQueue;
 }
 
 # pragma mark -
@@ -147,8 +145,8 @@
     self.isZoomIn = NO;
     self.isZoomOut = NO;
     
-    uiQueue = dispatch_get_main_queue();
-    oneBikeQueue = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+    self.uiQueue = dispatch_get_main_queue();
+    self.oneBikeQueue = dispatch_queue_create("com.onelightstudio.onebike", NULL);
     
     self.infoDistanceTextField.adjustsFontSizeToFitWidth = YES;
     self.infoDistanceTextField.minimumFontSize = 5.0;
@@ -476,9 +474,9 @@
             ClusterAnnotation *annotation = (ClusterAnnotation *) aView.annotation;
             // zoom in on cluster region
             [self.mapPanel setRegion:annotation.region animated:YES];
-            dispatch_async(oneBikeQueue, ^(void) {
+            dispatch_async(self.oneBikeQueue, ^(void) {
                 [self generateStationsAnnotations];
-                dispatch_async(uiQueue, ^(void) {
+                dispatch_async(self.uiQueue, ^(void) {
                     [self.mapPanel addAnnotations:self.clustersAnnotationsToAdd];
                     [self.clustersAnnotationsToRemove addObjectsFromArray:self.clustersAnnotationsToAdd];
                     [self.clustersAnnotationsToAdd removeAllObjects];
@@ -658,11 +656,11 @@
         [self eraseRoute];
         [self eraseSearchAnnotations];
         [self centerMapOnUserLocation];
-        dispatch_async(oneBikeQueue, ^(void) {
+        dispatch_async(self.oneBikeQueue, ^(void) {
             // necessary time to trigger effective zoom (and avoid to consider too many visible stations in map region)
             [NSThread sleepForTimeInterval:1.5f];
             [self generateStationsAnnotations];
-            dispatch_async(uiQueue, ^(void) {
+            dispatch_async(self.uiQueue, ^(void) {
                 [self.mapPanel addAnnotations:self.clustersAnnotationsToAdd];
                 [self.clustersAnnotationsToRemove addObjectsFromArray:self.clustersAnnotationsToAdd];
                 [self.clustersAnnotationsToAdd removeAllObjects];
@@ -970,9 +968,9 @@
 }
 
 -(void)drawAnnotations {
-    dispatch_async(oneBikeQueue, ^(void) {
+    dispatch_async(self.oneBikeQueue, ^(void) {
         [self generateStationsAnnotations];
-        dispatch_async(uiQueue, ^(void) {
+        dispatch_async(self.uiQueue, ^(void) {
             [self.mapPanel addAnnotations:self.clustersAnnotationsToAdd];
             [self.clustersAnnotationsToRemove addObjectsFromArray:self.clustersAnnotationsToAdd];
             [self.clustersAnnotationsToAdd removeAllObjects];

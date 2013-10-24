@@ -12,8 +12,8 @@
 
 @interface InfoPageViewController ()
 
-@property (strong,readwrite) HelpController *helpScreen;
-@property (strong,readwrite) AboutController *aboutScreen;
+@property (strong,readwrite) UIViewController *helpScreen;
+@property (strong,readwrite) UIViewController *aboutScreen;
 
 @end
 
@@ -64,6 +64,9 @@
     }
 }
 
+# pragma mark -
+# pragma mark UIPageViewControllerDataSource
+
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     
     UIViewController *next = nil;
@@ -100,6 +103,8 @@
     pageControl.pageIndicatorTintColor = [UIColor whiteColor];
     pageControl.currentPageIndicatorTintColor = [UIUtils colorWithHexaString:@"#afcb13"];
 }
+
+# pragma mark MFMailComposeViewControllerDelegate
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     switch (result) {

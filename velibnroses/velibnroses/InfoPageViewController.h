@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HelpController.h"
-#import "AboutController.h"
 #import <MessageUI/MessageUI.h>
 
 @interface InfoPageViewController : UIPageViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate, MFMailComposeViewControllerDelegate>

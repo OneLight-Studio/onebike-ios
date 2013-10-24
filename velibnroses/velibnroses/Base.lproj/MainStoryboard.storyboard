@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
     <dependencies>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
@@ -309,36 +310,34 @@
             </objects>
             <point key="canvasLocation" x="1272" y="32"/>
         </scene>
-        <!--Help Controller-->
+        <!--View Controller-->
         <scene sceneID="DJc-Ks-pak">
             <objects>
-                <viewController storyboardIdentifier="helpScreen" id="mZx-XO-NyK" customClass="HelpController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="helpScreen" id="mZx-XO-NyK" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zTG-hz-Ftm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="dyJ-RV-8n7">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="505"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="IPContent.png" id="dyJ-RV-8n7">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="441"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                             </imageView>
                         </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="PnZ-q7-OJc"/>
-                    <connections>
-                        <outlet property="contentImage" destination="dyJ-RV-8n7" id="paI-Un-ucJ"/>
-                    </connections>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LYB-5i-1bQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1272" y="696"/>
         </scene>
-        <!--About Controller-->
+        <!--View Controller-->
         <scene sceneID="YV4-Zt-z4N">
             <objects>
-                <viewController storyboardIdentifier="aboutScreen" id="vxX-xI-Gf5" customClass="AboutController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="aboutScreen" id="vxX-xI-Gf5" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ua7-mq-a0Y">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoText.png" id="fT3-ng-uRx">
@@ -388,7 +387,7 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="zbW-K2-cfz"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4vh-Cg-Fqd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -396,6 +395,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="IPContent.png" width="320" height="484"/>
         <image name="LogoOnelight.png" width="49" height="50"/>
         <image name="LogoText.png" width="176" height="58"/>
         <image name="MPDistance.png" width="20" height="20"/>
