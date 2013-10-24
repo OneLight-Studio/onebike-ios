@@ -36,6 +36,7 @@
 @property (strong,readwrite) Station *arrivalStation;
 @property (strong,readwrite) RoutePolyline *route;
 @property (strong,readwrite) Contract *currentContract;
+@property (strong,readwrite) Contract *searchContract;
 @property (strong,readwrite) NSNumber *isLocationServiceEnabled;
 @property (strong,readwrite) NSTimer *timer;
 @property (strong,readwrite) dispatch_queue_t uiQueue;
@@ -66,10 +67,7 @@
 
 @end
 
-@implementation MapController {
-    
-    NSMutableArray *_allStations;
-}
+@implementation MapController
 
 # pragma mark -
 
@@ -155,6 +153,7 @@
     
     self.areContractsDrawn = NO;
     self.currentContract = nil;
+    self.searchContract = nil;
 }
 
 - (void) startTimer {
@@ -766,7 +765,7 @@
                     if (self.departureCLLocation != nil && self.arrivalCLLocation != nil) {
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         if (![self areEqualLocationsBetween:self.departureCLLocation and:self.arrivalCLLocation]) {
-                            if (_allStations != nil) {
+                            if ([self.cache objectForKey:self.currentContract.name] != nil) {
                                 [self cancelBarButtonClicked:nil];
                                 double radius = [self getDistanceBetweenDeparture:self.departureCLLocation andArrival:self.arrivalCLLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                                 [self searchWithDeparture:self.departureCLLocation andArrival:self.arrivalCLLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
@@ -792,7 +791,7 @@
                     if (self.departureCLLocation != nil && self.arrivalCLLocation != nil) {
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         if (![self areEqualLocationsBetween:self.departureCLLocation and:self.arrivalCLLocation]) {
-                            if (_allStations != nil) {
+                            if ([self.cache objectForKey:self.currentContract.name] != nil) {
                                 [self cancelBarButtonClicked:nil];
                                 double radius = [self getDistanceBetweenDeparture:self.departureCLLocation andArrival:self.arrivalCLLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                                 [self searchWithDeparture:self.departureCLLocation andArrival:self.arrivalCLLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
@@ -1213,7 +1212,7 @@
     
     int radius = STATION_SEARCH_RADIUS_IN_METERS;
     while (matchingStationNumber < maxStationsNumber && radius <= maxRadius) {
-        for (Station *station in _allStations) {
+        for (Station *station in [self.cache objectForKey:self.currentContract.name]) {
             if (matchingStationNumber < maxStationsNumber) {
                 if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
                     
@@ -1247,7 +1246,7 @@
     
     int radius = STATION_SEARCH_RADIUS_IN_METERS;
     while (matchingStationNumber < maxStationsNumber && radius <= maxRadius) {
-        for (Station *station in _allStations) {
+        for (Station *station in [self.cache objectForKey:self.currentContract.name]) {
             if (matchingStationNumber < maxStationsNumber) {
                 if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
                     

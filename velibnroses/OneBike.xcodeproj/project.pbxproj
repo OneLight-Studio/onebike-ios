@@ -8,11 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
-		190DB5EF181946BC00DC39FE /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 190DB5ED181946BC00DC39FE /* MainStoryboard.storyboard */; };
-		190DB5F71819474600DC39FE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 190DB5F51819474600DC39FE /* InfoPlist.strings */; };
-		190DB5FC1819476100DC39FE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 190DB5FA1819476100DC39FE /* Localizable.strings */; };
-		190DB601181947A300DC39FE /* IPContent.png in Resources */ = {isa = PBXBuildFile; fileRef = 190DB5FF181947A300DC39FE /* IPContent.png */; };
-		190DB6051819480500DC39FE /* IPContent@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 190DB6031819480500DC39FE /* IPContent@2x.png */; };
 		19145C76180FE03600911481 /* Contract.m in Sources */ = {isa = PBXBuildFile; fileRef = 19145C75180FE03600911481 /* Contract.m */; };
 		19145C7818101F9800911481 /* contracts.json in Resources */ = {isa = PBXBuildFile; fileRef = 19145C7718101F9800911481 /* contracts.json */; };
 		194AD99B180EB9AD000AD1F1 /* LogoOnelight.png in Resources */ = {isa = PBXBuildFile; fileRef = 194AD968180EB9AD000AD1F1 /* LogoOnelight.png */; };
@@ -668,7 +663,6 @@
 			files = (
 				194AD9AB180EB9AD000AD1F1 /* MPStation.png in Resources */,
 				19F3F98317FB355F00A7627E /* Logo29.png in Resources */,
-				190DB601181947A300DC39FE /* IPContent.png in Resources */,
 				194AD9A1180EB9AD000AD1F1 /* MPCluster.png in Resources */,
 				194AD9A4180EB9AD000AD1F1 /* MPDeparture@2x.png in Resources */,
 				194AD9B0180EB9AD000AD1F1 /* NBBg@2x.png in Resources */,
@@ -677,7 +671,6 @@
 				194AD9B6180EB9AD000AD1F1 /* NBLogo@2x.png in Resources */,
 				194AD9AE180EB9AD000AD1F1 /* NBBack@2x.png in Resources */,
 				194AD99C180EB9AD000AD1F1 /* LogoOnelight@2x.png in Resources */,
-				190DB5F71819474600DC39FE /* InfoPlist.strings in Resources */,
 				194AD9C1180EB9AD000AD1F1 /* SPMyLocation_Disabled.png in Resources */,
 				194AD9AA180EB9AD000AD1F1 /* MPSeparator@2x.png in Resources */,
 				194AD9AC180EB9AD000AD1F1 /* MPStation@2x.png in Resources */,
@@ -706,8 +699,6 @@
 				194AD99B180EB9AD000AD1F1 /* LogoOnelight.png in Resources */,
 				19F3F98417FB355F00A7627E /* Logo58.png in Resources */,
 				194AD9A2180EB9AD000AD1F1 /* MPCluster@2x.png in Resources */,
-				190DB5EF181946BC00DC39FE /* MainStoryboard.storyboard in Resources */,
-				190DB6051819480500DC39FE /* IPContent@2x.png in Resources */,
 				194AD9C3180EB9AD000AD1F1 /* SPStand.png in Resources */,
 				194AD9BE180EB9AD000AD1F1 /* SPCloseSearch@2x.png in Resources */,
 				194AD9B1180EB9AD000AD1F1 /* NBClose.png in Resources */,
@@ -719,7 +710,6 @@
 				194AD9BC180EB9AD000AD1F1 /* SPButtonBg@2x.png in Resources */,
 				194AD99E180EB9AD000AD1F1 /* LogoText@2x.png in Resources */,
 				194AD9BB180EB9AD000AD1F1 /* SPButtonBg.png in Resources */,
-				190DB5FC1819476100DC39FE /* Localizable.strings in Resources */,
 				19C9C67817CE674600805611 /* update_storyboard_strings.sh in Resources */,
 				194AD9BA180EB9AD000AD1F1 /* SPBike@2x.png in Resources */,
 				194AD9C2180EB9AD000AD1F1 /* SPMyLocation_Disabled@2x.png in Resources */,
@@ -884,6 +874,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: Pierre-Yves ROGER (A5K4D4KBS9)";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/s.balard/workspaces/onelightstudio/onebike/velibnroses,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "velibnroses/OneBike-Prefix.pch";
 				INFOPLIST_FILE = "velibnroses/OneBike-Info.plist";
@@ -905,6 +899,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Prometil";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Prometil";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/s.balard/workspaces/onelightstudio/onebike/velibnroses,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "velibnroses/OneBike-Prefix.pch";
 				INFOPLIST_FILE = "velibnroses/OneBike-Info.plist";
