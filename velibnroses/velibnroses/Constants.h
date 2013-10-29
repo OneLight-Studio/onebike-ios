@@ -20,6 +20,7 @@
 #define MERCATOR_RADIUS 85445659.44705395
 #define MAX_ZOOM_LEVEL 20
 #define MAP_PADDING_FACTOR 1.25
+#define INVALID_STATIONS @[@"TEST EDOS"]
 
 // web services
 

@@ -10,8 +10,6 @@
 
 @implementation Contract
 
-@synthesize name, latitude, longitude, provider, radius, url;
-
 + (Contract *)fromJSON:(id)json {
     if (json == (id)[NSNull null]) {
         return nil;
@@ -77,13 +75,13 @@
 
 - (CLLocationCoordinate2D)center {
     CLLocationCoordinate2D cc2d;
-    cc2d.latitude = latitude.doubleValue;
-    cc2d.longitude = longitude.doubleValue;
+    cc2d.latitude = self.latitude.doubleValue;
+    cc2d.longitude = self.longitude.doubleValue;
     return cc2d;
 }
 
 - (MKCoordinateRegion)region {
-    return MKCoordinateRegionMakeWithDistance([self center], radius.doubleValue * 2, radius.doubleValue * 2);
+    return MKCoordinateRegionMakeWithDistance(self.center, self.radius.doubleValue * 2, self.radius.doubleValue * 2);
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -110,19 +108,19 @@
     if ([self class] != [object class])
         return false;
     Contract *other = (Contract *)object;
-    if (latitude == nil) {
+    if (self.latitude == nil) {
         if (other.latitude != nil) {
             return false;
         }
-    } else if (longitude == nil) {
+    } else if (self.longitude == nil) {
         if (other.longitude != nil) {
             return false;
         }
-    } else if (![latitude isEqual:other.latitude]) {
+    } else if (![self.latitude isEqual:other.latitude]) {
         return false;
-    } else if (![longitude isEqual:other.longitude]) {
+    } else if (![self.longitude isEqual:other.longitude]) {
         return false;
-    } else if (provider != other.provider) {
+    } else if (self.provider != other.provider) {
         return false;
     }
     return true;
@@ -131,9 +129,9 @@
 - (NSUInteger)hash {
     const NSUInteger prime = 31;
     NSUInteger result = 1;
-    result = prime * result + [latitude hash];
-    result = prime * result + [longitude hash];
-    result = prime * result + provider;
+    result = prime * result + [self.latitude hash];
+    result = prime * result + [self.longitude hash];
+    result = prime * result + self.provider;
     return result;
 }
 @end

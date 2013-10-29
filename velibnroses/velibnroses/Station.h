@@ -7,6 +7,7 @@
 //
 
 #import <MapKit/MapKit.h>
+#import "Contract.h"
 
 typedef enum
 {
@@ -26,7 +27,7 @@ typedef enum
 @property (assign,readwrite) StationState status;
 @property (assign,readonly) CLLocationCoordinate2D coordinate;
 
-+ (Station *)fromJSON:(id)json;
-+ (NSArray *)fromJSONArray:(id)json;
++ (Station *)parseJSONObject:(id)json fromProvider:(ContractProvider)provider;
++ (NSArray *)parseJSONArray:(id)json fromProvider:(ContractProvider)provider;
 
 @end

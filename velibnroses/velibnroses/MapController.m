@@ -22,27 +22,35 @@
 #import "Keys.h"
 #import "ClusterAnnotation.h"
 #import "Contract.h"
+#import "Place.h"
+#import "ContractService.h"
+#import "StationService.h"
+#import "PlaceService.h"
 
 @interface MapController ()
+
+@property (strong,readwrite) ContractService *contractService;
+@property (strong,readwrite) StationService *stationService;
+@property (strong,readwrite) PlaceService *placeService;
 
 @property (strong,readwrite) TRAutocompleteView *departureAutocompleteView;
 @property (strong,readwrite) TRAutocompleteView *arrivalAutocompleteView;
 @property (strong,readwrite) UIAlertView *rideUIAlert;
 
 @property (strong,readwrite) WSRequest *providerWSRequest;
-@property (strong,readwrite) CLLocation *departureCLLocation;
-@property (strong,readwrite) CLLocation *arrivalCLLocation;
+@property (strong,readwrite) Place *departure;
+@property (strong,readwrite) Place *arrival;
 @property (strong,readwrite) Station *departureStation;
 @property (strong,readwrite) Station *arrivalStation;
 @property (strong,readwrite) RoutePolyline *route;
 @property (strong,readwrite) Contract *currentContract;
-@property (strong,readwrite) Contract *searchContract;
+//@property (strong,readwrite) Contract *searchContract;
 @property (strong,readwrite) NSNumber *isLocationServiceEnabled;
 @property (strong,readwrite) NSTimer *timer;
 @property (strong,readwrite) dispatch_queue_t uiQueue;
 @property (strong,readwrite) dispatch_queue_t oneBikeQueue;
 
-@property (strong,readwrite) NSMutableArray *allContracts;
+//@property (strong,readwrite) NSMutableArray *allContracts;
 @property (strong,readwrite) NSMutableDictionary *cache;
 @property (strong,readwrite) NSMutableArray *clustersAnnotationsToAdd;
 @property (strong,readwrite) NSMutableArray *clustersAnnotationsToRemove;
@@ -153,7 +161,7 @@
     
     self.areContractsDrawn = NO;
     self.currentContract = nil;
-    self.searchContract = nil;
+    //self.searchContract = nil;
 }
 
 - (void) startTimer {
@@ -287,26 +295,18 @@
     }];
 }*/
 
-- (void)loadContracts {
-    NSError *error, *exception;
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"contracts" ofType:@"json"];
-    NSLog(@"load contracts from @%@", path);
-    NSString *content = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-    if (error == nil) {
-        id json = [NSJSONSerialization JSONObjectWithData:[content dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&exception];
-        if (exception == nil) {
-            self.allContracts = (NSMutableArray *)[Contract fromJSONArray:json];
-            NSLog(@"contracts found : %i", self.allContracts.count);
-        } else {
-            NSLog(@"exception occured during json contracts data processing  : %@", exception.debugDescription);
-        }
-    } else {
-        NSLog(@"error occured during contracts json file loading  : %@", error.debugDescription);
-    }
-    
-}
-
 # pragma mark View lifecycle
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        self.contractService = [[ContractService alloc] init];
+        self.stationService = [[StationService alloc] init];
+        self.placeService = [[PlaceService alloc] init];
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
@@ -317,7 +317,8 @@
     }
     
     [self registerOn];
-    [self loadContracts];
+    //[self loadContracts];
+    [self.contractService loadContracts];
     [self initView];
 }
 
@@ -365,9 +366,9 @@
 # pragma mark Delegate
 
 - (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
-    if ([self isEqualToLocationZero:self.startUserLocation]) {
+    if ([GeoUtils isLocationZero:self.startUserLocation]) {
         NSLog(@"receive user location update (%f,%f)", aUserLocation.location.coordinate.latitude, aUserLocation.location.coordinate.longitude);
-        if (![self isEqualToLocationZero:aUserLocation.location.coordinate]) {
+        if (![GeoUtils isLocationZero:aUserLocation.location.coordinate]) {
             self.startUserLocation = aUserLocation.location.coordinate;
             [self centerMapOnUserLocation];
             
@@ -541,46 +542,16 @@
             [self setCurrentContract];
             if (self.currentContract != nil) {
                 if (![[self.cache allKeys] containsObject:self.currentContract.name]) {
-                    switch (self.currentContract.provider) {
-                        case kJCDecaux:
-                            {
-                                self.jcdRequestAttemptsNumber = 0;
-                                NSLog(@"call JCD ws for contract : %@", self.currentContract.name);
-                                self.providerWSRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:NO];
-                                [self.providerWSRequest appendParameterWithKey:JCD_CONTRACT_KEY_PARAM_NAME andValue:self.currentContract.name];
-                                [self.providerWSRequest appendParameterWithKey:JCD_API_KEY_PARAM_NAME andValue:KEY_JCD];
-                                [self.providerWSRequest handleResultWith:^(id json) {
-                                    NSLog(@"JCD ws result");
-                                    NSMutableArray *contractStations = (NSMutableArray *)[Station fromJSONArray:json];
-                                    NSLog(@"%@ has %i stations", self.currentContract.name, contractStations.count);
-                                    [self.cache setObject:contractStations forKey:self.currentContract.name];
-                                    [self drawAnnotations];
-                                }];
-                                [self.providerWSRequest handleExceptionWith:^(NSError *exception) {
-                                    if (exception.code == JCD_TIMED_OUT_REQUEST_EXCEPTION_CODE) {
-                                        NSLog(@"jcd ws exception : expired request");
-                                        if (self.jcdRequestAttemptsNumber < 2) {
-                                            [self.providerWSRequest call];
-                                            self.jcdRequestAttemptsNumber++;
-                                        } else {
-                                            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                                        }
-                                    } else {
-                                        NSLog(@"JCD ws exception %@", exception.debugDescription);
-                                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                                    }
-                                }];
-                                [self.providerWSRequest handleErrorWith:^(int errorCode) {
-                                    NSLog(@"JCD ws error %d", errorCode);
-                                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                                }];
-                                [self.providerWSRequest call];
-                            }
-                            break;
-                        case kCityBikes:
-                        default:
-                            break;
-                    }
+                    [self.contractService loadStationsFromContract:self.currentContract success:^(NSMutableArray *someStations) {
+                        [self.cache setObject:someStations forKey:self.currentContract.name];
+                        [self drawAnnotations];
+                    } failure:^(NSError *anError) {
+                        NSLog(@"JCD ws error %@", anError.debugDescription);
+                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                    } timeout:^() {
+                        NSLog(@"JCD ws timeout");
+                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                    }];
                 } else {
                     [self drawAnnotations];
                 }
@@ -749,8 +720,8 @@
     } else {
         [self.view endEditing:YES];
         [self disableSearchButton];
-        self.departureCLLocation = nil;
-        self.arrivalCLLocation = nil;
+        self.departure = nil;
+        self.arrival = nil;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         CLGeocoder *departureGeocoder = [[CLGeocoder alloc] init];
         CLGeocoder *arrivalGeocoder = [[CLGeocoder alloc] init];
@@ -761,19 +732,38 @@
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"departure_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                    [self enableSearchButton];
                 } else {
-                    self.departureCLLocation = [(CLPlacemark *)[placemarks objectAtIndex:0] location];
-                    if (self.departureCLLocation != nil && self.arrivalCLLocation != nil) {
+                    self.departure = [self createPlaceFromLocation:[(CLPlacemark *)[placemarks objectAtIndex:0] location]];
+                    if (self.departure != nil && self.arrival != nil) {
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                        if (![self areEqualLocationsBetween:self.departureCLLocation and:self.arrivalCLLocation]) {
-                            if ([self.cache objectForKey:self.currentContract.name] != nil) {
-                                [self cancelBarButtonClicked:nil];
-                                double radius = [self getDistanceBetweenDeparture:self.departureCLLocation andArrival:self.arrivalCLLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
-                                [self searchWithDeparture:self.departureCLLocation andArrival:self.arrivalCLLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
+                        //if ([self areInTheSameContractsDeparture:self.departure AndArrival:self.arrival]) {
+                        if ([self.placeService areInTheSameContractsDeparture:self.departure AndArrival:self.arrival]) {
+                            if (![self.placeService isSamePlaceBetween:self.departure and:self.arrival]) {
+                                if ([self.cache objectForKey:self.departure.contract.name] == nil) {
+                                    [self.contractService loadStationsFromContract:self.departure.contract success:^(NSMutableArray *someStations) {
+                                        [self.cache setObject:someStations forKey:self.departure.contract.name];
+                                        [self cancelBarButtonClicked:nil];
+                                        /*double radius = [self getDistanceBetweenDeparture:self.departure andArrival:self.arrival withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];*/
+                                        double radius = [self.placeService getDistanceBetweenDeparture:self.departure andArrival:self.arrival betweenMinRadius:STATION_SEARCH_MIN_RADIUS_IN_METERS andMaxRadius:STATION_SEARCH_MAX_RADIUS_IN_METERS];
+                                        [self searchWithDeparture:self.departure andArrival:self.arrival withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
+                                    } failure:^(NSError *anError) {
+                                        NSLog(@"JCD ws error %@", anError.debugDescription);
+                                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                    } timeout:^() {
+                                        NSLog(@"JCD ws timeout");
+                                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                    }];
+                                } else {
+                                    [self cancelBarButtonClicked:nil];
+                                    /*double radius = [self getDistanceBetweenDeparture:self.departure andArrival:self.arrival withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];*/
+                                    double radius = [self.placeService getDistanceBetweenDeparture:self.departure andArrival:self.arrival betweenMinRadius:STATION_SEARCH_MIN_RADIUS_IN_METERS andMaxRadius:STATION_SEARCH_MAX_RADIUS_IN_METERS];
+                                    [self searchWithDeparture:self.departure andArrival:self.arrival withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
+                                }
                             } else {
-                                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"jcd_ws_get_data_warning", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                [self enableSearchButton];
                             }
                         } else {
-                            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:@"not the same contract" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                             [self enableSearchButton];
                         }
                     }
@@ -787,19 +777,38 @@
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"arrival_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                     [self enableSearchButton];
                 } else {
-                    self.arrivalCLLocation = [(CLPlacemark *)[placemarks objectAtIndex:0] location];
-                    if (self.departureCLLocation != nil && self.arrivalCLLocation != nil) {
+                    self.arrival = [self createPlaceFromLocation:[(CLPlacemark *)[placemarks objectAtIndex:0] location]];
+                    if (self.departure != nil && self.arrival != nil) {
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                        if (![self areEqualLocationsBetween:self.departureCLLocation and:self.arrivalCLLocation]) {
-                            if ([self.cache objectForKey:self.currentContract.name] != nil) {
-                                [self cancelBarButtonClicked:nil];
-                                double radius = [self getDistanceBetweenDeparture:self.departureCLLocation andArrival:self.arrivalCLLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
-                                [self searchWithDeparture:self.departureCLLocation andArrival:self.arrivalCLLocation withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
+                        //if ([self areInTheSameContractsDeparture:self.departure AndArrival:self.arrival]) {
+                        if ([self.placeService areInTheSameContractsDeparture:self.departure AndArrival:self.arrival]) {
+                            if (![self.placeService isSamePlaceBetween:self.departure and:self.arrival]) {
+                                if ([self.cache objectForKey:self.arrival.contract.name] == nil) {
+                                    [self.contractService loadStationsFromContract:self.arrival.contract success:^(NSMutableArray *someStations) {
+                                        [self.cache setObject:someStations forKey:self.arrival.contract.name];
+                                        [self cancelBarButtonClicked:nil];
+                                        /*double radius = [self getDistanceBetweenDeparture:self.departure andArrival:self.arrival withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];*/
+                                        double radius = [self.placeService getDistanceBetweenDeparture:self.departure andArrival:self.arrival betweenMinRadius:STATION_SEARCH_MIN_RADIUS_IN_METERS andMaxRadius:STATION_SEARCH_MAX_RADIUS_IN_METERS];
+                                        [self searchWithDeparture:self.departure andArrival:self.arrival withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
+                                    } failure:^(NSError *anError) {
+                                        NSLog(@"JCD ws error %@", anError.debugDescription);
+                                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                    } timeout:^() {
+                                        NSLog(@"JCD ws timeout");
+                                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                    }];
+                                } else {
+                                    [self cancelBarButtonClicked:nil];
+                                    /*double radius = [self getDistanceBetweenDeparture:self.departure andArrival:self.arrival withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];*/
+                                    double radius = [self.placeService getDistanceBetweenDeparture:self.departure andArrival:self.arrival betweenMinRadius:STATION_SEARCH_MIN_RADIUS_IN_METERS andMaxRadius:STATION_SEARCH_MAX_RADIUS_IN_METERS];
+                                    [self searchWithDeparture:self.departure andArrival:self.arrival withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
+                                }
                             } else {
-                               [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"jcd_ws_get_data_warning", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show]; 
+                                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                [self enableSearchButton];
                             }
                         } else {
-                            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:@"not the same contract" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                             [self enableSearchButton];
                         }
                     }
@@ -868,7 +877,7 @@
 
 - (void)generateContractsAnnotations {
     NSLog(@"generate contracts annotations");
-    for (Contract *contract in self.allContracts) {
+    for (Contract *contract in self.contractService.allContracts) {
         [self.contractsAnnotations addObject:[self createContractAnnotation:contract]];
     }
     NSLog(@"generated contracts : %d", self.contractsAnnotations.count);
@@ -876,7 +885,7 @@
 
 - (void)generateStationsAnnotations {
     NSLog(@"generate clusters annotations, zoom level : %d", self.currentZoomLevel);
-    NSMutableArray *visibleStations = [self filterVisibleStationsFrom:[self.cache objectForKey:_currentContract.name]];
+    NSMutableArray *visibleStations = [self filterVisibleStationsFrom:[self.cache objectForKey:self.currentContract.name]];
     
     double clusterSideLength = [GeoUtils getClusterSideLengthForZoomLevel:self.currentZoomLevel];
     NSLog(@"clusters side length : %f m", clusterSideLength);
@@ -989,11 +998,11 @@
     // departure annotation
     PlaceAnnotation *departureAnnotation = [[PlaceAnnotation alloc] init];
     departureAnnotation.placeType = kDeparture;
-    departureAnnotation.coordinate = self.departureCLLocation.coordinate;
+    departureAnnotation.coordinate = self.departure.location.coordinate;
     departureAnnotation.title = self.departureField.text;
     temp = [[Station alloc] init];
-    temp.latitude = [[NSNumber alloc] initWithDouble:self.departureCLLocation.coordinate.latitude];
-    temp.longitude = [[NSNumber alloc] initWithDouble:self.departureCLLocation.coordinate.longitude];
+    temp.latitude = [[NSNumber alloc] initWithDouble:self.departure.location.coordinate.latitude];
+    temp.longitude = [[NSNumber alloc] initWithDouble:self.departure.location.coordinate.longitude];
     departureAnnotation.placeStation = temp;
     
     [self.searchAnnotations addObject:departureAnnotation];
@@ -1001,11 +1010,11 @@
     // arrival annotation
     PlaceAnnotation *arrivalAnnotation = [[PlaceAnnotation alloc] init];
     arrivalAnnotation.placeType = kArrival;
-    arrivalAnnotation.coordinate = self.arrivalCLLocation.coordinate;
+    arrivalAnnotation.coordinate = self.arrival.location.coordinate;
     arrivalAnnotation.title = self.arrivalField.text;
     temp = [[Station alloc] init];
-    temp.latitude = [[NSNumber alloc] initWithDouble:self.arrivalCLLocation.coordinate.latitude];
-    temp.longitude = [[NSNumber alloc] initWithDouble:self.arrivalCLLocation.coordinate.longitude];
+    temp.latitude = [[NSNumber alloc] initWithDouble:self.arrival.location.coordinate.latitude];
+    temp.longitude = [[NSNumber alloc] initWithDouble:self.arrival.location.coordinate.longitude];
     arrivalAnnotation.placeStation = temp;
     
     [self.searchAnnotations addObject:arrivalAnnotation];
@@ -1155,9 +1164,9 @@
     self.bikeField.text = @"1";
     self.standField.text = @"1";
     
-    self.departureCLLocation = nil;
+    self.departure = nil;
     self.departureStation = nil;
-    self.arrivalCLLocation = nil;
+    self.arrival = nil;
     self.arrivalStation = nil;
 }
 
@@ -1168,8 +1177,8 @@
         self.searchPanel.frame = searchFrame;
     }];
     if (self.isLocationServiceEnabled != nil) {
-        self.departureLocation.enabled = [self.isLocationServiceEnabled boolValue];
-        self.arrivalLocation.enabled = [self.isLocationServiceEnabled boolValue];
+        self.departureLocation.enabled = self.isLocationServiceEnabled.boolValue;
+        self.arrivalLocation.enabled = self.isLocationServiceEnabled.boolValue;
     } else {
         BOOL allowed = [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized;
         self.departureLocation.enabled = allowed;
@@ -1188,15 +1197,17 @@
     [self.arrivalAutocompleteView hide];
 }
 
-- (void)searchWithDeparture:(CLLocation *)departure andArrival:(CLLocation *)arrival withBikes:(int)bikes andAvailableStands:(int)availableStands inARadiusOf:(int)radius {
-    NSLog(@"%f,%f -> %f,%f (%d / %d)", departure.coordinate.latitude, departure.coordinate.longitude, arrival.coordinate.latitude, arrival.coordinate.longitude, bikes, availableStands);
+- (void)searchWithDeparture:(Place *)aDeparturePlace andArrival:(Place *)anArrivalPlace withBikes:(int)bikes andAvailableStands:(int)availableStands inARadiusOf:(int)radius {
+    NSLog(@"%f,%f -> %f,%f (%d / %d)", aDeparturePlace.location.coordinate.latitude, aDeparturePlace.location.coordinate.longitude, anArrivalPlace.location.coordinate.latitude, anArrivalPlace.location.coordinate.longitude, bikes, availableStands);
     self.mapViewState = MAP_VIEW_SEARCH_STATE;
     [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
     [self eraseAnnotations];
     [self eraseRoute];
     [self eraseSearchAnnotations];
-    [self searchCloseStationsAroundDeparture:departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
-    [self searchCloseStationsAroundArrival:arrival withAvailableStandsNumber:availableStands andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
+    self.departureCloseStations = [self.stationService searchCloseStationsIn:[self.cache objectForKey:self.departure.contract.name] forPlace:self.departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
+    self.departureStation = [self.departureCloseStations objectAtIndex:0];
+    self.arrivalCloseStations = [self.stationService searchCloseStationsIn:[self.cache objectForKey:self.arrival.contract.name] forPlace:self.arrival withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
+    self.arrivalStation = [self.arrivalCloseStations objectAtIndex:0];
     if ([self.departureCloseStations count] > 0 && [self.arrivalCloseStations count] > 0 && self.departureStation != nil && self.arrivalStation != nil) {
         [self drawSearchAnnotations];
         [self drawRouteFromStationDeparture:self.departureStation toStationArrival:self.arrivalStation];
@@ -1206,78 +1217,10 @@
     }
 }
 
-- (void)searchCloseStationsAroundDeparture:(CLLocation *)location withBikesNumber:(int)bikesNumber andMaxStationsNumber:(int)maxStationsNumber inARadiusOf:(int)maxRadius {
-    NSLog(@"searching %d close stations around departure", maxStationsNumber);
-    int matchingStationNumber = 0;
-    
-    int radius = STATION_SEARCH_RADIUS_IN_METERS;
-    while (matchingStationNumber < maxStationsNumber && radius <= maxRadius) {
-        for (Station *station in [self.cache objectForKey:self.currentContract.name]) {
-            if (matchingStationNumber < maxStationsNumber) {
-                if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
-                    
-                    CLLocationCoordinate2D stationCoordinate;
-                    stationCoordinate.latitude = [station.latitude doubleValue];
-                    stationCoordinate.longitude = [station.longitude doubleValue];
-                    
-                    if (![self.departureCloseStations containsObject:station] && [self unlessInMeters:radius from:location.coordinate for:stationCoordinate]) {
-                        if ([station.availableBikes integerValue] >= bikesNumber) {
-                            NSLog(@"close station found at %d m : %@ - %@ available bikes", radius, station.name, station.availableBikes);
-                            [self.departureCloseStations addObject:station];
-                            if (self.departureStation == nil) {
-                                self.departureStation = station;
-                            }
-                            matchingStationNumber++;
-                        }
-                    }
-                }
-            } else {
-                // station max number is reached for this location
-                break;
-            }
-        }
-        radius += STATION_SEARCH_RADIUS_IN_METERS;
-    }
-}
-
-- (void)searchCloseStationsAroundArrival:(CLLocation *)location withAvailableStandsNumber:(int)availableStandsNumber andMaxStationsNumber:(int)maxStationsNumber inARadiusOf:(int)maxRadius {
-    NSLog(@"searching %d close stations around arrival", maxStationsNumber);
-    int matchingStationNumber = 0;
-    
-    int radius = STATION_SEARCH_RADIUS_IN_METERS;
-    while (matchingStationNumber < maxStationsNumber && radius <= maxRadius) {
-        for (Station *station in [self.cache objectForKey:self.currentContract.name]) {
-            if (matchingStationNumber < maxStationsNumber) {
-                if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
-                    
-                    CLLocationCoordinate2D stationCoordinate;
-                    stationCoordinate.latitude = [station.latitude doubleValue];
-                    stationCoordinate.longitude = [station.longitude doubleValue];
-                    
-                    if (![self.arrivalCloseStations containsObject:station] && [self unlessInMeters:radius from:location.coordinate for:stationCoordinate]) {
-                        if ([station.availableBikeStands integerValue] >= availableStandsNumber) {
-                            NSLog(@"close station found at %d m : %@ - %@ available stands", radius, station.name, station.availableBikeStands);
-                            [self.arrivalCloseStations addObject:station];
-                            if (self.arrivalStation == nil) {
-                                self.arrivalStation = station;
-                            }
-                            matchingStationNumber++;
-                        }
-                    }
-                }
-            } else {
-                // station max number is reached for this location
-                break;
-            }
-        }
-        radius += STATION_SEARCH_RADIUS_IN_METERS;
-    }
-}
-
 # pragma mark -
 # pragma mark Misc
 
--(void)setCurrentContract {
+- (void)setCurrentContract {
     BOOL invalidateCurrentContract = NO;
     if (self.currentContract != nil) {
         if (![GeoUtils isLocation:self.mapPanel.region.center inRegion:self.currentContract.region]) {
@@ -1286,12 +1229,7 @@
         }
     }
     if (self.currentContract == nil || invalidateCurrentContract) {
-        for (Contract *aContract in self.allContracts) {
-            if ([GeoUtils isLocation:self.mapPanel.region.center inRegion:aContract.region]) {
-                self.currentContract = aContract;
-                break;
-            }
-        }
+        self.currentContract = [self.contractService getContractFromCoordinate:self.mapPanel.region.center];
     }
     if (self.currentContract != nil) {
         NSLog(@"current contract : %@ (%@)", self.currentContract.name, [Contract getProviderNameFromContractProvider:self.currentContract.provider]);
@@ -1300,16 +1238,11 @@
     }
 }
 
--(double) getDistanceBetweenDeparture:(CLLocation *)departure andArrival:(CLLocation *)arrival withMin:(double)minRadius withMax:(double)maxRadius {
-    double dist = [GeoUtils getDistanceFromLat:departure.coordinate.latitude toLat:arrival.coordinate.latitude fromLong:departure.coordinate.longitude toLong:arrival.coordinate.longitude];
-    dist /= 2;
-    if (dist > maxRadius) {
-        dist = maxRadius;
-    } else if (dist < minRadius) {
-        dist = minRadius;
-    }
-    NSLog(@"max search radius : %f m", dist);
-    return dist;
+- (Place *)createPlaceFromLocation:(CLLocation *)aLocation {
+    Place *place = [[Place alloc] init];
+    place.location = aLocation;
+    place.contract = [self.contractService getContractFromCoordinate:aLocation.coordinate];
+    return place;
 }
 
 -(double) getStationDistanceBetween:(Station *)first and:(Station *)second {
@@ -1322,11 +1255,6 @@
 
 -(double) getClusterDistanceBetween:(ClusterAnnotation *)first and:(ClusterAnnotation *)second {
     return [GeoUtils getDistanceFromLat:first.coordinate.latitude toLat:second.coordinate.latitude fromLong:first.coordinate.longitude toLong:second.coordinate.longitude];
-}
-
-- (BOOL)unlessInMeters:(double)radius from:(CLLocationCoordinate2D)origin for:(CLLocationCoordinate2D)location {
-    double dist = [GeoUtils getDistanceFromLat:origin.latitude toLat:location.latitude fromLong:origin.longitude toLong:location.longitude];
-    return dist <= radius;
 }
 
 - (MKCoordinateRegion)generateRegionForSearchMode:(NSMutableArray*)annotations {
@@ -1372,22 +1300,6 @@
         }
     }
     return MKCoordinateRegionForMapRect(mapRect);
-}
-
-- (BOOL)isEqualToLocationZero:(CLLocationCoordinate2D)newLocation {
-    BOOL isLocationZero = fabs(newLocation.latitude - 0.00000) < 0.00001 && fabs(newLocation.longitude -  - 0.00000) < 0.00001;
-    if (isLocationZero) {
-        NSLog(@"location zero");
-    }
-    return isLocationZero;
-}
-
-- (BOOL)areEqualLocationsBetween:(CLLocation *)first and:(CLLocation *)second {
-    return fabs(first.coordinate.latitude - second.coordinate.latitude) < 0.001 && fabs(first.coordinate.longitude - second.coordinate.longitude) < 0.001;
-}
-
-- (BOOL)isTheSameStationBetween:(Station *)first and:(Station *)second {
-    return fabs(first.latitude.doubleValue - second.latitude.doubleValue) < 0.001 && fabs(first.longitude.doubleValue - second.longitude.doubleValue) < 0.001;
 }
 
 - (NSString *)cleanStationName:(Station *)aStation {
