@@ -10,6 +10,7 @@
 		190777011796F3BE00180530 /* GeoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 190777001796F3BE00180530 /* GeoUtils.m */; };
 		19145C76180FE03600911481 /* Contract.m in Sources */ = {isa = PBXBuildFile; fileRef = 19145C75180FE03600911481 /* Contract.m */; };
 		19145C7818101F9800911481 /* contracts.json in Resources */ = {isa = PBXBuildFile; fileRef = 19145C7718101F9800911481 /* contracts.json */; };
+		1918A8A81821786D008A57FC /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1918A8A71821786D008A57FC /* AFNetworkActivityIndicatorManager.m */; };
 		194AD99B180EB9AD000AD1F1 /* LogoOnelight.png in Resources */ = {isa = PBXBuildFile; fileRef = 194AD968180EB9AD000AD1F1 /* LogoOnelight.png */; };
 		194AD99C180EB9AD000AD1F1 /* LogoOnelight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 194AD969180EB9AD000AD1F1 /* LogoOnelight@2x.png */; };
 		194AD99D180EB9AD000AD1F1 /* LogoText.png in Resources */ = {isa = PBXBuildFile; fileRef = 194AD96A180EB9AD000AD1F1 /* LogoText.png */; };
@@ -127,6 +128,8 @@
 		19145C74180FE03600911481 /* Contract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contract.h; sourceTree = "<group>"; };
 		19145C75180FE03600911481 /* Contract.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contract.m; sourceTree = "<group>"; };
 		19145C7718101F9800911481 /* contracts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = contracts.json; sourceTree = "<group>"; };
+		1918A8A61821786D008A57FC /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
+		1918A8A71821786D008A57FC /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		194AD968180EB9AD000AD1F1 /* LogoOnelight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LogoOnelight.png; sourceTree = "<group>"; };
 		194AD969180EB9AD000AD1F1 /* LogoOnelight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LogoOnelight@2x.png"; sourceTree = "<group>"; };
 		194AD96A180EB9AD000AD1F1 /* LogoText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LogoText.png; sourceTree = "<group>"; };
@@ -478,6 +481,8 @@
 				19DA2989181DB3330068D16A /* AFURLResponseSerialization.m */,
 				19DA298A181DB3330068D16A /* AFURLSessionManager.h */,
 				19DA298B181DB3330068D16A /* AFURLSessionManager.m */,
+				1918A8A61821786D008A57FC /* AFNetworkActivityIndicatorManager.h */,
+				1918A8A71821786D008A57FC /* AFNetworkActivityIndicatorManager.m */,
 			);
 			path = AFNetworking;
 			sourceTree = "<group>";
@@ -791,6 +796,7 @@
 				19F1D6AC17D10B2900BA53AF /* TRGoogleMapsAutocompleteItemsSource.m in Sources */,
 				19DA2993181DB3330068D16A /* AFURLResponseSerialization.m in Sources */,
 				19DA2992181DB3330068D16A /* AFURLRequestSerialization.m in Sources */,
+				1918A8A81821786D008A57FC /* AFNetworkActivityIndicatorManager.m in Sources */,
 				19D69FA81807F2130099D2BE /* InfoPageViewController.m in Sources */,
 				19FDBC4F181AD22800C14411 /* Place.m in Sources */,
 				19F1D6AD17D10B2900BA53AF /* TRGoogleMapsAutocompletionCellFactory.m in Sources */,

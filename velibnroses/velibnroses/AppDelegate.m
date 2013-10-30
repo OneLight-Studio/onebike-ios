@@ -11,6 +11,7 @@
 #import "Keys.h"
 #import "UIUtils.h"
 #import "iRate.h"
+#import "AFNetworkActivityIndicatorManager.h"
 
 @interface AppDelegate ()
 
@@ -39,7 +40,7 @@
     } else {
         [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"NBBg.png"] forBarMetrics:UIBarMetricsDefault];
     }
-    
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     [TestFlight takeOff:KEY_TESTFLIGHT];
 
     return YES;
