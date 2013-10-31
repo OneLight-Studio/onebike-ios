@@ -525,6 +525,7 @@
 
         if (self.currentZoomLevel < 10) {
             // use contracts data
+            [self stopTimer];
             if (self.contractsAnnotations.count == 0) {
                 [self generateContractsAnnotations];
             }
@@ -589,7 +590,7 @@
 -(void)timerFired:(NSTimer *)theTimer
 {
     NSLog(@"timer fired %@", [theTimer fireDate]);
-    [self refreshData];
+    [self refreshCurrentContractData];
 }
 
 - (void)didTapMap:(UITapGestureRecognizer *)sender
@@ -746,6 +747,7 @@
 
 - (void)addStations:(NSMutableArray *)someStations toCacheForContract:(Contract *)aContract {
     if ([self.cache objectForKey:aContract.name] != nil) {
+        NSLog(@"refresh data for contract : %@", aContract.name);
         [self.cache removeObjectForKey:aContract.name];
     }
     [self.cache setObject:someStations forKey:aContract.name];
@@ -807,7 +809,7 @@
 {
     if ([[notification name] isEqualToString:NOTIFICATION_WILL_ENTER_FOREGROUND]) {
         NSLog(@"have to refresh stations data");
-        [self refreshData];
+        [self refreshCurrentContractData];
         [self resetUserLocation];
     }
 }
@@ -1288,7 +1290,7 @@
     return result;
 }
 
-- (void)refreshData {
+- (void)refreshCurrentContractData {
     [self.contractService loadStationsFromContract:self.currentContract success:^(NSMutableArray *someStations) {
         [self addStations:someStations toCacheForContract:self.currentContract];
         NSLog(@"draw stations");
