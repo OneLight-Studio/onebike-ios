@@ -6,15 +6,14 @@
   Copyright (c) 2013 OneLight Studio. All rights reserved.
 */
 
-"jcd_ws_get_data_warning" = "Please wait for a moment, bikes stations data are being received or processed.";
-"jcd_ws_get_data_error" = "An error has occurred during bikes stations data getting.";
-"google_ws_search_ride_error" = "An error has occurred during ride search.";
-
 "dialog_error_title" = "Error";
 "dialog_warning_title" = "Warning";
 "dialog_info_title" = "Info";
 
-"ip_content_img_name" = "IPContentBase.png";
+"jcd_ws_get_data_warning" = "Please wait for a moment, bikes stations data are being received or processed.";
+"jcd_ws_get_data_error" = "An error has occurred during bikes stations data getting.";
+"google_ws_search_ride_error" = "An error has occurred during ride search.";
+"google_ws_error" = "Google Maps error";
 
 "departure_not_found" = "Could not locate departure address.";
 "arrival_not_found" = "Could not locate arrival address.";
@@ -30,3 +29,4 @@
 "no_email_account_defined" = "Please, configure an email account in Mail app.";
 "email_title" = "[OneBike][iPhone] User feedback";
 "same_station" = "You'd better walk there ;)";
+"not_the_same_contract" = "The search departure and arrival must be in the same city.";

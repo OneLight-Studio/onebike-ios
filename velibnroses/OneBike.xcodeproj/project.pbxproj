@@ -65,10 +65,10 @@
 		19688CEA17B945B9005ACA64 /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 19688CE917B945B9005ACA64 /* PlaceAnnotation.m */; };
 		1993DCEF178F09860089A6D5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1993DCEE178F09860089A6D5 /* MapKit.framework */; };
 		19B5ADD417902AA5000E6B40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19B5ADD317902AA5000E6B40 /* CoreLocation.framework */; };
-		19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D1F7421793FDEC0051D13B /* WSRequest.m */; };
 		19BAAF7917E7398A00F0C092 /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 19BAAF7817E7398A00F0C092 /* ClusterAnnotation.m */; };
 		19CC9CAA17D0B0B700119925 /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CC9CA917D0B0B700119925 /* UIUtils.m */; };
 		19CECEBF1822A14900EEE976 /* IPContent@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 190DB6031819480500DC39FE /* IPContent@2x.png */; };
+		19CECEC01822ADBD00EEE976 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 190DB5FA1819476100DC39FE /* Localizable.strings */; };
 		19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CED9FF17AAA4120069ECDC /* RoutePolyline.m */; };
 		19D69FA81807F2130099D2BE /* InfoPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19D69FA71807F2130099D2BE /* InfoPageViewController.m */; };
 		19D91450181F04D300BAFDB0 /* StationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 19D9144F181F04D300BAFDB0 /* StationService.m */; };
@@ -269,8 +269,6 @@
 		E931958017858121009AFCC1 /* MapController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapController.h; sourceTree = "<group>"; };
 		E931958117858121009AFCC1 /* MapController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapController.m; sourceTree = "<group>"; };
 		E931958917858122009AFCC1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		E9D1F7411793FDEC0051D13B /* WSRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WSRequest.h; sourceTree = "<group>"; };
-		E9D1F7421793FDEC0051D13B /* WSRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WSRequest.m; sourceTree = "<group>"; };
 		E9DB020D180D64400019DAA9 /* iRate.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = iRate.bundle; sourceTree = "<group>"; };
 		E9DB020E180D64400019DAA9 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
 		E9DB020F180D64400019DAA9 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
@@ -335,7 +333,6 @@
 			children = (
 				19F1D65B17D0E4A900BA53AF /* External APIs */,
 				19B5ADD517902ACF000E6B40 /* Utils */,
-				E9D1F7401793FDC40051D13B /* Web Services */,
 				19FD1B5817958E4B00309FD0 /* Constants.h */,
 				19DBB0C817F9A2FA005B3637 /* Keys.h */,
 			);
@@ -638,15 +635,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E9D1F7401793FDC40051D13B /* Web Services */ = {
-			isa = PBXGroup;
-			children = (
-				E9D1F7411793FDEC0051D13B /* WSRequest.h */,
-				E9D1F7421793FDEC0051D13B /* WSRequest.m */,
-			);
-			name = "Web Services";
-			sourceTree = "<group>";
-		};
 		E9DB020C180D64310019DAA9 /* iRate */ = {
 			isa = PBXGroup;
 			children = (
@@ -711,6 +699,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19CECEC01822ADBD00EEE976 /* Localizable.strings in Resources */,
 				19CECEBF1822A14900EEE976 /* IPContent@2x.png in Resources */,
 				19254ECF1822A0DB00CCC90C /* IPContent.png in Resources */,
 				19254ECC18228BC200CCC90C /* MainStoryboard.storyboard in Resources */,
@@ -785,7 +774,6 @@
 				19DA2991181DB3330068D16A /* AFURLConnectionOperation.m in Sources */,
 				19FD1B5F179591BE00309FD0 /* Station.m in Sources */,
 				190777011796F3BE00180530 /* GeoUtils.m in Sources */,
-				19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */,
 				19D91453181F101D00BAFDB0 /* PlaceService.m in Sources */,
 				19E9F2B9181C86EC000CB511 /* ContractService.m in Sources */,
 				19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */,

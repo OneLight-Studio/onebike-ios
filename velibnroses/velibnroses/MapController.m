@@ -9,7 +9,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import "MapController.h"
 #import "Constants.h"
-#import "WSRequest.h"
 #import "Station.h"
 #import "GeoUtils.h"
 #import "RoutePolyline.h"
@@ -26,6 +25,7 @@
 #import "ContractService.h"
 #import "StationService.h"
 #import "PlaceService.h"
+#import "AFNetworking.h"
 
 @interface MapController ()
 
@@ -174,120 +174,6 @@
         self.timer = nil;
     }
 }
-
-/*- (void)configureJCDWebServices {
-    _jcdRequestAttemptsNumber = 0;
-    NSLog(@"init jcd ws");
-    _jcdRequest = [[WSRequest alloc] initWithResource:JCD_WS_ENTRY_POINT_PARAM_VALUE inBackground:_isStationsDisplayedAtLeastOnce];
-    [_jcdRequest appendParameterWithKey:JCD_API_KEY_PARAM_NAME andValue:KEY_JCD];
-    [_jcdRequest handleResultWith:^(id json) {
-        NSLog(@"jcd ws result");
-        _jcdRequestAttemptsNumber = 0;
-        // block concurrent access
-        dispatch_barrier_async(oneBikeQueue, ^(void) {
-            _allStations = (NSMutableArray *)[Station fromJSONArray:json];
-            NSLog(@"stations count %i", _allStations.count);
-        });
-        
-        NSLog(@"draw stations");
-        if (_mapViewState == MAP_VIEW_DEFAULT_STATE) {
-            
-            [self eraseAnnotations];
-            
-            dispatch_async(oneBikeQueue, ^(void) {
-                [self generateStationsAnnotations];
-                dispatch_async(uiQueue, ^(void) {
-                    [mapPanel addAnnotations:_clustersAnnotationsToAdd];
-                    [_clustersAnnotationsToRemove addObjectsFromArray:_clustersAnnotationsToAdd];
-                    [_clustersAnnotationsToAdd removeAllObjects];
-                    
-                    [mapPanel addAnnotations:_stationsAnnotationsToAdd];
-                    [_stationsAnnotationsToRemove addObjectsFromArray:_stationsAnnotationsToAdd];
-                    [_stationsAnnotationsToAdd removeAllObjects];
-                    
-                    if (!_isStationsDisplayedAtLeastOnce) {
-                        _isStationsDisplayedAtLeastOnce = true;
-                    }
-                });
-            });
-        } else if (_mapViewState == MAP_VIEW_SEARCH_STATE) {
-            
-            Station *selectedDeparture = _departureStation.copy;
-            Station *selectedArrival = _arrivalStation.copy;
-            
-            [self eraseSearchAnnotations];
-            [self eraseRoute];
-            
-            dispatch_async(oneBikeQueue, ^(void) {
-                BOOL isSameDeparture = true;
-                BOOL isSameArrival = true;
-                double radius = [self getDistanceBetweenDeparture:_departureLocation andArrival:_arrivalLocation withMin:STATION_SEARCH_MIN_RADIUS_IN_METERS withMax:STATION_SEARCH_MAX_RADIUS_IN_METERS];
-                [self searchCloseStationsAroundDeparture:_departureLocation withBikesNumber:[self.bikeField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
-                [self searchCloseStationsAroundArrival:_arrivalLocation withAvailableStandsNumber:[self.standField.text intValue] andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
-                if (![self isTheSameStationBetween:selectedDeparture and:_departureStation]) {
-                    isSameDeparture = false;
-                    // user has selected another station than new one defined
-                    for (Station *temp in _departureCloseStations) {
-                        if ([self isTheSameStationBetween:selectedDeparture and:temp]) {
-                            NSLog(@"set departure station to user initial choice");
-                            _departureStation = temp;
-                            isSameDeparture = true;
-                            break;
-                        }
-                    }
-                }
-                if (![self isTheSameStationBetween:selectedArrival and:_arrivalStation]) {
-                    isSameArrival = false;
-                    // user has selected another station than new one defined
-                    for (Station *temp in _arrivalCloseStations) {
-                        if ([self isTheSameStationBetween:selectedArrival and:temp]) {
-                            NSLog(@"set arrival station to user initial choice");
-                            _arrivalStation = temp;
-                            isSameArrival = true;
-                            break;
-                        }
-                    }
-                }
-                dispatch_async(uiQueue, ^(void) {
-                    if (_rideUIAlert != nil) {
-                        [_rideUIAlert dismissWithClickedButtonIndex:0 animated:YES];
-                    }
-                    if ([_departureCloseStations count] > 0 && [_arrivalCloseStations count] > 0 && _departureStation != nil && _arrivalStation != nil) {
-                        [self drawSearchAnnotations];
-                        [self drawRouteFromStationDeparture:_departureStation toStationArrival:_arrivalStation];
-                        if (!isSameDeparture || !isSameArrival) {
-                            _rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"ride_has_changed", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                            [_rideUIAlert show];
-                        }
-                    } else {
-                        _rideUIAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"no_more_available_ride", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                        [_rideUIAlert show];
-                        [self centerMapOnUserLocation];
-                    }
-                });
-            });
-        }
-        [self startTimer];
-    }];
-    [_jcdRequest handleExceptionWith:^(NSError *exception) {
-        if (exception.code == JCD_TIMED_OUT_REQUEST_EXCEPTION_CODE) {
-            NSLog(@"jcd ws exception : expired request");
-            if (_jcdRequestAttemptsNumber < 2) {
-                [_jcdRequest call];
-                _jcdRequestAttemptsNumber++;
-            } else {
-                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-            }
-        } else {
-            NSLog(@"JCD ws exception %@", exception.debugDescription);
-            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        }
-    }];
-    [_jcdRequest handleErrorWith:^(int errorCode) {
-        NSLog(@"JCD ws error %d", errorCode);
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-    }];
-}*/
 
 # pragma mark View lifecycle
 
@@ -784,7 +670,7 @@
                 [self enableSearchButton];
             }
         } else {
-            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:@"not the same contract" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"not_the_same_contract", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
             [self enableSearchButton];
         }
     }
@@ -1004,20 +890,15 @@
     }
     
     NSLog(@"searching for a route");
-    WSRequest *googleRequest = [[WSRequest alloc] initWithResource:GOOGLE_MAPS_WS_ENTRY_POINT_PARAM_VALUE inBackground:NO];
-    [googleRequest appendParameterWithKey:GOOGLE_MAPS_API_ORIGIN_PARAM_NAME andValue:[NSString stringWithFormat:@"%@,%@", departure.latitude, departure.longitude]];
-    [googleRequest appendParameterWithKey:GOOGLE_MAPS_API_DESTINATION_PARAM_NAME andValue:[NSString stringWithFormat:@"%@,%@", arrival.latitude, arrival.longitude]];
-    [googleRequest appendParameterWithKey:GOOGLE_MAPS_API_LANGUAGE_PARAM_NAME andValue:[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]];
-    [googleRequest appendParameterWithKey:GOOGLE_MAPS_API_MODE_PARAM_NAME andValue:@"walking"];
-    [googleRequest appendParameterWithKey:GOOGLE_MAPS_API_SENSOR_PARAM_NAME andValue:@"true"];
-    [googleRequest handleResultWith:^(id json) {
-        NSString *status = [json valueForKey:@"status"];
+    NSDictionary *parameters = @{GOOGLE_MAPS_API_ORIGIN_PARAM_NAME:[NSString stringWithFormat:@"%@,%@", departure.latitude, departure.longitude],GOOGLE_MAPS_API_DESTINATION_PARAM_NAME:[NSString stringWithFormat:@"%@,%@", arrival.latitude, arrival.longitude],GOOGLE_MAPS_API_LANGUAGE_PARAM_NAME:[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode],GOOGLE_MAPS_API_MODE_PARAM_NAME:@"walking",GOOGLE_MAPS_API_SENSOR_PARAM_NAME:@"true"};
+    AFHTTPRequestOperation *request = [[AFHTTPRequestOperationManager manager] GET:GOOGLE_MAPS_WS_ENTRY_POINT_PARAM_VALUE parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *status = [responseObject valueForKey:@"status"];
         
         if ([status isEqualToString:@"OK"]) {
             NSLog(@"find a route");
-            NSString *encodedPolyline = [[[[json objectForKey:@"routes"] firstObject] objectForKey:@"overview_polyline"] valueForKey:@"points"];
-            NSString *distanceLabel = [[[[[[json objectForKey:@"routes"] firstObject] objectForKey:@"legs"] firstObject] objectForKey:@"distance"] objectForKey:@"text"];
-            NSInteger duration = ((NSString *)[[[[[[json objectForKey:@"routes"] firstObject] objectForKey:@"legs"] firstObject] objectForKey:@"duration"] objectForKey:@"value"]).integerValue / 2;
+            NSString *encodedPolyline = [[[[responseObject objectForKey:@"routes"] firstObject] objectForKey:@"overview_polyline"] valueForKey:@"points"];
+            NSString *distanceLabel = [[[[[[responseObject objectForKey:@"routes"] firstObject] objectForKey:@"legs"] firstObject] objectForKey:@"distance"] objectForKey:@"text"];
+            NSInteger duration = ((NSString *)[[[[[[responseObject objectForKey:@"routes"] firstObject] objectForKey:@"legs"] firstObject] objectForKey:@"duration"] objectForKey:@"value"]).integerValue / 2;
             NSMutableString *durationLabel = nil;
             NSLog(@"duration : %i s", duration);
             NSLog(@"distance label : %@", distanceLabel);
@@ -1056,20 +937,15 @@
             self.redraw = NO;
             
         } else {
-            NSLog(@"Google Maps API error %@", status);
-            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"")  message:@"Google Maps API error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            NSLog(@"Google Maps error %@", status);
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"")  message:NSLocalizedString(@"google_ws_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         }
         [self enableSearchButton];
-    }];
-    [googleRequest handleErrorWith:^(int errorCode) {
-        NSLog(@"HTTP error %d", errorCode);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error %@", error.debugDescription);
         [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"google_ws_search_ride_error", @"")  message:NSLocalizedString(@"OK", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
-    [googleRequest handleExceptionWith:^(NSError *exception) {
-        NSLog(@"Exception %@", exception.debugDescription);
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"google_ws_search_ride_error", @"")  message:NSLocalizedString(@"OK", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-    }];
-    [googleRequest call];
+    [request start];
 }
 
 - (void)eraseContractsAnnotations {

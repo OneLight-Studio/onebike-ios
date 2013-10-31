@@ -6,15 +6,14 @@
   Copyright (c) 2013 OneLight Studio. All rights reserved.
 */
 
-"jcd_ws_get_data_warning" = "Por favor espere, datos de la estación se descargan o procesan.";
-"jcd_ws_get_data_error" = "Se ha producido un error al recuperar datos de las estaciones.";
-"google_ws_search_ride_error" = "Se produjo un error en la búsqueda de su itinerario.";
-
 "dialog_error_title" = "Error";
 "dialog_warning_title" = "Alerta";
 "dialog_info_title" = "Info";
 
-"ip_content_img_name" = "IPContentBase.png";
+"jcd_ws_get_data_warning" = "Por favor espere, datos de la estación se descargan o procesan.";
+"jcd_ws_get_data_error" = "Se ha producido un error al recuperar datos de las estaciones.";
+"google_ws_search_ride_error" = "Se produjo un error en la búsqueda de su itinerario.";
+"google_ws_error" = "Error de Google Maps";
 
 "departure_not_found" = "No hemos encontrado su dirección de inicio.";
 "arrival_not_found" = "No hemos encontrado su dirección de destino.";
@@ -28,5 +27,6 @@
 "no_location_activated" = "Para disfrutar de todas las funciones de la aplicación, gracias para permitir la localización en el menú \"Settings\"";
 "no_location_allowed" = "Para disfrutar de todas las funciones de la aplicación, gracias para permitir la localización en el menú \"Settings\"";
 "no_email_account_defined" = "Please, configure an email account in Mail app.";
-"email_title" = "[OneBike][iPhone] Comentario usuario";
+"email_title" = "[OneBike][iPhone] Comentario de usuario";
 "same_station" = "Debería ir andando ;)";
+"not_the_same_contract" = "El inicio y el destino de su búsqueda deben encontrarse en la misma ciudad.";
