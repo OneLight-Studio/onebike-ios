@@ -17,6 +17,7 @@
 
 @property (strong,readwrite) NSMutableArray *allContracts;
 @property (assign,readwrite) int requestAttemptsNumber;
+@property (strong,readwrite) AFHTTPRequestOperation *request;
 
 @end
 
@@ -54,14 +55,12 @@
 }
 
 - (void)loadStationsFromContract:(Contract *)aContract success:(void(^)(NSMutableArray *))successBlock failure:(void(^)(NSError *))failureBlock timeout:(void(^)(void))timeoutBlock {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     self.requestAttemptsNumber = 0;
-    AFHTTPRequestOperation *request;
     switch (aContract.provider) {
         case kJCDecaux:
         {
             NSLog(@"call JCD ws for contract : %@", aContract.name);
-            request = [manager GET:aContract.url parameters:@{JCD_API_KEY_PARAM_NAME:KEY_JCD} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            self.request = [[AFHTTPRequestOperationManager manager] GET:aContract.url parameters:@{JCD_API_KEY_PARAM_NAME:KEY_JCD} success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 NSLog(@"JCD ws result");
                 NSMutableArray *contractStations = (NSMutableArray *)[Station parseJSONArray:responseObject fromProvider:kJCDecaux];
                 NSLog(@"%@ has %i stations", aContract.name, contractStations.count);
@@ -79,13 +78,13 @@
                     failureBlock(error);
                 }
             }];
-            [request start];
+            [self.request start];
             break;
         }
         case kCityBikes:
         {
             NSLog(@"call Citybikes ws for contract : %@", aContract.name);
-            request = [manager GET:aContract.url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            self.request = [[AFHTTPRequestOperationManager manager] GET:aContract.url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 NSLog(@"Citybikes ws result");
                 NSMutableArray *contractStations = (NSMutableArray *)[Station parseJSONArray:responseObject fromProvider:kCityBikes];
                 NSLog(@"%@ has %i stations", aContract.name, contractStations.count);
@@ -93,7 +92,7 @@
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 failureBlock(error);
             }];
-            [request start];
+            [self.request start];
             break;
         }
         default:

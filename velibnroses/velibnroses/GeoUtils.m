@@ -113,7 +113,7 @@
 }
 
 + (BOOL)isCoordinate:(CLLocationCoordinate2D)first equalToCoordinate:(CLLocationCoordinate2D)second {
-    return (first.latitude == second.latitude) < 0.001 && (first.longitude == second.longitude) < 0.001;
+    return fabs(first.latitude - second.latitude) < 0.0001 && fabs(first.longitude - second.longitude) < 0.0001;
 }
 
 + (BOOL)unlessInMeters:(double)radius fromOrigin:(CLLocationCoordinate2D)origin forLocation:(CLLocationCoordinate2D)location {

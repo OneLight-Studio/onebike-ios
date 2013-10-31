@@ -11,5 +11,6 @@
 @interface StationService : NSObject
 
 - (NSMutableArray *)searchCloseStationsIn:(NSMutableArray *)contractStations forPlace:(Place *)aPlace withBikesNumber:(int)bikesNumber andMaxStationsNumber:(int)maxStationsNumber inARadiusOf:(int)maxRadius;
+- (NSMutableArray *)searchCloseStationsIn:(NSMutableArray *)contractStations forPlace:(Place *)aPlace withAvailableStandsNumber:(int)availableStandsNumber andMaxStationsNumber:(int)maxStationsNumber inARadiusOf:(int)maxRadius;
 
 @end

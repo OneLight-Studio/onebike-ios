@@ -29,12 +29,42 @@
                     stationCoordinate.longitude = station.longitude.doubleValue;
                     
                     if (![closeStations containsObject:station] && [GeoUtils unlessInMeters:radius fromOrigin:aPlace.location.coordinate forLocation:stationCoordinate]) {
-                        if ([station.availableBikes integerValue] >= bikesNumber) {
+                        if (station.availableBikes.integerValue >= bikesNumber) {
                             NSLog(@"close station found at %d m : %@ - %@ available bikes", radius, station.name, station.availableBikes);
                             [closeStations addObject:station];
-                            /*if (self.departureStation == nil) {
-                                self.departureStation = station;
-                            }*/
+                            matchingStationNumber++;
+                        }
+                    }
+                }
+            } else {
+                // station max number is reached for this location
+                break;
+            }
+        }
+        radius += STATION_SEARCH_RADIUS_IN_METERS;
+    }
+    return closeStations;
+}
+
+- (NSMutableArray *)searchCloseStationsIn:(NSMutableArray *)contractStations forPlace:(Place *)aPlace withAvailableStandsNumber:(int)availableStandsNumber andMaxStationsNumber:(int)maxStationsNumber inARadiusOf:(int)maxRadius {
+    NSLog(@"searching %d close stations around %f,%f", maxStationsNumber, aPlace.location.coordinate.latitude, aPlace.location.coordinate.longitude);
+    int matchingStationNumber = 0;
+    NSMutableArray *closeStations = [[NSMutableArray alloc] initWithCapacity:3];
+    
+    int radius = STATION_SEARCH_RADIUS_IN_METERS;
+    while (matchingStationNumber < maxStationsNumber && radius <= maxRadius) {
+        for (Station *station in contractStations) {
+            if (matchingStationNumber < maxStationsNumber) {
+                if (station.latitude != (id)[NSNull null] && station.longitude != (id)[NSNull null]) {
+                    
+                    CLLocationCoordinate2D stationCoordinate;
+                    stationCoordinate.latitude = [station.latitude doubleValue];
+                    stationCoordinate.longitude = [station.longitude doubleValue];
+                    
+                    if (![closeStations containsObject:station] && [GeoUtils unlessInMeters:radius fromOrigin:aPlace.location.coordinate forLocation:stationCoordinate]) {
+                        if (station.availableBikeStands.integerValue >= availableStandsNumber) {
+                            NSLog(@"close station found at %d m : %@ - %@ available stands", radius, station.name, station.availableBikeStands);
+                            [closeStations addObject:station];
                             matchingStationNumber++;
                         }
                     }

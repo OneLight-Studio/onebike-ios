@@ -65,8 +65,11 @@
     NSLog(@"applicationWillEnterForeground");
     double now = [[NSDate date] timeIntervalSince1970];
     double sleepingTime = now - self.sleepingStartDate;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WILL_ENTER_FOREGROUND object:[NSNumber numberWithDouble:sleepingTime] userInfo:nil];
+    NSLog(@"sleeping time : %f s", sleepingTime);
+    if (sleepingTime > TIME_BEFORE_REFRESH_DATA_IN_SECONDS) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WILL_ENTER_FOREGROUND object:nil userInfo:nil];
+    }
+    self.sleepingStartDate = 0;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

@@ -25,7 +25,7 @@
 // web services
 
 #define WS_REQUEST_TIMEOUT 10
-#define TIME_BEFORE_REFRESH_DATA_IN_SECONDS 300
+#define TIME_BEFORE_REFRESH_DATA_IN_SECONDS 30
 
 #define JCD_TIMED_OUT_REQUEST_EXCEPTION_CODE -1001
 #define JCD_WS_ENTRY_POINT_PARAM_VALUE @"https://api.jcdecaux.com/vls/v1/stations"
