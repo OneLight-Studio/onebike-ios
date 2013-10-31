@@ -11,6 +11,8 @@
 		19145C76180FE03600911481 /* Contract.m in Sources */ = {isa = PBXBuildFile; fileRef = 19145C75180FE03600911481 /* Contract.m */; };
 		19145C7818101F9800911481 /* contracts.json in Resources */ = {isa = PBXBuildFile; fileRef = 19145C7718101F9800911481 /* contracts.json */; };
 		1918A8A81821786D008A57FC /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1918A8A71821786D008A57FC /* AFNetworkActivityIndicatorManager.m */; };
+		19254ECC18228BC200CCC90C /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 190DB5ED181946BC00DC39FE /* MainStoryboard.storyboard */; };
+		19254ECF1822A0DB00CCC90C /* IPContent.png in Resources */ = {isa = PBXBuildFile; fileRef = 190DB5FF181947A300DC39FE /* IPContent.png */; };
 		194AD99B180EB9AD000AD1F1 /* LogoOnelight.png in Resources */ = {isa = PBXBuildFile; fileRef = 194AD968180EB9AD000AD1F1 /* LogoOnelight.png */; };
 		194AD99C180EB9AD000AD1F1 /* LogoOnelight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 194AD969180EB9AD000AD1F1 /* LogoOnelight@2x.png */; };
 		194AD99D180EB9AD000AD1F1 /* LogoText.png in Resources */ = {isa = PBXBuildFile; fileRef = 194AD96A180EB9AD000AD1F1 /* LogoText.png */; };
@@ -65,8 +67,8 @@
 		19B5ADD417902AA5000E6B40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19B5ADD317902AA5000E6B40 /* CoreLocation.framework */; };
 		19B7AC1A17982F16004FF00B /* WSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D1F7421793FDEC0051D13B /* WSRequest.m */; };
 		19BAAF7917E7398A00F0C092 /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 19BAAF7817E7398A00F0C092 /* ClusterAnnotation.m */; };
-		19C9C67817CE674600805611 /* update_storyboard_strings.sh in Resources */ = {isa = PBXBuildFile; fileRef = 19C9C67717CE674600805611 /* update_storyboard_strings.sh */; };
 		19CC9CAA17D0B0B700119925 /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CC9CA917D0B0B700119925 /* UIUtils.m */; };
+		19CECEBF1822A14900EEE976 /* IPContent@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 190DB6031819480500DC39FE /* IPContent@2x.png */; };
 		19CEDA0017AAA4120069ECDC /* RoutePolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 19CED9FF17AAA4120069ECDC /* RoutePolyline.m */; };
 		19D69FA81807F2130099D2BE /* InfoPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19D69FA71807F2130099D2BE /* InfoPageViewController.m */; };
 		19D91450181F04D300BAFDB0 /* StationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 19D9144F181F04D300BAFDB0 /* StationService.m */; };
@@ -130,6 +132,8 @@
 		19145C7718101F9800911481 /* contracts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = contracts.json; sourceTree = "<group>"; };
 		1918A8A61821786D008A57FC /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		1918A8A71821786D008A57FC /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
+		19254ECD18229C0B00CCC90C /* es */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = es; path = es.lproj/IPContent.png; sourceTree = "<group>"; };
+		19254ECE18229C1200CCC90C /* es */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = es; path = "es.lproj/IPContent@2x.png"; sourceTree = "<group>"; };
 		194AD968180EB9AD000AD1F1 /* LogoOnelight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LogoOnelight.png; sourceTree = "<group>"; };
 		194AD969180EB9AD000AD1F1 /* LogoOnelight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LogoOnelight@2x.png"; sourceTree = "<group>"; };
 		194AD96A180EB9AD000AD1F1 /* LogoText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LogoText.png; sourceTree = "<group>"; };
@@ -707,6 +711,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19CECEBF1822A14900EEE976 /* IPContent@2x.png in Resources */,
+				19254ECF1822A0DB00CCC90C /* IPContent.png in Resources */,
+				19254ECC18228BC200CCC90C /* MainStoryboard.storyboard in Resources */,
 				194AD9AB180EB9AD000AD1F1 /* MPStation.png in Resources */,
 				19F3F98317FB355F00A7627E /* Logo29.png in Resources */,
 				194AD9A1180EB9AD000AD1F1 /* MPCluster.png in Resources */,
@@ -756,7 +763,6 @@
 				194AD9BC180EB9AD000AD1F1 /* SPButtonBg@2x.png in Resources */,
 				194AD99E180EB9AD000AD1F1 /* LogoText@2x.png in Resources */,
 				194AD9BB180EB9AD000AD1F1 /* SPButtonBg.png in Resources */,
-				19C9C67817CE674600805611 /* update_storyboard_strings.sh in Resources */,
 				194AD9BA180EB9AD000AD1F1 /* SPBike@2x.png in Resources */,
 				194AD9C2180EB9AD000AD1F1 /* SPMyLocation_Disabled@2x.png in Resources */,
 				194AD9B5180EB9AD000AD1F1 /* NBLogo.png in Resources */,
@@ -847,6 +853,7 @@
 			children = (
 				190DB600181947A300DC39FE /* Base */,
 				190DB602181947AE00DC39FE /* fr */,
+				19254ECD18229C0B00CCC90C /* es */,
 			);
 			name = IPContent.png;
 			path = ..;
@@ -857,6 +864,7 @@
 			children = (
 				190DB6041819480500DC39FE /* Base */,
 				190DB6061819480B00DC39FE /* fr */,
+				19254ECE18229C1200CCC90C /* es */,
 			);
 			name = "IPContent@2x.png";
 			path = ..;

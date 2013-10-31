@@ -468,6 +468,8 @@
             // zoom in on cluster region
             [self.mapPanel setRegion:annotation.region animated:YES];
             dispatch_async(self.oneBikeQueue, ^(void) {
+                // necessary time to trigger effective zoom (and avoid to consider too many visible stations in map region)
+                [NSThread sleepForTimeInterval:1.5f];
                 [self generateStationsAnnotations];
                 dispatch_async(self.uiQueue, ^(void) {
                     [self.mapPanel addAnnotations:self.clustersAnnotationsToAdd];
