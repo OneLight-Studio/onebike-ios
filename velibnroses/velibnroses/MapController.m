@@ -510,6 +510,7 @@
         dispatch_async(self.oneBikeQueue, ^(void) {
             // necessary time to trigger effective zoom (and avoid to consider too many visible stations in map region)
             [NSThread sleepForTimeInterval:1.5f];
+            [self locateCurrentContract];
             [self generateStationsAnnotations];
             dispatch_async(self.uiQueue, ^(void) {
                 [self.mapPanel addAnnotations:self.clustersAnnotationsToAdd];
@@ -726,7 +727,6 @@
     MKCoordinateRegion currentRegion = MKCoordinateRegionMakeWithDistance(self.startUserLocation, SPAN_SIDE_INIT_LENGTH_IN_METERS, SPAN_SIDE_INIT_LENGTH_IN_METERS);
     [self.mapPanel setRegion:currentRegion animated:YES];
     NSLog(@"centered on user location (%f,%f)", self.startUserLocation.latitude, self.startUserLocation.longitude);
-    [self locateCurrentContract];
 }
 
 - (void)generateContractsAnnotations {
@@ -1046,6 +1046,7 @@
     [self eraseAnnotations];
     [self eraseRoute];
     [self eraseSearchAnnotations];
+    [self eraseContractsAnnotations];
     self.departureCloseStations = [self.stationService searchCloseStationsIn:[self.cache objectForKey:self.departure.contract.name] forPlace:self.departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
     self.departureStation = [self.departureCloseStations objectAtIndex:0];
     self.arrivalCloseStations = [self.stationService searchCloseStationsIn:[self.cache objectForKey:self.arrival.contract.name] forPlace:self.arrival withAvailableStandsNumber:availableStands andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
