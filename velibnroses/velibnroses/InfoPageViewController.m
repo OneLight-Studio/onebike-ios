@@ -116,6 +116,7 @@
             break;
         case MFMailComposeResultSent:
             NSLog(@"Mail sent");
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"thanks_feedback", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
             break;
         case MFMailComposeResultFailed:
             NSLog(@"Mail sent failure: %@", [error localizedDescription]);
@@ -124,9 +125,7 @@
         default:
             break;
     }
-    
     [self dismissViewControllerAnimated:YES completion:NULL];
-
 }
 
 @end
