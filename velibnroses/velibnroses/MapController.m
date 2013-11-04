@@ -73,9 +73,9 @@
 
 @end
 
-@implementation MapController
-
 # pragma mark -
+
+@implementation MapController
 
 - (id)initWithCoder:(NSCoder *)coder
 {
@@ -86,6 +86,106 @@
         self.placeService = [[PlaceService alloc] init];
     }
     return self;
+}
+
+- (void)registerOn
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackgroundNotificationReceived:) name:NOTIFICATION_DID_ENTER_BACKGROUND object:nil];
+    NSLog(@"register on %@", NOTIFICATION_DID_ENTER_BACKGROUND);
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForegroundNotificationReceived:) name:NOTIFICATION_WILL_ENTER_FOREGROUND object:nil];
+    NSLog(@"register on %@", NOTIFICATION_WILL_ENTER_FOREGROUND);
+}
+
+- (void)resetUserLocation
+{
+    CLLocationCoordinate2D cc2d;
+    cc2d.latitude = 0;
+    cc2d.longitude = 0;
+    self.startUserLocation = cc2d;
+}
+
+- (void)initView
+{
+    self.mapPanel.delegate = self;
+    self.mapPanel.showsUserLocation = YES;
+    [self.mapPanel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapMap:)]];
+    
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"NBLogo.png"]];
+    
+    CGRect searchFrame = self.searchPanel.frame;
+    searchFrame.origin.y = -searchFrame.size.height;
+    self.searchPanel.frame = searchFrame;
+    
+    UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeUpInvoked:)];
+    [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
+    [self.searchPanel addGestureRecognizer:swipeUpGestureRecognizer];
+    
+    self.bikeField.text = @"1";
+    self.standField.text = @"1";
+    self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"NBClose.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
+    
+    self.departureSpinner.hidesWhenStopped = YES;
+    [self.departureSpinner setColor:[UIUtils colorWithHexaString:@"#b2ca04"]];
+    self.arrivalSpinner.hidesWhenStopped = YES;
+    [self.arrivalSpinner setColor:[UIUtils colorWithHexaString:@"#b2ca04"]];
+    self.searchSpinner.hidesWhenStopped = YES;
+    [self.searchSpinner setColor:[UIUtils colorWithHexaString:@"#ffffff"]];
+    [self.searchSpinner setHidden:true];
+    
+    self.isMapLoaded = NO;
+    [self resetUserLocation];
+    self.mapViewState = MAP_VIEW_DEFAULT_STATE;
+    self.isSearchViewVisible = NO;
+    
+    [self.infoBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [self.searchBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [self.cancelBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+    UIImage *buttonBg = [[UIImage imageNamed:@"SPButtonBg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
+    [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
+    
+    self.cache = [[NSMutableDictionary alloc] init];
+    self.clustersAnnotationsToAdd = [[NSMutableArray alloc] init];
+    self.clustersAnnotationsToRemove = [[NSMutableArray alloc] init];
+    self.stationsAnnotationsToAdd = [[NSMutableArray alloc] init];
+    self.stationsAnnotationsToRemove = [[NSMutableArray alloc] init];
+    
+    self.departureCloseStations = [[NSMutableArray alloc] init];
+    self.arrivalCloseStations = [[NSMutableArray alloc] init];
+    self.searchAnnotations = [[NSMutableArray alloc] init];
+    self.contractsAnnotations = [[NSMutableArray alloc] init];
+    
+    self.rideUIAlert = nil;
+    self.isZoomIn = NO;
+    self.isZoomOut = NO;
+    
+    self.uiQueue = dispatch_get_main_queue();
+    self.oneBikeQueue = dispatch_queue_create("com.onelightstudio.onebike", NULL);
+    
+    self.infoDistanceTextField.adjustsFontSizeToFitWidth = YES;
+    self.infoDistanceTextField.minimumFontSize = 5.0;
+    self.infoDurationTextField.adjustsFontSizeToFitWidth = YES;
+    self.infoDurationTextField.minimumFontSize = 5.0;
+    
+    self.areContractsDrawn = NO;
+    self.currentContract = nil;
+    self.forceStationsDisplay = NO;
+}
+
+- (void)startTimer {
+    if (self.timer == nil) {
+        NSLog(@"start timer");
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:TIME_BEFORE_REFRESH_DATA_IN_SECONDS target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
+    }
+}
+
+- (void)stopTimer {
+    if (self.timer != nil) {
+        NSLog(@"stop timer");
+        [self.timer invalidate];
+        self.timer = nil;
+    }
 }
 
 # pragma mark View lifecycle
@@ -135,11 +235,198 @@
     }
 }
 
+# pragma mark Event(s)
+
+-(void)timerFired:(NSTimer *)theTimer
+{
+    NSLog(@"timer fired %@", [theTimer fireDate]);
+    [self refreshCurrentContractData];
+}
+
+- (void)didTapMap:(UITapGestureRecognizer *)sender
+{
+    NSLog(@"tap map fired");
+    if (self.isSearchViewVisible) {
+        self.isSearchViewVisible = NO;
+        [self closeSearchPanel];
+    }
+    [self refreshNavigationBarHasSearchView:self.isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
+}
+
+- (IBAction)searchBarButtonClicked:(id)sender {
+    self.isSearchViewVisible = YES;
+    [self openSearchPanel];
+    [self refreshNavigationBarHasSearchView:self.isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
+}
+
+- (IBAction)cancelBarButtonClicked:(id)sender {
+    if (self.isSearchViewVisible) {
+        self.isSearchViewVisible = NO;
+        [self closeSearchPanel];
+    } else {
+        self.mapViewState = MAP_VIEW_DEFAULT_STATE;
+        [self resetSearchViewFields];
+        [self eraseRoute];
+        [self eraseSearchAnnotations];
+        [self centerMapOnUserLocation];
+        dispatch_async(self.oneBikeQueue, ^(void) {
+            // necessary time to trigger effective zoom (and avoid to consider too many visible stations in map region)
+            [NSThread sleepForTimeInterval:1.5f];
+            [self locateCurrentContract];
+            [self generateStationsAnnotations];
+            dispatch_async(self.uiQueue, ^(void) {
+                [self.mapPanel addAnnotations:self.clustersAnnotationsToAdd];
+                [self.clustersAnnotationsToRemove addObjectsFromArray:self.clustersAnnotationsToAdd];
+                [self.clustersAnnotationsToAdd removeAllObjects];
+                
+                [self.mapPanel addAnnotations:self.stationsAnnotationsToAdd];
+                [self.stationsAnnotationsToRemove addObjectsFromArray:self.stationsAnnotationsToAdd];
+                [self.stationsAnnotationsToAdd removeAllObjects];
+            });
+        });
+        [self.infoPanel setHidden:true];
+    }
+    [self refreshNavigationBarHasSearchView:self.isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
+}
+
+- (IBAction)backBarButtonClicked:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)departureFieldChanged:(id)sender {
+    if (self.departureField.text.length < 3) {
+        [self.departureAutocompleteView hide];
+    }
+}
+
+- (IBAction)arrivalFieldChanged:(id)sender {
+    if (self.arrivalField.text.length < 3) {
+        [self.arrivalAutocompleteView hide];
+    }
+}
+
+- (IBAction)bikeIconClicked:(id)sender {
+    [self.bikeField becomeFirstResponder];
+}
+
+- (IBAction)standIconClicked:(id)sender {
+    [self.standField becomeFirstResponder];
+}
+
+- (IBAction)userLocationAsDepartureClicked:(id)sender {
+    [self.departureLocation setHidden:true];
+    [self.departureSpinner startAnimating];
+    
+    CLLocationCoordinate2D userLocation = self.mapPanel.userLocation.coordinate;
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:userLocation.latitude longitude:userLocation.longitude];
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (error != nil) {
+            self.departureField.text = [NSString stringWithFormat:@"%f,%f", userLocation.latitude, userLocation.longitude];
+        } else {
+            self.departureField.text = [[[(CLPlacemark *)[placemarks objectAtIndex:0] addressDictionary] valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
+        }
+        [self.departureSpinner stopAnimating];
+        [self.departureLocation setHidden:false];
+        if (![self.departureAutocompleteView isHidden]) {
+            [self.departureAutocompleteView hide];
+        }
+    }];
+}
+
+- (IBAction)userLocationAsArrivalClicked:(id)sender {
+    [self.arrivalLocation setHidden:true];
+    [self.arrivalSpinner startAnimating];
+    
+    CLLocationCoordinate2D userLocation = self.mapPanel.userLocation.coordinate;
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:userLocation.latitude longitude:userLocation.longitude];
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (error != nil) {
+            self.arrivalField.text = [NSString stringWithFormat:@"%f,%f", userLocation.latitude, userLocation.longitude];
+        } else {
+            self.arrivalField.text = [[[(CLPlacemark *)[placemarks objectAtIndex:0] addressDictionary] valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
+        }
+        [self.arrivalSpinner stopAnimating];
+        [self.arrivalLocation setHidden:false];
+        if (![self.arrivalAutocompleteView isHidden]) {
+            [self.arrivalAutocompleteView hide];
+        }
+    }];
+}
+
+- (IBAction)searchButtonClicked:(id)sender {
+    [self.view endEditing:YES];
+    if (self.departureField.text.length == 0) {
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"") message:NSLocalizedString(@"missing_departure", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+    } else if (self.arrivalField.text.length == 0) {
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"") message:NSLocalizedString(@"missing_arrival", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+    } else {
+        [self.view endEditing:YES];
+        [self disableSearchButton];
+        self.departure = nil;
+        self.arrival = nil;
+        //[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        CLGeocoder *departureGeocoder = [[CLGeocoder alloc] init];
+        [departureGeocoder geocodeAddressString:self.departureField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (self.searching) {
+                if (error != nil) {
+                    //[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"departure_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+                    [self enableSearchButton];
+                } else {
+                    self.departure = [self createPlaceFromLocation:[(CLPlacemark *)[placemarks objectAtIndex:0] location]];
+                    [self validatePlace:self.departure];
+                }
+            }
+        }];
+        CLGeocoder *arrivalGeocoder = [[CLGeocoder alloc] init];
+        [arrivalGeocoder geocodeAddressString:self.arrivalField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (self.searching) {
+                if (error != nil) {
+                    //[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"arrival_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
+                    [self enableSearchButton];
+                } else {
+                    self.arrival = [self createPlaceFromLocation:[(CLPlacemark *)[placemarks objectAtIndex:0] location]];
+                    [self validatePlace:self.arrival];
+                }
+            }
+        }];
+    }
+}
+
+- (void)swipeUpInvoked:(UITapGestureRecognizer *)recognizer {
+    if (self.isSearchViewVisible) {
+        self.isSearchViewVisible = NO;
+        [self closeSearchPanel];
+    }
+    [self refreshNavigationBarHasSearchView:self.isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     if (!self.searching) {
         [self enableSearchButton];
     } else {
         [self disableSearchButton];
+    }
+}
+
+# pragma mark Notification(s)
+
+- (void) didEnterBackgroundNotificationReceived:(NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:NOTIFICATION_DID_ENTER_BACKGROUND]) {
+        [self stopTimer];
+    }
+}
+
+- (void) willEnterForegroundNotificationReceived:(NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:NOTIFICATION_WILL_ENTER_FOREGROUND]) {
+        NSLog(@"have to refresh stations data");
+        [self refreshCurrentContractData];
+        [self resetUserLocation];
     }
 }
 
@@ -398,295 +685,7 @@
     return YES;
 }
 
-# pragma mark Event(s)
-
--(void)timerFired:(NSTimer *)theTimer
-{
-    NSLog(@"timer fired %@", [theTimer fireDate]);
-    [self refreshCurrentContractData];
-}
-
-- (void)didTapMap:(UITapGestureRecognizer *)sender
-{
-    NSLog(@"tap map fired");
-    if (self.isSearchViewVisible) {
-        self.isSearchViewVisible = NO;
-        [self closeSearchPanel];
-    }
-    [self refreshNavigationBarHasSearchView:self.isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
-}
-
-- (IBAction)searchBarButtonClicked:(id)sender {
-    self.isSearchViewVisible = YES;
-    [self openSearchPanel];
-    [self refreshNavigationBarHasSearchView:self.isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
-}
-
-- (IBAction)cancelBarButtonClicked:(id)sender {
-    if (self.isSearchViewVisible) {
-        self.isSearchViewVisible = NO;
-        [self closeSearchPanel];
-    } else {
-        self.mapViewState = MAP_VIEW_DEFAULT_STATE;
-        [self resetSearchViewFields];
-        [self eraseRoute];
-        [self eraseSearchAnnotations];
-        [self centerMapOnUserLocation];
-        dispatch_async(self.oneBikeQueue, ^(void) {
-            // necessary time to trigger effective zoom (and avoid to consider too many visible stations in map region)
-            [NSThread sleepForTimeInterval:1.5f];
-            [self locateCurrentContract];
-            [self generateStationsAnnotations];
-            dispatch_async(self.uiQueue, ^(void) {
-                [self.mapPanel addAnnotations:self.clustersAnnotationsToAdd];
-                [self.clustersAnnotationsToRemove addObjectsFromArray:self.clustersAnnotationsToAdd];
-                [self.clustersAnnotationsToAdd removeAllObjects];
-                
-                [self.mapPanel addAnnotations:self.stationsAnnotationsToAdd];
-                [self.stationsAnnotationsToRemove addObjectsFromArray:self.stationsAnnotationsToAdd];
-                [self.stationsAnnotationsToAdd removeAllObjects];
-            });
-        });
-        [self.infoPanel setHidden:true];
-    }
-    [self refreshNavigationBarHasSearchView:self.isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
-}
-
-- (IBAction)backBarButtonClicked:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (IBAction)departureFieldChanged:(id)sender {
-    if (self.departureField.text.length < 3) {
-        [self.departureAutocompleteView hide];
-    }
-}
-
-- (IBAction)arrivalFieldChanged:(id)sender {
-    if (self.arrivalField.text.length < 3) {
-        [self.arrivalAutocompleteView hide];
-    }
-}
-
-- (IBAction)bikeIconClicked:(id)sender {
-    [self.bikeField becomeFirstResponder];
-}
-
-- (IBAction)standIconClicked:(id)sender {
-    [self.standField becomeFirstResponder];
-}
-
-- (IBAction)userLocationAsDepartureClicked:(id)sender {
-    [self.departureLocation setHidden:true];
-    [self.departureSpinner startAnimating];
-    
-    CLLocationCoordinate2D userLocation = self.mapPanel.userLocation.coordinate;
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:userLocation.latitude longitude:userLocation.longitude];
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        if (error != nil) {
-            self.departureField.text = [NSString stringWithFormat:@"%f,%f", userLocation.latitude, userLocation.longitude];
-        } else {
-            self.departureField.text = [[[(CLPlacemark *)[placemarks objectAtIndex:0] addressDictionary] valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-        }
-        [self.departureSpinner stopAnimating];
-        [self.departureLocation setHidden:false];
-        if (![self.departureAutocompleteView isHidden]) {
-            [self.departureAutocompleteView hide];
-        }
-    }];
-}
-
-- (IBAction)userLocationAsArrivalClicked:(id)sender {
-    [self.arrivalLocation setHidden:true];
-    [self.arrivalSpinner startAnimating];
-    
-    CLLocationCoordinate2D userLocation = self.mapPanel.userLocation.coordinate;
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:userLocation.latitude longitude:userLocation.longitude];
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        if (error != nil) {
-            self.arrivalField.text = [NSString stringWithFormat:@"%f,%f", userLocation.latitude, userLocation.longitude];
-        } else {
-            self.arrivalField.text = [[[(CLPlacemark *)[placemarks objectAtIndex:0] addressDictionary] valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-        }
-        [self.arrivalSpinner stopAnimating];
-        [self.arrivalLocation setHidden:false];
-        if (![self.arrivalAutocompleteView isHidden]) {
-            [self.arrivalAutocompleteView hide];
-        }
-    }];
-}
-
-- (IBAction)searchButtonClicked:(id)sender {
-    [self.view endEditing:YES];
-    if (self.departureField.text.length == 0) {
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"") message:NSLocalizedString(@"missing_departure", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
-    } else if (self.arrivalField.text.length == 0) {
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"") message:NSLocalizedString(@"missing_arrival", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
-    } else {
-        [self.view endEditing:YES];
-        [self disableSearchButton];
-        self.departure = nil;
-        self.arrival = nil;
-        //[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-        CLGeocoder *departureGeocoder = [[CLGeocoder alloc] init];
-        [departureGeocoder geocodeAddressString:self.departureField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
-            if (self.searching) {
-                if (error != nil) {
-                    //[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"departure_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
-                   [self enableSearchButton];
-                } else {
-                    self.departure = [self createPlaceFromLocation:[(CLPlacemark *)[placemarks objectAtIndex:0] location]];
-                    [self validatePlace:self.departure];
-                }
-            }
-        }];
-        CLGeocoder *arrivalGeocoder = [[CLGeocoder alloc] init];
-        [arrivalGeocoder geocodeAddressString:self.arrivalField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
-            if (self.searching) {
-                if (error != nil) {
-                    //[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"arrival_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
-                    [self enableSearchButton];
-                } else {
-                    self.arrival = [self createPlaceFromLocation:[(CLPlacemark *)[placemarks objectAtIndex:0] location]];
-                    [self validatePlace:self.arrival];
-                }
-            }
-        }];
-    }
-}
-
-- (void)swipeUpInvoked:(UITapGestureRecognizer *)recognizer {
-    if (self.isSearchViewVisible) {
-        self.isSearchViewVisible = NO;
-        [self closeSearchPanel];
-    }
-    [self refreshNavigationBarHasSearchView:self.isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
-}
-
-# pragma mark Notification(s)
-
-- (void) didEnterBackgroundNotificationReceived:(NSNotification *)notification
-{
-    if ([[notification name] isEqualToString:NOTIFICATION_DID_ENTER_BACKGROUND]) {
-        [self stopTimer];
-    }
-}
-
-- (void) willEnterForegroundNotificationReceived:(NSNotification *)notification
-{
-    if ([[notification name] isEqualToString:NOTIFICATION_WILL_ENTER_FOREGROUND]) {
-        NSLog(@"have to refresh stations data");
-        [self refreshCurrentContractData];
-        [self resetUserLocation];
-    }
-}
-
 # pragma mark -
-
-- (void)registerOn
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackgroundNotificationReceived:) name:NOTIFICATION_DID_ENTER_BACKGROUND object:nil];
-    NSLog(@"register on %@", NOTIFICATION_DID_ENTER_BACKGROUND);
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForegroundNotificationReceived:) name:NOTIFICATION_WILL_ENTER_FOREGROUND object:nil];
-    NSLog(@"register on %@", NOTIFICATION_WILL_ENTER_FOREGROUND);
-}
-
-- (void)resetUserLocation
-{
-    CLLocationCoordinate2D cc2d;
-    cc2d.latitude = 0;
-    cc2d.longitude = 0;
-    self.startUserLocation = cc2d;
-}
-
-- (void)initView
-{
-    self.mapPanel.delegate = self;
-    self.mapPanel.showsUserLocation = YES;
-    [self.mapPanel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapMap:)]];
-    
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"NBLogo.png"]];
-    
-    CGRect searchFrame = self.searchPanel.frame;
-    searchFrame.origin.y = -searchFrame.size.height;
-    self.searchPanel.frame = searchFrame;
-    
-    UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeUpInvoked:)];
-    [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
-    [self.searchPanel addGestureRecognizer:swipeUpGestureRecognizer];
-    
-    self.bikeField.text = @"1";
-    self.standField.text = @"1";
-    self.cancelBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"NBClose.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBarButtonClicked:)];
-    
-    self.departureSpinner.hidesWhenStopped = YES;
-    [self.departureSpinner setColor:[UIUtils colorWithHexaString:@"#b2ca04"]];
-    self.arrivalSpinner.hidesWhenStopped = YES;
-    [self.arrivalSpinner setColor:[UIUtils colorWithHexaString:@"#b2ca04"]];
-    self.searchSpinner.hidesWhenStopped = YES;
-    [self.searchSpinner setColor:[UIUtils colorWithHexaString:@"#ffffff"]];
-    [self.searchSpinner setHidden:true];
-    
-    self.isMapLoaded = NO;
-    [self resetUserLocation];
-    self.mapViewState = MAP_VIEW_DEFAULT_STATE;
-    self.isSearchViewVisible = NO;
-    
-    [self.infoBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [self.searchBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [self.cancelBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    
-    UIImage *buttonBg = [[UIImage imageNamed:@"SPButtonBg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(16, 16, 16, 16)];
-    [self.searchButton setBackgroundImage:buttonBg forState:UIControlStateNormal];
-    
-    self.cache = [[NSMutableDictionary alloc] init];
-    self.clustersAnnotationsToAdd = [[NSMutableArray alloc] init];
-    self.clustersAnnotationsToRemove = [[NSMutableArray alloc] init];
-    self.stationsAnnotationsToAdd = [[NSMutableArray alloc] init];
-    self.stationsAnnotationsToRemove = [[NSMutableArray alloc] init];
-    
-    self.departureCloseStations = [[NSMutableArray alloc] init];
-    self.arrivalCloseStations = [[NSMutableArray alloc] init];
-    self.searchAnnotations = [[NSMutableArray alloc] init];
-    self.contractsAnnotations = [[NSMutableArray alloc] init];
-    
-    self.rideUIAlert = nil;
-    self.isZoomIn = NO;
-    self.isZoomOut = NO;
-    
-    self.uiQueue = dispatch_get_main_queue();
-    self.oneBikeQueue = dispatch_queue_create("com.onelightstudio.onebike", NULL);
-    
-    self.infoDistanceTextField.adjustsFontSizeToFitWidth = YES;
-    self.infoDistanceTextField.minimumFontSize = 5.0;
-    self.infoDurationTextField.adjustsFontSizeToFitWidth = YES;
-    self.infoDurationTextField.minimumFontSize = 5.0;
-    
-    self.areContractsDrawn = NO;
-    self.currentContract = nil;
-    self.forceStationsDisplay = NO;
-}
-
-- (void)startTimer {
-    if (self.timer == nil) {
-        NSLog(@"start timer");
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:TIME_BEFORE_REFRESH_DATA_IN_SECONDS target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
-    }
-}
-
-- (void)stopTimer {
-    if (self.timer != nil) {
-        NSLog(@"stop timer");
-        [self.timer invalidate];
-        self.timer = nil;
-    }
-}
-
 # pragma mark Navigation Bar
 
 - (void)refreshNavigationBarHasSearchView:(BOOL)hasSearchView hasRideView:(BOOL)hasRideView {
