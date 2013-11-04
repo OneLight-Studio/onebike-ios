@@ -69,6 +69,7 @@
 @property (assign,readwrite) BOOL redraw;
 @property (assign,readwrite) BOOL areContractsDrawn;
 @property (assign,readwrite) CLLocationCoordinate2D startUserLocation;
+@property (assign,readwrite) BOOL forceStationsDisplay;
 
 @end
 
@@ -158,6 +159,7 @@
     
     self.areContractsDrawn = NO;
     self.currentContract = nil;
+    self.forceStationsDisplay = NO;
 }
 
 - (void)startTimer {
@@ -195,7 +197,6 @@
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         self.navigationController.navigationBar.translucent = NO;
     }
-    
     [self registerOn];
     [self.contractService loadContracts];
     [self initView];
@@ -274,6 +275,27 @@
     if (!self.isMapLoaded) {
         NSLog(@"map is loaded");
         self.isMapLoaded = true;
+        if (self.forceStationsDisplay) {
+            NSLog(@"force stations display");
+            self.forceStationsDisplay = NO;
+            [self locateCurrentContract];
+            if (self.currentContract != nil) {
+                if (![[self.cache allKeys] containsObject:self.currentContract.name]) {
+                    [self.contractService loadStationsFromContract:self.currentContract success:^(NSMutableArray *someStations) {
+                        [self addStations:someStations toCacheForContract:self.currentContract];
+                        [self drawAnnotations];
+                    } failure:^(NSError *anError) {
+                        NSLog(@"JCD ws error %@", anError.debugDescription);
+                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                    } timeout:^() {
+                        NSLog(@"JCD ws timeout");
+                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                    }];
+                } else {
+                    [self drawAnnotations];
+                }
+            }
+        }
     }
 }
 
@@ -395,6 +417,7 @@
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     if (self.isMapLoaded && self.mapViewState == MAP_VIEW_DEFAULT_STATE) {
+        NSLog(@"region has changed");
         NSUInteger level = [UIUtils zoomLevel:self.mapPanel];
         if (level < self.currentZoomLevel) {
             self.currentZoomLevel = level;
@@ -439,6 +462,9 @@
                 }
             }
         }
+    } else if (!self.isMapLoaded && !self.forceStationsDisplay) {
+        NSLog(@"need to force stations display");
+        self.forceStationsDisplay = YES;
     }
 }
 
@@ -604,12 +630,12 @@
         [self disableSearchButton];
         self.departure = nil;
         self.arrival = nil;
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        //[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         CLGeocoder *departureGeocoder = [[CLGeocoder alloc] init];
         [departureGeocoder geocodeAddressString:self.departureField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
             if (self.searching) {
                 if (error != nil) {
-                    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                    //[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"departure_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                    [self enableSearchButton];
                 } else {
@@ -622,7 +648,7 @@
         [arrivalGeocoder geocodeAddressString:self.arrivalField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
             if (self.searching) {
                 if (error != nil) {
-                    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                    //[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"arrival_not_found", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
                     [self enableSearchButton];
                 } else {
@@ -645,7 +671,7 @@
 
 - (void)validatePlace:(Place *)aPlace {
     if (self.departure != nil && self.arrival != nil) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        //[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if (self.departure.contract != nil && self.arrival.contract != nil) {
             if ([self.placeService areInTheSameContractsDeparture:self.departure AndArrival:self.arrival]) {
                 if (![self.placeService isSamePlaceBetween:self.departure and:self.arrival]) {
@@ -1048,7 +1074,7 @@
 - (void)searchWithDeparture:(Place *)aDeparturePlace andArrival:(Place *)anArrivalPlace withBikes:(int)bikes andAvailableStands:(int)availableStands inARadiusOf:(int)radius {
     NSLog(@"%f,%f -> %f,%f (%d / %d)", aDeparturePlace.location.coordinate.latitude, aDeparturePlace.location.coordinate.longitude, anArrivalPlace.location.coordinate.latitude, anArrivalPlace.location.coordinate.longitude, bikes, availableStands);
     self.mapViewState = MAP_VIEW_SEARCH_STATE;
-    [self refreshNavigationBarHasSearchView:_isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
+    [self refreshNavigationBarHasSearchView:self.isSearchViewVisible hasRideView:self.mapViewState == MAP_VIEW_SEARCH_STATE];
     [self eraseAnnotations];
     [self eraseRoute];
     [self eraseSearchAnnotations];
