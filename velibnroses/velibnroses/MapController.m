@@ -1040,6 +1040,7 @@
         searchFrame.origin.y = -searchFrame.size.height;
         self.searchPanel.frame = searchFrame;
     }];
+    [self.searchPanel endEditing:YES];
     [self.departureAutocompleteView hide];
     [self.arrivalAutocompleteView hide];
 }
