@@ -1080,10 +1080,10 @@
     [self eraseSearchAnnotations];
     [self eraseContractsAnnotations];
     self.departureCloseStations = [self.stationService searchCloseStationsIn:[self.cache objectForKey:self.departure.contract.name] forPlace:self.departure withBikesNumber:bikes andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
-    self.departureStation = [self.departureCloseStations objectAtIndex:0];
     self.arrivalCloseStations = [self.stationService searchCloseStationsIn:[self.cache objectForKey:self.arrival.contract.name] forPlace:self.arrival withAvailableStandsNumber:availableStands andMaxStationsNumber:SEARCH_RESULT_MAX_STATIONS_NUMBER inARadiusOf:radius];
-    self.arrivalStation = [self.arrivalCloseStations objectAtIndex:0];
-    if ([self.departureCloseStations count] > 0 && [self.arrivalCloseStations count] > 0 && self.departureStation != nil && self.arrivalStation != nil) {
+    if ([self.departureCloseStations count] > 0 && [self.arrivalCloseStations count] > 0) {
+        self.departureStation = [self.departureCloseStations objectAtIndex:0];
+        self.arrivalStation = [self.arrivalCloseStations objectAtIndex:0];
         NSLog(@"search contract : %@ (%@)", aDeparturePlace.contract.name, [Contract getProviderNameFromContractProvider:aDeparturePlace.contract.provider]);
         self.currentContract = aDeparturePlace.contract;
         [self drawSearchAnnotations];
