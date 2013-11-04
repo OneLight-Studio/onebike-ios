@@ -31,3 +31,4 @@
 "same_station" = "Debería ir andando ;)";
 "not_the_same_contract" = "El inicio y el destino de su búsqueda deben encontrarse en la misma ciudad.";
 "thanks_feedback" = "Gracias por su comentario.";
+"unsupported_contract" = "OneBike no soporta aún la ciudad de su búsqueda";

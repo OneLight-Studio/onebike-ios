@@ -646,32 +646,37 @@
 - (void)validatePlace:(Place *)aPlace {
     if (self.departure != nil && self.arrival != nil) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        if ([self.placeService areInTheSameContractsDeparture:self.departure AndArrival:self.arrival]) {
-            if (![self.placeService isSamePlaceBetween:self.departure and:self.arrival]) {
-                if ([self.cache objectForKey:aPlace.contract.name] == nil) {
-                    [self.contractService loadStationsFromContract:aPlace.contract success:^(NSMutableArray *someStations) {
-                        [self addStations:someStations toCacheForContract:aPlace.contract];
+        if (self.departure.contract != nil && self.arrival.contract != nil) {
+            if ([self.placeService areInTheSameContractsDeparture:self.departure AndArrival:self.arrival]) {
+                if (![self.placeService isSamePlaceBetween:self.departure and:self.arrival]) {
+                    if ([self.cache objectForKey:aPlace.contract.name] == nil) {
+                        [self.contractService loadStationsFromContract:aPlace.contract success:^(NSMutableArray *someStations) {
+                            [self addStations:someStations toCacheForContract:aPlace.contract];
+                            [self cancelBarButtonClicked:nil];
+                            double radius = [self.placeService getDistanceBetweenDeparture:self.departure andArrival:self.arrival betweenMinRadius:STATION_SEARCH_MIN_RADIUS_IN_METERS andMaxRadius:STATION_SEARCH_MAX_RADIUS_IN_METERS];
+                            [self searchWithDeparture:self.departure andArrival:self.arrival withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
+                        } failure:^(NSError *anError) {
+                            NSLog(@"JCD ws error %@", anError.debugDescription);
+                            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                        } timeout:^() {
+                            NSLog(@"JCD ws timeout");
+                            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                        }];
+                    } else {
                         [self cancelBarButtonClicked:nil];
                         double radius = [self.placeService getDistanceBetweenDeparture:self.departure andArrival:self.arrival betweenMinRadius:STATION_SEARCH_MIN_RADIUS_IN_METERS andMaxRadius:STATION_SEARCH_MAX_RADIUS_IN_METERS];
                         [self searchWithDeparture:self.departure andArrival:self.arrival withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
-                    } failure:^(NSError *anError) {
-                        NSLog(@"JCD ws error %@", anError.debugDescription);
-                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                    } timeout:^() {
-                        NSLog(@"JCD ws timeout");
-                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"") message:NSLocalizedString(@"jcd_ws_get_data_error", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                    }];
+                    }
                 } else {
-                    [self cancelBarButtonClicked:nil];
-                    double radius = [self.placeService getDistanceBetweenDeparture:self.departure andArrival:self.arrival betweenMinRadius:STATION_SEARCH_MIN_RADIUS_IN_METERS andMaxRadius:STATION_SEARCH_MAX_RADIUS_IN_METERS];
-                    [self searchWithDeparture:self.departure andArrival:self.arrival withBikes:[self.bikeField.text intValue] andAvailableStands:[self.standField.text intValue] inARadiusOf:radius];
+                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                    [self enableSearchButton];
                 }
             } else {
-                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"same_location", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"")  message:NSLocalizedString(@"not_the_same_contract", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                 [self enableSearchButton];
             }
         } else {
-            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_warning_title", @"")  message:NSLocalizedString(@"not_the_same_contract", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_error_title", @"")  message:NSLocalizedString(@"unsupported_contract", @"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
             [self enableSearchButton];
         }
     }
