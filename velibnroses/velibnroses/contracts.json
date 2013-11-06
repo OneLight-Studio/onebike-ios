@@ -1,0 +1,882 @@
+﻿ [
+  {
+  "name": "Rouen",
+  "provider": "JCDecaux",
+  "radius": 3000,
+  "lng": 1.099971,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Rouen",
+  "lat": 49.44323199999999
+  },
+  {
+  "name": "Paris",
+  "provider": "JCDecaux",
+  "radius": 10000,
+  "lng": 2.3522219,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Paris",
+  "lat": 48.856614
+  },
+  {
+  "name": "Toulouse",
+  "provider": "JCDecaux",
+  "radius": 6000,
+  "lng": 1.444209,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Toulouse",
+  "lat": 43.604652
+  },
+  {
+  "name": "Luxembourg",
+  "provider": "JCDecaux",
+  "radius": 5000,
+  "lng": 6.1319346,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Luxembourg",
+  "lat": 49.61162100000001
+  },
+  {
+  "name": "Valence",
+  "provider": "JCDecaux",
+  "radius": 6000,
+  "lng": -0.3762881,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Valence",
+  "lat": 39.4699075
+  },
+  {
+  "name": "Stockholm",
+  "provider": "JCDecaux",
+  "radius": 3000,
+  "lng": 18.06491,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Stockholm",
+  "lat": 59.32893000000001
+  },
+  {
+  "name": "Goteborg",
+  "provider": "JCDecaux",
+  "radius": 4000,
+  "lng": 11.97456,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Goteborg",
+  "lat": 57.70887
+  },
+  {
+  "name": "Santander",
+  "provider": "JCDecaux",
+  "radius": 6000,
+  "lng": -3.8099803,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Santander",
+  "lat": 43.46230569999999
+  },
+  {
+  "name": "Amiens",
+  "provider": "JCDecaux",
+  "radius": 2000,
+  "lng": 2.295753,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Amiens",
+  "lat": 49.894067
+  },
+  {
+  "name": "Lillestrom",
+  "provider": "JCDecaux",
+  "radius": 1000,
+  "lng": 11.0503785,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Lillestrom",
+  "lat": 59.9559696
+  },
+  {
+  "name": "Mulhouse",
+  "provider": "JCDecaux",
+  "radius": 3000,
+  "lng": 7.335888,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Mulhouse",
+  "lat": 47.750839
+  },
+  {
+  "name": "Lyon",
+  "provider": "JCDecaux",
+  "radius": 7000,
+  "lng": 4.835659,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Lyon",
+  "lat": 45.764043
+  },
+  {
+  "name": "Ljubljana",
+  "provider": "JCDecaux",
+  "radius": 5000,
+  "lng": 14.5080702,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Ljubljana",
+  "lat": 46.05645089999999
+  },
+  {
+  "name": "Seville",
+  "provider": "JCDecaux",
+  "radius": 8000,
+  "lng": -5.9823299,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Seville",
+  "lat": 37.3880961
+  },
+  {
+  "name": "Namur",
+  "provider": "JCDecaux",
+  "radius": 2000,
+  "lng": 4.867665,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Namur",
+  "lat": 50.465328
+  },
+  {
+  "name": "Nancy",
+  "provider": "JCDecaux",
+  "radius": 4000,
+  "lng": 6.184417,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Nancy",
+  "lat": 48.692054
+  },
+  {
+  "name": "Creteil",
+  "provider": "JCDecaux",
+  "radius": 3000,
+  "lng": 2.455572,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Creteil",
+  "lat": 48.790367
+  },
+  {
+  "name": "Bruxelles-Capitale",
+  "provider": "JCDecaux",
+  "radius": 8000,
+  "lng": 4.3517103,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Bruxelles-Capitale",
+  "lat": 50.8503396
+  },
+  {
+  "name": "Cergy-Pontoise",
+  "provider": "JCDecaux",
+  "radius": 7000,
+  "lng": 2.095255,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Cergy-Pontoise",
+  "lat": 49.04666
+  },
+  {
+  "name": "Vilnius",
+  "provider": "JCDecaux",
+  "radius": 2000,
+  "lng": 25.2796514,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Vilnius",
+  "lat": 54.6871555
+  },
+  {
+  "name": "Toyama",
+  "provider": "JCDecaux",
+  "radius": 2000,
+  "lng": 137.2136768,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Toyama",
+  "lat": 36.6959518
+  },
+  {
+  "name": "Kazan",
+  "provider": "JCDecaux",
+  "radius": 3000,
+  "lng": 49.1055556,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Kazan",
+  "lat": 55.8005556
+  },
+  {
+  "name": "Marseille",
+  "provider": "JCDecaux",
+  "radius": 7000,
+  "lng": 5.36978,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Marseille",
+  "lat": 43.296482
+  },
+  {
+  "name": "Nantes",
+  "provider": "JCDecaux",
+  "radius": 4000,
+  "lng": -1.553621,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Nantes",
+  "lat": 47.218371
+  },
+  {
+  "name": "Besancon",
+  "provider": "JCDecaux",
+  "radius": 2000,
+  "lng": 6.024053899999999,
+  "url": "https://api.jcdecaux.com/vls/v1/stations?contract=Besancon",
+  "lat": 47.237829
+  },
+  {
+  "name": "Dublin",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -6.260177,
+  "url": "http://api.citybik.es/dublin.json",
+  "lat": 53.330662
+  },
+  {
+  "name": "Zaragoza",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -0.878056,
+  "url": "http://api.citybik.es/bizi.json",
+  "lat": 41.655553
+  },
+  {
+  "name": "Barcelona",
+  "provider": "CityBikes",
+  "radius": 7000,
+  "lng": 2.153128,
+  "url": "http://api.citybik.es/bicing.json",
+  "lat": 41.398298
+  },
+  {
+  "name": "barclays",
+  "provider": "CityBikes",
+  "radius": 9000,
+  "lng": -0.116146,
+  "url": "http://api.citybik.es/barclays.json",
+  "lat": 51.514943
+  },
+  {
+  "name": "Mexico City",
+  "provider": "CityBikes",
+  "radius": 8000,
+  "lng": -99.20322,
+  "url": "http://api.citybik.es/ecobici.json",
+  "lat": 19.434353
+  },
+  {
+  "name": "Brisbane",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": 153.02257,
+  "url": "http://api.citybik.es/citycycle.json",
+  "lat": -27.471297
+  },
+  {
+  "name": "Vienna",
+  "provider": "CityBikes",
+  "radius": 7000,
+  "lng": 16.398464,
+  "url": "http://api.citybik.es/wien.json",
+  "lat": 48.192986
+  },
+  {
+  "name": "Montreal",
+  "provider": "CityBikes",
+  "radius": 9000,
+  "lng": -73.57845,
+  "url": "http://api.citybik.es/bixi.json",
+  "lat": 45.50733
+  },
+  {
+  "name": "Docklands",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": 144.945923,
+  "url": "http://api.citybik.es/melbourne.json",
+  "lat": -37.818306
+  },
+  {
+  "name": "Girona",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": 2.820382,
+  "url": "http://api.citybik.es/girocleta.json",
+  "lat": 41.974679
+  },
+  {
+  "name": "Washington",
+  "provider": "CityBikes",
+  "radius": 17000,
+  "lng": -76.947974,
+  "url": "http://api.citybik.es/capitalbikeshare.json",
+  "lat": 38.894
+  },
+  {
+  "name": "Miami Beach",
+  "provider": "CityBikes",
+  "radius": 14000,
+  "lng": -80.141136,
+  "url": "http://api2.citybik.es/decobike.json",
+  "lat": 25.775754
+  },
+  {
+  "name": "Minneapolis",
+  "provider": "CityBikes",
+  "radius": 17000,
+  "lng": -93.272185,
+  "url": "http://api.citybik.es/niceride.json",
+  "lat": 44.975641
+  },
+  {
+  "name": "Denver",
+  "provider": "CityBikes",
+  "radius": 11000,
+  "lng": -104.96299,
+  "url": "http://api.citybik.es/denver.json",
+  "lat": 39.67918
+  },
+  {
+  "name": "Des Moines",
+  "provider": "CityBikes",
+  "radius": 1000,
+  "lng": -93.6262,
+  "url": "http://api.citybik.es/desmoines.json",
+  "lat": 41.58764
+  },
+  {
+  "name": "San Antonio",
+  "provider": "CityBikes",
+  "radius": 15000,
+  "lng": -98.47946,
+  "url": "http://api.citybik.es/sanantonio.json",
+  "lat": 29.44356
+  },
+  {
+  "name": "Turin",
+  "provider": "CityBikes",
+  "radius": 13000,
+  "lng": 7.678306,
+  "url": "http://api.citybik.es/tobike.json",
+  "lat": 45.067019
+  },
+  {
+  "name": "Kailua",
+  "provider": "CityBikes",
+  "radius": 1000,
+  "lng": -157.74098,
+  "url": "http://api.citybik.es/hawaii.json",
+  "lat": 21.39234
+  },
+  {
+  "name": "Boulder",
+  "provider": "CityBikes",
+  "radius": 5000,
+  "lng": -105.28087,
+  "url": "http://api.citybik.es/boulder.json",
+  "lat": 40.01377
+  },
+  {
+  "name": "Milan",
+  "provider": "CityBikes",
+  "radius": 5000,
+  "lng": 9.177407,
+  "url": "http://api.citybik.es/bikemi.json",
+  "lat": 45.452319
+  },
+  {
+  "name": "CF",
+  "provider": "CityBikes",
+  "radius": 9000,
+  "lng": -58.407637,
+  "url": "http://api.citybik.es/mejorenbici.json",
+  "lat": -34.58503
+  },
+  {
+  "name": "Palma de Mallorca",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": 2.655279,
+  "url": "http://api.citybik.es/palma.json",
+  "lat": 39.581315
+  },
+  {
+  "name": "León",
+  "provider": "CityBikes",
+  "radius": 6000,
+  "lng": -5.571308,
+  "url": "http://api.citybik.es/bicileon.json",
+  "lat": 42.592583
+  },
+  {
+  "name": "Oslo",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": 10.736818,
+  "url": "http://api2.citybik.es/bysykkel.json",
+  "lat": 59.910696
+  },
+  {
+  "name": "Rome",
+  "provider": "CityBikes",
+  "radius": 5000,
+  "lng": 12.473173,
+  "url": "http://api.citybik.es/rome.json",
+  "lat": 41.900074
+  },
+  {
+  "name": "venice",
+  "provider": "CityBikes",
+  "radius": 14000,
+  "lng": 12.230497,
+  "url": "http://api.citybik.es/venice.json",
+  "lat": 45.479978
+  },
+  {
+  "name": "Sestri Levante",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": 9.39713,
+  "url": "http://api.citybik.es/tigullionbike.json",
+  "lat": 44.27581
+  },
+  {
+  "name": "Toronto",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -79.38882,
+  "url": "http://api2.citybik.es/toronto.json",
+  "lat": 43.653743
+  },
+  {
+  "name": "Madison",
+  "provider": "CityBikes",
+  "radius": 7000,
+  "lng": -89.41403,
+  "url": "http://api.citybik.es/madison.json",
+  "lat": 43.06754
+  },
+  {
+  "name": "Ronchin",
+  "provider": "CityBikes",
+  "radius": 17000,
+  "lng": 3.07762,
+  "url": "http://api.citybik.es/vlille.json",
+  "lat": 50.6055
+  },
+  {
+  "name": "New York",
+  "provider": "CityBikes",
+  "radius": 7000,
+  "lng": -73.995721,
+  "url": "http://api.citybik.es/citibikenyc.json",
+  "lat": 40.730493
+  },
+  {
+  "name": "Ottawa",
+  "provider": "CityBikes",
+  "radius": 5000,
+  "lng": -75.691066,
+  "url": "http://api.citybik.es/ottawa.json",
+  "lat": 45.428997
+  },
+  {
+  "name": "Fort Lauderdale",
+  "provider": "CityBikes",
+  "radius": 18000,
+  "lng": -80.10032,
+  "url": "http://api.citybik.es/broward.json",
+  "lat": 26.16739
+  },
+  {
+  "name": "Charlotte",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -80.83978,
+  "url": "http://api.citybik.es/charlotte.json",
+  "lat": 35.22443
+  },
+  {
+  "name": "Fort Worth",
+  "provider": "CityBikes",
+  "radius": 9000,
+  "lng": -97.3113,
+  "url": "http://api.citybik.es/fortworth.json",
+  "lat": 32.74578
+  },
+  {
+  "name": "Greenville",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -82.40448,
+  "url": "http://api.citybik.es/greenville.json",
+  "lat": 34.84501
+  },
+  {
+  "name": "Houston",
+  "provider": "CityBikes",
+  "radius": 5000,
+  "lng": -95.36762,
+  "url": "http://api.citybik.es/houston.json",
+  "lat": 29.75737
+  },
+  {
+  "name": "Nashville",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -86.77426,
+  "url": "http://api.citybik.es/nashville.json",
+  "lat": 36.16252
+  },
+  {
+  "name": "Spartanburg",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -81.92174,
+  "url": "http://api.citybik.es/spartanburg.json",
+  "lat": 34.94747
+  },
+  {
+  "name": "KCMO",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -94.58074,
+  "url": "http://api.citybik.es/kansas.json",
+  "lat": 39.11054
+  },
+  {
+  "name": "Omaha",
+  "provider": "CityBikes",
+  "radius": 9000,
+  "lng": -96.0135,
+  "url": "http://api.citybik.es/omaha.json",
+  "lat": 41.23805
+  },
+  {
+  "name": "Chicago",
+  "provider": "CityBikes",
+  "radius": 12000,
+  "lng": -87.64664,
+  "url": "http://api.citybik.es/divvybikes.json",
+  "lat": 41.87184
+  },
+  {
+  "name": "Padua",
+  "provider": "CityBikes",
+  "radius": 5000,
+  "lng": 11.878805,
+  "url": "http://api.citybik.es/goodbike.json",
+  "lat": 45.408944
+  },
+  {
+  "name": "Albacete",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -1.852836,
+  "url": "http://api2.citybik.es/albacete.json",
+  "lat": 38.979603
+  },
+  {
+  "name": "Montilla",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -4.634027,
+  "url": "http://api2.citybik.es/montilla.json",
+  "lat": 37.59142
+  },
+  {
+  "name": "Puertollano",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -4.108123,
+  "url": "http://api2.citybik.es/puertobike.json",
+  "lat": 38.705472
+  },
+  {
+  "name": "Ciudad Real",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -3.93229,
+  "url": "http://api2.citybik.es/ciudad_real.json",
+  "lat": 38.968318
+  },
+  {
+  "name": "Cieza",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -1.422581,
+  "url": "http://api2.citybik.es/cieza.json",
+  "lat": 38.237147
+  },
+  {
+  "name": "San Pedro del Pinatar",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -0.786961,
+  "url": "http://api2.citybik.es/san_pedro.json",
+  "lat": 37.830619
+  },
+  {
+  "name": "Almuñécar",
+  "provider": "CityBikes",
+  "radius": 1000,
+  "lng": -3.688828,
+  "url": "http://api2.citybik.es/almunecar.json",
+  "lat": 36.735789
+  },
+  {
+  "name": "Las Palmas de Gran Canaria",
+  "provider": "CityBikes",
+  "radius": 5000,
+  "lng": -15.416214,
+  "url": "http://api2.citybik.es/las_palmas.json",
+  "lat": 28.10998
+  },
+  {
+  "name": "Redondela",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -8.610783,
+  "url": "http://api2.citybik.es/redondela.json",
+  "lat": 42.289405
+  },
+  {
+  "name": "Badajoz",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -6.999322,
+  "url": "http://api2.citybik.es/badajoz.json",
+  "lat": 38.887061
+  },
+  {
+  "name": "Soria",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -2.468405,
+  "url": "http://api2.citybik.es/soria.json",
+  "lat": 41.770736
+  },
+  {
+  "name": "Salamanca",
+  "provider": "CityBikes",
+  "radius": 5000,
+  "lng": -5.648894,
+  "url": "http://api2.citybik.es/salamanca.json",
+  "lat": 40.972319
+  },
+  {
+  "name": "Elche",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -0.695433,
+  "url": "http://api2.citybik.es/bicielx.json",
+  "lat": 38.264171
+  },
+  {
+  "name": "Vila-real",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -0.104581,
+  "url": "http://api2.citybik.es/villarreal.json",
+  "lat": 39.934446
+  },
+  {
+  "name": "Lalín",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -8.113497,
+  "url": "http://api2.citybik.es/lalin.json",
+  "lat": 42.656756
+  },
+  {
+  "name": "Aranda de Duero",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -3.692539,
+  "url": "http://api2.citybik.es/aranda_de_duero.json",
+  "lat": 41.658614
+  },
+  {
+  "name": "A Rúa",
+  "provider": "CityBikes",
+  "radius": 1000,
+  "lng": -7.115135,
+  "url": "http://api2.citybik.es/a_rua.json",
+  "lat": 42.389167
+  },
+  {
+  "name": "Úbeda",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -3.374809,
+  "url": "http://api2.citybik.es/ubeda.json",
+  "lat": 38.016477
+  },
+  {
+  "name": "Porto do Son",
+  "provider": "CityBikes",
+  "radius": 8000,
+  "lng": -8.94698,
+  "url": "http://api2.citybik.es/via_verde.json",
+  "lat": 42.75864
+  },
+  {
+  "name": "Novelda",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -0.766225,
+  "url": "http://api2.citybik.es/novelda.json",
+  "lat": 38.380242
+  },
+  {
+  "name": "Aranjuez",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -3.618158,
+  "url": "http://api2.citybik.es/aranjuez.json",
+  "lat": 40.034711
+  },
+  {
+  "name": "Antequera",
+  "provider": "CityBikes",
+  "radius": 1000,
+  "lng": -4.56216,
+  "url": "http://api2.citybik.es/antequera.json",
+  "lat": 37.021608
+  },
+  {
+  "name": "El Campello",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -0.389349,
+  "url": "http://api2.citybik.es/el_campello.json",
+  "lat": 38.427393
+  },
+  {
+  "name": "Don Benito",
+  "provider": "CityBikes",
+  "radius": 8000,
+  "lng": -5.868969,
+  "url": "http://api2.citybik.es/don_benito_villanueva.json",
+  "lat": 38.955625
+  },
+  {
+  "name": "Puerto Lumbreras",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -1.808719,
+  "url": "http://api2.citybik.es/puerto_lumbreras.json",
+  "lat": 37.561408
+  },
+  {
+  "name": "Roda",
+  "provider": "CityBikes",
+  "radius": 12000,
+  "lng": -0.858953,
+  "url": "http://api2.citybik.es/san_javier.json",
+  "lat": 37.770612
+  },
+  {
+  "name": "O Barco",
+  "provider": "CityBikes",
+  "radius": 1000,
+  "lng": -6.984611,
+  "url": "http://api2.citybik.es/o_barco.json",
+  "lat": 42.415789
+  },
+  {
+  "name": "Baeza",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -3.464341,
+  "url": "http://api2.citybik.es/baeza.json",
+  "lat": 37.996399
+  },
+  {
+  "name": "Pinto",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -3.692361,
+  "url": "http://api2.citybik.es/pinto.json",
+  "lat": 40.247715
+  },
+  {
+  "name": "Alhama de Murcia",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -1.413188,
+  "url": "http://api2.citybik.es/alhama_de_murcia.json",
+  "lat": 37.852744
+  },
+  {
+  "name": "Segovia",
+  "provider": "CityBikes",
+  "radius": 5000,
+  "lng": -4.121697,
+  "url": "http://api2.citybik.es/bicio.json",
+  "lat": 40.944752
+  },
+  {
+  "name": "Palencia",
+  "provider": "CityBikes",
+  "radius": 4000,
+  "lng": -4.530283,
+  "url": "http://api2.citybik.es/palencia.json",
+  "lat": 42.019451
+  },
+  {
+  "name": "Blanca",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -1.376971,
+  "url": "http://api2.citybik.es/blanca.json",
+  "lat": 38.17808
+  },
+  {
+  "name": "Sant Joan d'Alacant",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -0.435455,
+  "url": "http://api2.citybik.es/sant_joan.json",
+  "lat": 38.389008
+  },
+  {
+  "name": "Guadalajara",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -3.168567,
+  "url": "http://api2.citybik.es/guadalajara.json",
+  "lat": 40.636511
+  },
+  {
+  "name": "Priego de Córdoba",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -4.211297,
+  "url": "http://api2.citybik.es/priego_de_cordoba.json",
+  "lat": 37.441353
+  },
+  {
+  "name": "Jaén",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -3.787603,
+  "url": "http://api2.citybik.es/jaen.json",
+  "lat": 37.767536
+  },
+  {
+  "name": "Granada",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -3.606936,
+  "url": "http://api2.citybik.es/universidad_de_granada.json",
+  "lat": 37.181394
+  },
+  {
+  "name": "Talavera de la Reina",
+  "provider": "CityBikes",
+  "radius": 2000,
+  "lng": -4.833009,
+  "url": "http://api2.citybik.es/talavera.json",
+  "lat": 39.959821
+  },
+  {
+  "name": "Mula",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": -1.496061,
+  "url": "http://api2.citybik.es/mula.json",
+  "lat": 38.038892
+  },
+  {
+  "name": "Vinaròs",
+  "provider": "CityBikes",
+  "radius": 3000,
+  "lng": 0.476291,
+  "url": "http://api2.citybik.es/vinaros.json",
+  "lat": 40.47868
+  },
+  {
+  "name": "Vigo",
+  "provider": "CityBikes",
+  "radius": 1000,
+  "lng": -8.725371,
+  "url": "http://api2.citybik.es/vigo.json",
+  "lat": 42.239035
+  }
+  ]

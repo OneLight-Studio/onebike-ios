@@ -10,7 +10,7 @@
 
 @interface RoutePolyline : NSObject <MKOverlay>
 
-@property (nonatomic, strong) MKPolyline *polyline;
+@property (strong,readwrite) MKPolyline *polyline;
 
 + (RoutePolyline *)routePolylineFromPolyline:(MKPolyline *)otherPolyline;
 

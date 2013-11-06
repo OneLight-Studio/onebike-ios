@@ -8,24 +8,28 @@
 
 #import <MapKit/MapKit.h>
 
-@interface MapController : UIViewController <MKMapViewDelegate, UITextFieldDelegate>
+@interface MapController : UIViewController <MKMapViewDelegate,UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet MKMapView *mapPanel;
-@property (weak, nonatomic) IBOutlet UIView *searchPanel;
-@property (weak, nonatomic) IBOutlet UITextField *departureField;
-@property (weak, nonatomic) IBOutlet UITextField *arrivalField;
-@property (weak, nonatomic) IBOutlet UITextField *bikeField;
-@property (weak, nonatomic) IBOutlet UITextField *standField;
-@property (weak, nonatomic) IBOutlet UIButton *closeSearchPanelButton;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *searchBarButton;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelBarButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *infoBarButton;
-@property (weak, nonatomic) IBOutlet UIButton *searchButton;
-@property (weak, nonatomic) IBOutlet UIButton *departureLocation;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *departureSpinner;
-@property (weak, nonatomic) IBOutlet UIButton *arrivalLocation;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *arrivalSpinner;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *searchSpinner;
+@property (weak,readwrite) IBOutlet MKMapView *mapPanel;
+@property (weak,readwrite) IBOutlet UIView *searchPanel;
+@property (weak,readwrite) IBOutlet UITextField *departureField;
+@property (weak,readwrite) IBOutlet UITextField *arrivalField;
+@property (weak,readwrite) IBOutlet UITextField *bikeField;
+@property (weak,readwrite) IBOutlet UITextField *standField;
+@property (weak,readwrite) IBOutlet UIButton *closeSearchPanelButton;
+@property (weak,readwrite) IBOutlet UIBarButtonItem *infoBarButton;
+@property (weak,readwrite) IBOutlet UIButton *searchButton;
+@property (weak,readwrite) IBOutlet UIButton *departureLocation;
+@property (weak,readwrite) IBOutlet UIActivityIndicatorView *departureSpinner;
+@property (weak,readwrite) IBOutlet UIButton *arrivalLocation;
+@property (weak,readwrite) IBOutlet UIActivityIndicatorView *arrivalSpinner;
+@property (weak,readwrite) IBOutlet UIActivityIndicatorView *searchSpinner;
+@property (weak,readwrite) IBOutlet UIView *infoPanel;
+@property (weak,readwrite) IBOutlet UITextField *infoDistanceTextField;
+@property (weak,readwrite) IBOutlet UITextField *infoDurationTextField;
+
+@property (strong,readwrite) IBOutlet UIBarButtonItem *searchBarButton;
+@property (strong,readwrite) IBOutlet UIBarButtonItem *cancelBarButton;
 
 - (IBAction)searchBarButtonClicked:(id)sender;
 - (IBAction)userLocationAsDepartureClicked:(id)sender;

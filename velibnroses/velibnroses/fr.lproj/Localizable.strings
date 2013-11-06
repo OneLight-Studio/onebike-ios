@@ -10,6 +10,11 @@
 "dialog_warning_title" = "Alerte";
 "dialog_info_title" = "Info";
 
+"jcd_ws_get_data_warning" = "Veuillez patienter quelques instants, les données des stations de vélos sont en train d'être téléchargées ou traitées.";
+"jcd_ws_get_data_error" = "Une erreur s'est produite lors de la récupération des données des stations de vélos.";
+"google_ws_search_ride_error" = "Une erreur s'est produite lors de la recherche de votre itinéraire.";
+"google_ws_error" = "Erreur de Google Maps";
+
 "departure_not_found" = "L'adresse de départ est introuvable.";
 "arrival_not_found" = "L'adresse d'arrivée est introuvable.";
 "error" = "Oops, uen erreur s'est produite.";
@@ -21,7 +26,9 @@
 "no_more_available_ride" = "Les disponibilités des stations ont changé.\nIl n'y a plus de station correspondant à votre recherche.";
 "no_location_activated" = "Pour bénéficier de l'ensemble des fonctionnalités, merci d'activer la localisation dans l'écran \"Réglages\"";
 "no_location_allowed" = "Pour bénéficier de l'ensemble des fonctionnalités, merci d'autoriser la localisation dans l'écran \"Réglages\"";
-
-"jcd_ws_get_data_warning" = "Veuillez patienter quelques instants, les données des stations de vélos sont en train d'être téléchargées ou traitées.";
-"jcd_ws_get_data_error" = "Une erreur s'est produite lors de la récupération des données des stations de vélos.";
-"google_ws_search_ride_error" = "Une erreur s'est produite lors de la recherche de votre itinéraire.";
+"no_email_account_defined" = "Veuillez définir un compte email dans l'application Mail.";
+"email_title" = "[OneBike][iPhone] Commentaire utilisateur";
+"same_station" = "Vous feriez mieux d'y aller à pied ;)";
+"not_the_same_contract" = "Le départ et l'arrivée de votre recherche doivent se situer dans la même ville.";
+"thanks_feedback" = "Merci pour votre retour.";
+"unsupported_contract" = "Votre recherche porte sur une ville encore non prise en charge par OneBike.";

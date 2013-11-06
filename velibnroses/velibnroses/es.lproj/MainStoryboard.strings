@@ -1,5 +1,23 @@
+/* Class = "IBUILabel"; attributedText = "OneBike is an app by OneLight Studio, a Prometil company's trademark."; ObjectID = "dsh-vW-bi6"; */
+"dsh-vW-bi6.text" = "OneBike es una aplicación de OneLight Studio, marca registrada de la sociedad Prometil.";
+
+/* Class = "IBUILabel"; attributedText = "For any information or suggestion don't hesitate, click up there. Don't be shy, we love to hear you!"; ObjectID = "9Ox-rF-zAm"; */
+"9Ox-rF-zAm.text" = "Para mayor información o sugerencia no dude en hacer clic arriba. ¡ No sea tímido, nosotros adoramos a escucharle !";
+
+/* Class = "IBUILabel"; attributedText = "OneBike uses data from the JCDecaux and CityBikes real time APIs."; ObjectID = "JTv-wB-d5Y"; */
+"JTv-wB-d5Y.text" = "OneBike utiliza los datos de las APIs de tiempo real de JCDecaux & CitiBikes.";
+
+/* Class = "IBUILabel"; attributedText = "No more pain with overloaded bike stands when you arrive, OneBike keeps you informed in real time."; ObjectID = "CBG-5q-93G"; */
+"CBG-5q-93G.text" = "Eliminan el problema de las estaciones sobrecargadas cuando llegue, OneBike le informa en tiempo real.";
+
+/* Class = "IBUILabel"; attributedText = "OneBike is the app that makes your bike rides easier all around the world!"; ObjectID = "1tf-bd-Ao5"; */
+"1tf-bd-Ao5.text" = "¡ OneBike es la aplicación que facilita sus viajes en bicicleta de autoservicio en todo el mundo !";
+
+/* Class = "IBUIBarButtonItem"; title = "Feedback"; ObjectID = "Tin-JL-JdR"; */
+"Tin-JL-JdR.title" = "Comentario";
+
 /* Class = "IBUIButton"; normalTitle = "Let's go !"; ObjectID = "7ZO-mt-kun"; */
-"7ZO-mt-kun.normalTitle" = "Búscar";
+"7ZO-mt-kun.normalTitle" = "Buscar";
 
 /* Class = "IBUITextField"; placeholder = "Arrival"; ObjectID = "Wdw-ii-7F2"; */
 "Wdw-ii-7F2.placeholder" = "Destino";

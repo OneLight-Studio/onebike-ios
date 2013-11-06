@@ -7,6 +7,7 @@
 //
 
 #import <MapKit/MapKit.h>
+#import "Contract.h"
 
 typedef enum
 {
@@ -15,19 +16,18 @@ typedef enum
 
 @interface Station : NSObject <NSCopying>
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *address;
-@property (nonatomic, strong) NSString *contract;
-@property (nonatomic, strong) NSNumber *latitude;
-@property (nonatomic, strong) NSNumber *longitude;
-@property (nonatomic, assign) BOOL banking;
-@property (nonatomic, assign) StationState status;
-@property (nonatomic, strong) NSNumber *bikeStands;
-@property (nonatomic, strong) NSNumber *availableBikeStands;
-@property (nonatomic, strong) NSNumber *availableBikes;
-@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
+@property (strong,readwrite) NSString *name;
+@property (strong,readwrite) NSString *address;
+@property (strong,readwrite) NSNumber *latitude;
+@property (strong,readwrite) NSNumber *longitude;
+@property (strong,readwrite) NSNumber *bikeStands;
+@property (strong,readwrite) NSNumber *availableBikeStands;
+@property (strong,readwrite) NSNumber *availableBikes;
+@property (assign,readwrite) BOOL banking;
+@property (assign,readwrite) StationState status;
+@property (assign,readonly) CLLocationCoordinate2D coordinate;
 
-+ (Station *)fromJSON:(id)json;
-+ (NSArray *)fromJSONArray:(id)json;
++ (Station *)parseJSONObject:(id)json fromProvider:(ContractProvider)provider;
++ (NSArray *)parseJSONArray:(id)json fromProvider:(ContractProvider)provider;
 
 @end

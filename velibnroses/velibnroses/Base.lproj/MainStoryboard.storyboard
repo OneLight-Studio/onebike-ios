@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="SBZ-qn-Jb4">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -88,11 +88,11 @@
                                         <rect key="frame" x="204" y="8" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPMyLocation.png">
+                                        <state key="normal" image="SPMyLocation.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="disabled" image="Images/SearchPanel/SPMyLocation_Disabled.png"/>
+                                        <state key="disabled" image="SPMyLocation_Disabled.png"/>
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -104,7 +104,7 @@
                                         <rect key="frame" x="246" y="8" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPBike.png">
+                                        <state key="normal" image="SPBike.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -119,7 +119,7 @@
                                         <rect key="frame" x="130" y="156" width="62" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPCloseSearch.png">
+                                        <state key="normal" image="SPCloseSearch.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -138,11 +138,11 @@
                                         <rect key="frame" x="204" y="55" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPMyLocation.png">
+                                        <state key="normal" image="SPMyLocation.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="disabled" image="Images/SearchPanel/SPMyLocation_Disabled.png"/>
+                                        <state key="disabled" image="SPMyLocation_Disabled.png"/>
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -170,7 +170,7 @@
                                         <rect key="frame" x="246" y="55" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" image="Images/SearchPanel/SPStand.png">
+                                        <state key="normal" image="SPStand.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -212,16 +212,49 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.75" colorSpace="calibratedWhite"/>
                             </view>
+                            <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" id="B8j-9X-DmC">
+                                <rect key="frame" x="0.0" y="440" width="320" height="40"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="10T-RF-E1x">
+                                        <rect key="frame" x="75" y="5" width="75" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="fCz-fA-jZB">
+                                        <rect key="frame" x="200" y="5" width="80" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MPDistance.png" id="cyf-lu-IbR">
+                                        <rect key="frame" x="35" y="0.0" width="40" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MPSeparator.png" id="CFR-pE-OpU">
+                                        <rect key="frame" x="160" y="0.0" width="1" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" image="MPDuration.png" id="5Is-pm-MpG">
+                                        <rect key="frame" x="160" y="0.0" width="40" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.75" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="hmS-dC-JVN">
-                        <barButtonItem key="leftBarButtonItem" image="Images/NavigationBar/NBInfo.png" id="lbv-EE-UWT">
+                        <barButtonItem key="leftBarButtonItem" image="NBInfo.png" id="lbv-EE-UWT">
                             <connections>
-                                <segue destination="mZx-XO-NyK" kind="push" id="dt9-Xg-diD"/>
+                                <segue destination="HOZ-74-3NR" kind="push" id="kfB-L6-xIl"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="Images/NavigationBar/NBSearch.png" id="Dwx-k2-M2a">
+                        <barButtonItem key="rightBarButtonItem" image="NBSearch.png" id="Dwx-k2-M2a">
                             <connections>
                                 <action selector="searchBarButtonClicked:" destination="R2K-lh-zEE" id="lUh-a4-YUx"/>
                             </connections>
@@ -237,6 +270,9 @@
                         <outlet property="departureLocation" destination="vrN-9E-YNC" id="yzO-wr-T0V"/>
                         <outlet property="departureSpinner" destination="c49-wK-1go" id="3t7-8h-sPk"/>
                         <outlet property="infoBarButton" destination="lbv-EE-UWT" id="yOY-yq-68u"/>
+                        <outlet property="infoDistanceTextField" destination="10T-RF-E1x" id="noM-LA-9Pb"/>
+                        <outlet property="infoDurationTextField" destination="fCz-fA-jZB" id="9u5-qh-aQv"/>
+                        <outlet property="infoPanel" destination="B8j-9X-DmC" id="Gdf-VG-tKF"/>
                         <outlet property="mapPanel" destination="QIt-AM-94y" id="KGF-Hb-vky"/>
                         <outlet property="searchBarButton" destination="Dwx-k2-M2a" id="MgW-nf-Ofl"/>
                         <outlet property="searchButton" destination="7ZO-mt-kun" id="4av-zB-rIX"/>
@@ -249,47 +285,130 @@
             </objects>
             <point key="canvasLocation" x="803" y="32"/>
         </scene>
-        <!--Info Controller-->
-        <scene sceneID="DJc-Ks-pak">
+        <!--Info Page View Controller-->
+        <scene sceneID="ZwD-d1-0BE">
             <objects>
-                <viewController id="mZx-XO-NyK" customClass="InfoController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="zTG-hz-Ftm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="dyJ-RV-8n7">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="505"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
-                            </imageView>
-                        </subviews>
-                    </view>
-                    <navigationItem key="navigationItem" id="PnZ-q7-OJc">
-                        <barButtonItem key="leftBarButtonItem" image="Images/NavigationBar/NBBack.png" id="K2C-dy-2tc">
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" pageSpacing="2" navigationOrientation="horizontal" spineLocation="none" id="HOZ-74-3NR" customClass="InfoPageViewController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="yjh-qs-KBW">
+                        <barButtonItem key="leftBarButtonItem" image="NBBack.png" id="JJ6-Qb-bal">
                             <connections>
-                                <action selector="backBarButtonClicked:" destination="mZx-XO-NyK" id="8wJ-xD-br6"/>
+                                <action selector="backBarButtonClicked:" destination="HOZ-74-3NR" id="azx-XH-LB1"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Feedback" id="Tin-JL-JdR">
+                            <connections>
+                                <action selector="feedbackBarButtonClicked:" destination="HOZ-74-3NR" id="78P-oS-0IX"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="backBarButton" destination="K2C-dy-2tc" id="Gom-pg-78P"/>
-                        <outlet property="contentImage" destination="dyJ-RV-8n7" id="paI-Un-ucJ"/>
+                        <outlet property="backBarButton" destination="JJ6-Qb-bal" id="VCQ-MI-BdT"/>
+                        <outlet property="feedbackBarButton" destination="Tin-JL-JdR" id="JrB-r3-BwG"/>
                     </connections>
+                </pageViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Etb-Cc-qFK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1272" y="32"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="DJc-Ks-pak">
+            <objects>
+                <viewController storyboardIdentifier="helpScreen" id="mZx-XO-NyK" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zTG-hz-Ftm">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="IPContent.png" id="dyJ-RV-8n7">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="441"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LYB-5i-1bQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1276" y="32"/>
+            <point key="canvasLocation" x="1272" y="696"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="YV4-Zt-z4N">
+            <objects>
+                <viewController storyboardIdentifier="aboutScreen" id="vxX-xI-Gf5" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ua7-mq-a0Y">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoText.png" id="fT3-ng-uRx">
+                                <rect key="frame" x="72" y="17" width="176" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OneBike is the app that makes your bike rides easier all around the world!" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="1tf-bd-Ao5">
+                                <rect key="frame" x="10" y="75" width="300" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" red="0.68627450980000004" green="0.79607843140000001" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No more pain with overloaded bike stands when you arrive, OneBike keeps you informed in real time." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="CBG-5q-93G">
+                                <rect key="frame" x="10" y="130" width="300" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OneBike uses data from the JCDecaux and CityBikes real time APIs." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JTv-wB-d5Y">
+                                <rect key="frame" x="10" y="190" width="300" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For any information or suggestion don't hesitate, click up there. Don't be shy, we love to hear you!" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Ox-rF-zAm">
+                                <rect key="frame" x="10" y="250" width="300" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OneBike is an app by OneLight Studio, a Prometil company's trademark." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="dsh-vW-bi6">
+                                <rect key="frame" x="78" y="320" width="222" height="55"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoOnelight.png" id="RWs-gL-w6j">
+                                <rect key="frame" x="10" y="315" width="60" height="65"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4vh-Cg-Fqd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1736" y="696"/>
         </scene>
     </scenes>
     <resources>
-        <image name="Images/NavigationBar/NBBack.png" width="16" height="16"/>
-        <image name="Images/NavigationBar/NBInfo.png" width="16" height="16"/>
-        <image name="Images/NavigationBar/NBSearch.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPBike.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPCloseSearch.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPMyLocation.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPMyLocation_Disabled.png" width="16" height="16"/>
-        <image name="Images/SearchPanel/SPStand.png" width="16" height="16"/>
+        <image name="IPContent.png" width="320" height="484"/>
+        <image name="LogoOnelight.png" width="49" height="50"/>
+        <image name="LogoText.png" width="176" height="58"/>
+        <image name="MPDistance.png" width="20" height="20"/>
+        <image name="MPDuration.png" width="20" height="20"/>
+        <image name="MPSeparator.png" width="1" height="24"/>
+        <image name="NBBack.png" width="20" height="20"/>
+        <image name="NBInfo.png" width="20" height="20"/>
+        <image name="NBSearch.png" width="20" height="20"/>
+        <image name="SPBike.png" width="21" height="21"/>
+        <image name="SPCloseSearch.png" width="14" height="10"/>
+        <image name="SPMyLocation.png" width="22" height="22"/>
+        <image name="SPMyLocation_Disabled.png" width="22" height="22"/>
+        <image name="SPStand.png" width="21" height="21"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
