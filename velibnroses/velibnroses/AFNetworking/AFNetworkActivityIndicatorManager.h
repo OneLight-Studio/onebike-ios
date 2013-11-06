@@ -1,6 +1,6 @@
 // AFNetworkActivityIndicatorManager.h
 //
-// Copyright (c) 2011 Gowalla (http://gowalla.com/)
+// Copyright (c) 2013 AFNetworking (http://afnetworking.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,18 @@
 #import <Availability.h>
 
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+
 #import <UIKit/UIKit.h>
 
 /**
  `AFNetworkActivityIndicatorManager` manages the state of the network activity indicator in the status bar. When enabled, it will listen for notifications indicating that a network request operation has started or finished, and start or stop animating the indicator accordingly. The number of active requests is incremented and decremented much like a stack or a semaphore, and the activity indicator will animate so long as that number is greater than zero.
-
+ 
  You should enable the shared instance of `AFNetworkActivityIndicatorManager` when your application finishes launching. In `AppDelegate application:didFinishLaunchingWithOptions:` you can do so with the following code:
-
-    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-
+ 
+ [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+ 
  By setting `isNetworkActivityIndicatorVisible` to `YES` for `sharedManager`, the network activity indicator will show and hide automatically as requests start and finish. You should not ever need to call `incrementActivityCount` or `decrementActivityCount` yourself.
-
+ 
  See the Apple Human Interface Guidelines section about the Network Activity Indicator for more information:
  http://developer.apple.com/library/iOS/#documentation/UserExperience/Conceptual/MobileHIG/UIElementGuidelines/UIElementGuidelines.html#//apple_ref/doc/uid/TP40006556-CH13-SW44
  */
@@ -43,7 +44,7 @@
 
 /**
  A Boolean value indicating whether the manager is enabled.
-
+ 
  If YES, the manager will change status bar network activity indicator according to network operation notifications it receives. The default value is NO.
  */
 @property (nonatomic, assign, getter = isEnabled) BOOL enabled;
@@ -55,7 +56,7 @@
 
 /**
  Returns the shared network activity indicator manager object for the system.
-
+ 
  @return The systemwide network activity indicator manager.
  */
 + (instancetype)sharedManager;

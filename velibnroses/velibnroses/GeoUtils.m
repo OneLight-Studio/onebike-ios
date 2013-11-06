@@ -113,7 +113,20 @@
 }
 
 + (BOOL)isCoordinate:(CLLocationCoordinate2D)first equalToCoordinate:(CLLocationCoordinate2D)second {
-    return (first.latitude == second.latitude) < 0.001 && (first.longitude == second.longitude) < 0.001;
+    return fabs(first.latitude - second.latitude) < 0.0001 && fabs(first.longitude - second.longitude) < 0.0001;
+}
+
++ (BOOL)unlessInMeters:(double)radius fromOrigin:(CLLocationCoordinate2D)origin forLocation:(CLLocationCoordinate2D)location {
+    double dist = [GeoUtils getDistanceFromLat:origin.latitude toLat:location.latitude fromLong:origin.longitude toLong:location.longitude];
+    return dist <= radius;
+}
+
++ (BOOL)isLocationZero:(CLLocationCoordinate2D)aLocation {
+    BOOL isLocationZero = fabs(aLocation.latitude - 0.00000) < 0.00001 && fabs(aLocation.longitude - 0.00000) < 0.00001;
+    if (isLocationZero) {
+        NSLog(@"location zero");
+    }
+    return isLocationZero;
 }
 
 @end

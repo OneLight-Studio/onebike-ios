@@ -11,10 +11,15 @@
 #import "Keys.h"
 #import "UIUtils.h"
 #import "iRate.h"
+#import "AFNetworkActivityIndicatorManager.h"
 
-@implementation AppDelegate {
-    double _sleepingStartDate;
-}
+@interface AppDelegate ()
+
+@property (assign,readwrite) double sleepingStartDate;
+
+@end
+
+@implementation AppDelegate
 
 + (void)initialize
 {
@@ -35,7 +40,7 @@
     } else {
         [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"NBBg.png"] forBarMetrics:UIBarMetricsDefault];
     }
-    
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     [TestFlight takeOff:KEY_TESTFLIGHT];
 
     return YES;
@@ -49,7 +54,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    _sleepingStartDate = [[NSDate date] timeIntervalSince1970];
+    self.sleepingStartDate = [[NSDate date] timeIntervalSince1970];
     NSLog(@"applicationDidEnterBackground");
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DID_ENTER_BACKGROUND object:nil userInfo:nil];
@@ -59,9 +64,12 @@
 {
     NSLog(@"applicationWillEnterForeground");
     double now = [[NSDate date] timeIntervalSince1970];
-    double sleepingTime = now - _sleepingStartDate;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WILL_ENTER_FOREGROUND object:[NSNumber numberWithDouble:sleepingTime] userInfo:nil];
+    double sleepingTime = now - self.sleepingStartDate;
+    NSLog(@"sleeping time : %f s", sleepingTime);
+    if (sleepingTime > TIME_BEFORE_REFRESH_DATA_IN_SECONDS) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WILL_ENTER_FOREGROUND object:nil userInfo:nil];
+    }
+    self.sleepingStartDate = 0;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

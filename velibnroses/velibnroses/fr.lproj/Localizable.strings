@@ -6,15 +6,14 @@
   Copyright (c) 2013 OneLight Studio. All rights reserved.
 */
 
-"jcd_ws_get_data_warning" = "Veuillez patienter quelques instants, les données des stations de vélos sont en train d'être téléchargées ou traitées.";
-"jcd_ws_get_data_error" = "Une erreur s'est produite lors de la récupération des données des stations de vélos.";
-"google_ws_search_ride_error" = "Une erreur s'est produite lors de la recherche de votre itinéraire.";
-
 "dialog_error_title" = "Erreur";
 "dialog_warning_title" = "Alerte";
 "dialog_info_title" = "Info";
 
-"ip_content_img_name" = "IPContent_fr.png";
+"jcd_ws_get_data_warning" = "Veuillez patienter quelques instants, les données des stations de vélos sont en train d'être téléchargées ou traitées.";
+"jcd_ws_get_data_error" = "Une erreur s'est produite lors de la récupération des données des stations de vélos.";
+"google_ws_search_ride_error" = "Une erreur s'est produite lors de la recherche de votre itinéraire.";
+"google_ws_error" = "Erreur de Google Maps";
 
 "departure_not_found" = "L'adresse de départ est introuvable.";
 "arrival_not_found" = "L'adresse d'arrivée est introuvable.";
@@ -30,3 +29,6 @@
 "no_email_account_defined" = "Veuillez définir un compte email dans l'application Mail.";
 "email_title" = "[OneBike][iPhone] Commentaire utilisateur";
 "same_station" = "Vous feriez mieux d'y aller à pied ;)";
+"not_the_same_contract" = "Le départ et l'arrivée de votre recherche doivent se situer dans la même ville.";
+"thanks_feedback" = "Merci pour votre retour.";
+"unsupported_contract" = "Votre recherche porte sur une ville encore non prise en charge par OneBike.";

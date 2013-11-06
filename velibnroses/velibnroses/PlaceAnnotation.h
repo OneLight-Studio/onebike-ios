@@ -21,8 +21,8 @@ typedef enum
 
 @interface PlaceAnnotation : MKPointAnnotation <NSCopying>
 
-@property (nonatomic, assign) PlaceAnnotationType placeType;
-@property (nonatomic, assign) PlaceAnnotationLocation placeLocation;
-@property (nonatomic, strong) Station *placeStation;
+@property (assign,readwrite) PlaceAnnotationType placeType;
+@property (assign,readwrite) PlaceAnnotationLocation placeLocation;
+@property (strong,readwrite) Station *placeStation;
 
 @end

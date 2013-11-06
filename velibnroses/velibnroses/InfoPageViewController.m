@@ -11,15 +11,13 @@
 #import "Constants.h"
 
 @interface InfoPageViewController ()
-    
+
+@property (strong,readwrite) UIViewController *helpScreen;
+@property (strong,readwrite) UIViewController *aboutScreen;
+
 @end
 
 @implementation InfoPageViewController
-
-@synthesize backBarButton;
-@synthesize feedbackBarButton;
-@synthesize helpScreen;
-@synthesize aboutScreen;
 
 # pragma mark -
 
@@ -32,9 +30,9 @@
     self.navigationItem.hidesBackButton = YES;
 	[self.backBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [self.feedbackBarButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    helpScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"helpScreen"];
-    aboutScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"aboutScreen"];
-    [self setViewControllers:@[helpScreen] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+    self.helpScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"helpScreen"];
+    self.aboutScreen = [self.storyboard instantiateViewControllerWithIdentifier:@"aboutScreen"];
+    [self setViewControllers:@[self.helpScreen] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
 }
 
 # pragma mark Event(s)
@@ -66,12 +64,15 @@
     }
 }
 
+# pragma mark -
+# pragma mark UIPageViewControllerDataSource
+
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     
     UIViewController *next = nil;
     
-    if (viewController == helpScreen) {
-        next = aboutScreen;
+    if (viewController == self.helpScreen) {
+        next = self.aboutScreen;
     }
     
     return next;
@@ -81,8 +82,8 @@
     
     UIViewController *previous = nil;
     
-    if (viewController == aboutScreen) {
-        previous = helpScreen;
+    if (viewController == self.aboutScreen) {
+        previous = self.helpScreen;
     }
     
     return previous;
@@ -103,6 +104,8 @@
     pageControl.currentPageIndicatorTintColor = [UIUtils colorWithHexaString:@"#afcb13"];
 }
 
+# pragma mark MFMailComposeViewControllerDelegate
+
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     switch (result) {
         case MFMailComposeResultCancelled:
@@ -113,6 +116,7 @@
             break;
         case MFMailComposeResultSent:
             NSLog(@"Mail sent");
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"dialog_info_title", @"") message:NSLocalizedString(@"thanks_feedback", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"") otherButtonTitles:nil] show];
             break;
         case MFMailComposeResultFailed:
             NSLog(@"Mail sent failure: %@", [error localizedDescription]);
@@ -121,9 +125,7 @@
         default:
             break;
     }
-    
     [self dismissViewControllerAnimated:YES completion:NULL];
-
 }
 
 @end

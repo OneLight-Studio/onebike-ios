@@ -17,18 +17,18 @@
         return true;
     if ([self class] != [object class])
         return false;
-    ClusterAnnotation *obj = (ClusterAnnotation *)object;
+    ClusterAnnotation *other = (ClusterAnnotation *)object;
     if ([[NSNumber alloc] initWithDouble:self.coordinate.latitude] == nil) {
-        if ([[NSNumber alloc] initWithDouble:obj.coordinate.latitude] != nil) {
+        if ([[NSNumber alloc] initWithDouble:other.coordinate.latitude] != nil) {
             return false;
         }
     } else if ([[NSNumber alloc] initWithDouble:self.coordinate.longitude] == nil) {
-        if ([[NSNumber alloc] initWithDouble:obj.coordinate.longitude] != nil) {
+        if ([[NSNumber alloc] initWithDouble:other.coordinate.longitude] != nil) {
             return false;
         }
-    } else if (![[[NSNumber alloc] initWithDouble:self.coordinate.latitude] isEqual:[[NSNumber alloc] initWithDouble:obj.coordinate.latitude]]) {
+    } else if (![[[NSNumber alloc] initWithDouble:self.coordinate.latitude] isEqual:[[NSNumber alloc] initWithDouble:other.coordinate.latitude]]) {
         return false;
-    } else if (![[[NSNumber alloc] initWithDouble:self.coordinate.longitude] isEqual:[[NSNumber alloc] initWithDouble:obj.coordinate.longitude]]) {
+    } else if (![[[NSNumber alloc] initWithDouble:self.coordinate.longitude] isEqual:[[NSNumber alloc] initWithDouble:other.coordinate.longitude]]) {
         return false;
     }
     return true;
