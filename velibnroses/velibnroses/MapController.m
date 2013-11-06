@@ -548,7 +548,7 @@
             if (annotationView == nil) {
                 annotationView = [[MKAnnotationView alloc] initWithAnnotation:cluster reuseIdentifier:annotationID];
                 annotationView.image =  [UIImage imageNamed:@"MPCluster.png"];
-                annotationView.centerOffset = CGPointMake(0.0, -15.0);
+                annotationView.centerOffset = CGPointMake(5.0, -15.0);
             }
             annotationView.canShowCallout = NO;
         }

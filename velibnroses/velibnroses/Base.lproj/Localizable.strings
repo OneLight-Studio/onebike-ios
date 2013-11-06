@@ -31,4 +31,4 @@
 "same_station" = "You'd better walk there ;)";
 "not_the_same_contract" = "The search departure and arrival must be in the same city.";
 "thanks_feedback" = "Thanks for your feedback.";
-"unsupported_contract" = "You search in a city still unsupported by OneBike.";
+"unsupported_contract" = "Your search is in a city still unsupported by OneBike.";
